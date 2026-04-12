@@ -1,0 +1,8 @@
+node_modules/
+.env
+.env.local
+.vercel/
+*.err.txt
+*.out.txt
+_inspect_zip/
+_script_check.js

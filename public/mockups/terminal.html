@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>问道链途 Mockup - 清算终端</title>
+  <style>
+    :root{--bg:#050708;--panel:#0b1012;--panel2:#0f1518;--line:#172328;--text:#d8e1e3;--muted:#708085;--green:#1fd18a;--amber:#e6c05a;--red:#ff6e63;--cyan:#4fd6e7}
+    *{box-sizing:border-box} body{margin:0;font-family:"Microsoft YaHei UI","PingFang SC",sans-serif;color:var(--text);background:radial-gradient(circle at 10% 8%, rgba(31,209,138,.08), transparent 22%),radial-gradient(circle at 86% 10%, rgba(255,110,99,.08), transparent 22%),#040607;min-height:100vh}
+    body::before{content:"";position:fixed;inset:0;pointer-events:none;background:linear-gradient(rgba(255,255,255,.02) 1px, transparent 1px),linear-gradient(90deg, rgba(255,255,255,.02) 1px, transparent 1px);background-size:22px 22px;opacity:.34}
+    .app{width:min(1400px, calc(100vw - 40px));margin:20px auto;position:relative;z-index:1;display:grid;grid-template-columns:300px 1fr 340px;gap:14px}.panel{background:linear-gradient(180deg, rgba(255,255,255,.01), rgba(0,0,0,.12)), var(--panel);border:1px solid var(--line);border-radius:8px;box-shadow:0 16px 30px rgba(0,0,0,.28)}.sidebar,.center,.right{display:grid;gap:14px}
+    .title-card{padding:18px;min-height:162px;background:linear-gradient(180deg, rgba(79,214,231,.05), transparent 50%), var(--panel2)} .title{font-size:34px;font-weight:700;letter-spacing:.18em;color:#f2f6f7;margin:0 0 12px}.sub{font-size:12px;color:var(--muted);letter-spacing:.18em}
+    .status{margin-top:18px;display:grid;gap:8px}.status div{display:flex;justify-content:space-between;font-size:13px;color:#bfc8cb;padding:8px 10px;background:rgba(255,255,255,.015);border-radius:6px;border:1px solid rgba(255,255,255,.04)}.status b{color:#fff}
+    .faces,.right .panel{padding:18px}.sec{color:var(--muted);font-size:11px;letter-spacing:.22em;text-transform:uppercase;margin-bottom:14px}.face{display:grid;grid-template-columns:48px 1fr auto;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.04)}.face img{width:48px;height:48px;border-radius:6px;object-fit:cover}.face b{display:block;font-size:14px}.face span{color:var(--muted);font-size:12px}.dot{width:8px;height:8px;border-radius:50%}.green{background:var(--green)} .amber{background:var(--amber)} .red{background:var(--red)}
+    .hero{padding:18px 18px 0;display:grid;gap:14px}.topbar{display:flex;justify-content:space-between;align-items:center;padding:4px 4px 0}.topbar h2{margin:0;font-size:15px;letter-spacing:.18em;color:#e5ecee}.pills{display:flex;gap:8px}.pill{padding:7px 10px;border-radius:999px;font-size:11px;letter-spacing:.14em;border:1px solid rgba(255,255,255,.06);color:#b4c5cb;background:rgba(255,255,255,.02)}
+    .market{display:grid;grid-template-columns:1.2fr .8fr;gap:14px;min-height:240px}.chart,.orderbook,.metric,.risk-card,.action{border-radius:8px;background:rgba(255,255,255,.012);border:1px solid rgba(255,255,255,.04)}.chart{padding:16px;position:relative;overflow:hidden}.chart::before{content:"";position:absolute;inset:0;background:linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);background-size:100% 40px, 48px 100%}
+    .candles{position:absolute;inset:22px 18px 18px;display:flex;align-items:flex-end;gap:10px}.candle{flex:1;min-width:10px;border-radius:3px 3px 0 0;background:linear-gradient(180deg, rgba(79,214,231,.95), rgba(31,209,138,.95));box-shadow:0 0 18px rgba(79,214,231,.18)}.candle.red{background:linear-gradient(180deg, rgba(255,110,99,.95), rgba(190,59,59,.95))}
+    .orderbook{padding:16px}.row{display:grid;grid-template-columns:1fr auto auto;gap:10px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:13px;color:#cad4d7}.row .buy{color:var(--green)}.row .sell{color:var(--red)}
+    .storybox{padding:18px;min-height:262px;border-top:1px solid rgba(255,255,255,.04)}.story{font-size:20px;line-height:1.95;color:#edf4f6;max-width:92%}.actions{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:18px}.action{padding:16px 14px}.action strong{display:block;font-size:16px;margin-bottom:8px}.action span{font-size:13px;color:#8ea0a6;line-height:1.7}.action.buy strong{color:var(--green)}.action.wait strong{color:var(--amber)}.action.odd strong{color:var(--cyan)}
+    .metrics{display:grid;gap:10px}.metric{padding:12px 14px}.metric-top{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:8px}.metric b{font-size:28px;color:#fff}.risk-card{position:relative;overflow:hidden;background:radial-gradient(circle at 86% 14%, rgba(255,110,99,.12), transparent 24%),rgba(255,255,255,.01)}.risk-card p{color:#c8d1d5;line-height:1.9;font-size:14px;margin:10px 0 0}
+    .log-item{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:13px;color:#c8d1d5}.log-item em{font-style:normal;color:var(--green)}
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <section class="panel title-card"><h1 class="title">问道链途</h1><div class="sub">清算终端版 · 更像深夜交易室</div><div class="status"><div><span>角色</span><b>何一</b></div><div><span>境界</span><b>筑基中期 A5</b></div><div><span>热度</span><b style="color:var(--green)">FOMO 升温</b></div></div></section>
+      <section class="panel faces">
+        <div class="sec">风口人物监控</div>
+        <div class="face"><img src="https://unavatar.io/twitter/heyibinance" alt=""><div><b>何一</b><span>平台情绪总控</span></div><i class="dot green"></i></div>
+        <div class="face"><img src="https://unavatar.io/twitter/cz_binance" alt=""><div><b>CZ</b><span>流动性中枢</span></div><i class="dot amber"></i></div>
+        <div class="face"><img src="https://unavatar.io/twitter/CryptoHayes" alt=""><div><b>Arthur</b><span>高杠杆意见源</span></div><i class="dot red"></i></div>
+        <div class="face"><img src="https://unavatar.io/twitter/saylor" alt=""><div><b>Saylor</b><span>BTC 教派扩散</span></div><i class="dot green"></i></div>
+      </section>
+    </aside>
+    <main class="center">
+      <section class="panel hero">
+        <div class="topbar"><h2>叙事主场 / Market Theater</h2><div class="pills"><span class="pill">本轮收益 ¥10,190</span><span class="pill">推演缓存命中</span><span class="pill">Turn 18</span></div></div>
+        <div class="market">
+          <div class="chart"><div class="candles"><div class="candle" style="height:35%"></div><div class="candle red" style="height:20%"></div><div class="candle" style="height:48%"></div><div class="candle" style="height:54%"></div><div class="candle red" style="height:38%"></div><div class="candle" style="height:70%"></div><div class="candle" style="height:68%"></div><div class="candle red" style="height:44%"></div><div class="candle" style="height:86%"></div><div class="candle" style="height:78%"></div><div class="candle red" style="height:58%"></div><div class="candle" style="height:92%"></div></div></div>
+          <div class="orderbook"><div class="sec">行情微观层</div><div class="row"><span>山寨叙事涌入</span><span class="buy">+12%</span><span>买盘</span></div><div class="row"><span>教育概念发酵</span><span class="buy">+8%</span><span>跟单</span></div><div class="row"><span>大V 喊单外溢</span><span class="sell">-3%</span><span>抛压</span></div><div class="row"><span>交易所流量倾斜</span><span class="buy">+17%</span><span>助推</span></div><div class="row"><span>监管风声逼近</span><span class="sell">-5%</span><span>风险</span></div></div>
+        </div>
+        <div class="storybox"><div class="story">后台数据突然抬头。你刚把“修仙作者课”推上首页，几个大户就顺着流量闯了进来。订单像刷屏一样跳动，平台热搜全是你的名字。此刻你更像一个操纵情绪的交易员，而不是闭关悟道的修士。</div><div class="actions"><div class="action buy"><strong>顺势打榜</strong><span>继续把流量往爆点上推，换更陡的增长斜率。</span></div><div class="action wait"><strong>收紧入口</strong><span>关掉部分转化口，先保住系统口碑和长线秩序。</span></div><div class="action odd"><strong>放出暗牌</strong><span>借人物联动做一波神秘预告，测试市场真实耐心。</span></div></div></div>
+      </section>
+    </main>
+    <aside class="right">
+      <section class="panel"><div class="sec">账户状态</div><div class="metrics"><div class="metric"><div class="metric-top"><span>本金</span><span style="color:var(--green)">UP</span></div><b>10190</b></div><div class="metric"><div class="metric-top"><span>心态</span><span>稳定</span></div><b>200</b></div><div class="metric"><div class="metric-top"><span>认知</span><span>溢出</span></div><b>200</b></div><div class="metric"><div class="metric-top"><span>气运</span><span>热手</span></div><b>126</b></div></div></section>
+      <section class="panel risk-card"><div class="sec">风险雷达</div><p>这个方向把“选项”做成像交易动作，适合更强调决策压力、市场速度和资本流动。修真感会弱一点，但币圈味会更狠。</p></section>
+      <section class="panel"><div class="sec">最近日志</div><div class="log-item"><span>课程首页登顶</span><em>本金 +60</em></div><div class="log-item"><span>平台热搜爆发</span><em>气运 +10</em></div><div class="log-item"><span>监管消息靠近</span><em style="color:var(--red)">心态 -5</em></div><div class="log-item"><span>教育资产成形</span><em>身份升级</em></div></section>
+    </aside>
+  </div>
+</body>
+</html>

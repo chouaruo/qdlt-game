@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>问道链途 Mockup - 玄市金阙</title>
+  <style>
+    :root{--bg:#0b0806;--bg2:#15100b;--panel:#16110d;--panel2:#1e1711;--line:rgba(213,165,70,.18);--gold:#d5a546;--gold2:#f4d27a;--paper:#f1e3c6;--muted:#8e7750;--jade:#2fa374;--crimson:#b14646}
+    *{box-sizing:border-box} body{margin:0;min-height:100vh;font-family:"Microsoft YaHei UI","PingFang SC",sans-serif;color:var(--paper);background:radial-gradient(circle at 18% 14%, rgba(47,163,116,.14), transparent 22%),radial-gradient(circle at 82% 8%, rgba(177,70,70,.14), transparent 26%),linear-gradient(180deg, rgba(255,255,255,.02), transparent 28%),var(--bg);overflow-x:hidden}
+    body::before{content:"";position:fixed;inset:0;background:linear-gradient(90deg, transparent 0 95px, rgba(213,165,70,.04) 95px 96px),linear-gradient(180deg, transparent 0 95px, rgba(213,165,70,.03) 95px 96px);background-size:96px 96px;pointer-events:none;opacity:.7}
+    .shell{width:min(1360px, calc(100vw - 48px));margin:28px auto;position:relative;z-index:1;display:grid;grid-template-columns:1.55fr .95fr;gap:18px}.surface{background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(0,0,0,.08)), var(--panel);border:1px solid var(--line);border-radius:8px;box-shadow:0 18px 40px rgba(0,0,0,.25)}.left{display:grid;grid-template-rows:auto auto 1fr auto;gap:18px}
+    .hero{padding:24px 26px 22px;display:flex;justify-content:space-between;align-items:flex-start;min-height:176px;background:linear-gradient(140deg, rgba(213,165,70,.08), transparent 38%),linear-gradient(180deg, rgba(47,163,116,.05), transparent 60%),var(--panel2)} .title{font-size:52px;line-height:1;letter-spacing:.18em;color:var(--gold2);font-weight:700;margin:0 0 14px}.subtitle,.micro{color:var(--muted);font-size:13px;letter-spacing:.16em}
+    .chips,.avatars,.tag-row,.log-list{display:flex;gap:8px;flex-wrap:wrap}.chips{margin-top:20px}.chip,.tag{padding:7px 10px;border-radius:999px;font-size:12px;letter-spacing:.1em;border:1px solid var(--line);background:rgba(213,165,70,.05)}.avatars{margin-top:14px;gap:10px}.avatar{width:58px;height:58px;border-radius:8px;border:1px solid rgba(213,165,70,.22);overflow:hidden;background:#0d0a08}.avatar img,.portrait img{width:100%;height:100%;object-fit:cover;display:block}
+    .hero-right{text-align:right;max-width:360px;display:flex;flex-direction:column;gap:14px;align-items:flex-end}.realm{border:1px solid rgba(213,165,70,.3);border-radius:999px;padding:10px 16px;color:var(--gold2);font-size:13px;letter-spacing:.14em;background:rgba(213,165,70,.08)}.quote{color:#d7c6a2;line-height:1.9;font-size:15px;max-width:320px}
+    .stats{padding:0 18px 18px;display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.stat{padding:18px 16px 14px;border-radius:8px;border:1px solid var(--line);background:rgba(255,255,255,.01);min-height:92px}.stat .k{color:var(--muted);font-size:12px;letter-spacing:.28em;margin-bottom:10px}.stat .v{font-size:34px;color:var(--gold2);font-weight:700}
+    .main-card{padding:24px 26px 18px;min-height:430px;display:grid;grid-template-rows:auto 1fr auto;gap:18px}.section-label{color:var(--gold);font-size:12px;letter-spacing:.28em;text-transform:uppercase}.story{font-size:19px;line-height:2.08;color:#f2e8d5;padding-right:10px}.story::first-letter{font-size:34px;color:var(--gold2);margin-right:4px}
+    .options{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.option{padding:16px 16px 14px;border:1px solid var(--line);border-radius:8px;background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(0,0,0,.12))}.option .risk{font-size:11px;letter-spacing:.18em;margin-bottom:12px;color:var(--muted)}.option strong{display:block;font-size:18px;line-height:1.5;color:var(--paper);margin-bottom:8px}.option span{color:#ad9770;font-size:13px;line-height:1.7}
+    .bottom{display:grid;grid-template-columns:1fr 1fr;gap:18px}.ledger,.log,.right-top,.character-card,.ladder{padding:18px}.log-item{width:100%;display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(213,165,70,.08);color:#d4c4a6;font-size:14px}.log-item em{font-style:normal;color:var(--jade)}
+    .right{display:grid;grid-template-rows:auto 1fr auto;gap:18px}.right-top{display:grid;gap:12px}.meter{padding:16px;border-radius:8px;border:1px solid var(--line);background:rgba(255,255,255,.015)}.meter-top{display:flex;justify-content:space-between;font-size:13px;color:#d4c4a6;margin-bottom:10px}.track{height:8px;border-radius:999px;background:rgba(255,255,255,.06);overflow:hidden}.fill{height:100%;border-radius:999px;background:linear-gradient(90deg, var(--gold), var(--jade));width:68%}
+    .character-card{position:relative;overflow:hidden;background:radial-gradient(circle at 86% 12%, rgba(213,165,70,.12), transparent 25%),linear-gradient(180deg, rgba(255,255,255,.015), rgba(0,0,0,.14)),var(--panel)}.character-card h3{margin:0 0 6px;font-size:24px;color:var(--gold2);letter-spacing:.08em}.character-card p{margin:0;color:#cfbc96;line-height:1.9;font-size:15px;max-width:82%}.portrait{position:absolute;right:18px;bottom:18px;width:118px;height:118px;border-radius:8px;border:1px solid rgba(213,165,70,.22);overflow:hidden;box-shadow:0 18px 32px rgba(0,0,0,.28)}
+    .ladder{display:grid;gap:10px}.step{display:grid;grid-template-columns:62px 1fr auto;gap:12px;padding:12px;border-radius:8px;border:1px solid rgba(213,165,70,.1);background:rgba(255,255,255,.01);align-items:center}.step.active{background:rgba(213,165,70,.08);border-color:rgba(213,165,70,.26)}.step code{color:var(--gold2);font-size:12px;letter-spacing:.18em}.step b{font-size:15px;color:var(--paper)}.step small{color:var(--muted)}.step i{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.08);display:block}.step.active i{background:var(--jade)}
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <section class="left">
+      <div class="surface hero">
+        <div>
+          <h1 class="title">问道链途</h1>
+          <div class="subtitle">玄市金阙版 · 修真叙事重于交易工具感</div>
+          <div class="chips"><span class="chip">币圈修真传</span><span class="chip">回合 18</span><span class="chip">预生成命中</span></div>
+          <div class="avatars">
+            <div class="avatar"><img src="https://unavatar.io/twitter/VitalikButerin" alt="Vitalik" /></div>
+            <div class="avatar"><img src="https://unavatar.io/twitter/cz_binance" alt="CZ" /></div>
+            <div class="avatar"><img src="https://unavatar.io/twitter/star_okx" alt="徐明星" /></div>
+          </div>
+        </div>
+        <div class="hero-right">
+          <div class="realm">筑基中期 A5</div>
+          <div class="quote">“这不是一个看盘界面，而是一座把欲望、认知、气运和本金同时炼化的修真市场。”</div>
+          <div class="micro">推荐用途：作为主版本，平衡戏剧性与高级感</div>
+        </div>
+      </div>
+      <div class="stats">
+        <div class="stat"><div class="k">本金</div><div class="v">10190</div></div>
+        <div class="stat"><div class="k">心态</div><div class="v">200</div></div>
+        <div class="stat"><div class="k">认知</div><div class="v">200</div></div>
+        <div class="stat"><div class="k">气运</div><div class="v">126</div></div>
+      </div>
+      <div class="surface main-card">
+        <div class="section-label">本回合 · 剧情主舞台</div>
+        <div class="story">讲台下坐满了交易所高管、矿场老板和上一轮牛市幸存下来的老韭菜。你刚放下那本《币圈修仙传承体系》，场外资金已经像潮水一样涌进来。一个熟悉的声音从后排响起：“老师，既然认知可以复制，那财富是不是也能批量飞升？”</div>
+        <div class="options">
+          <div class="option"><div class="risk">险 · 冲顶叙事</div><strong>卖课收割流量</strong><span>把认知包装成标准课程，迅速放大利润，也迅速放大质疑。</span></div>
+          <div class="option"><div class="risk">稳 · 固化体系</div><strong>建立修真基金</strong><span>把书、社群与资金池连成闭环，让飞升不靠情绪，靠结构。</span></div>
+          <div class="option"><div class="risk">奇 · 暗线探索</div><strong>私下见中本聪</strong><span>放下台前风光，跟着纸条里的指引去见一位从未露面的旧神。</span></div>
+        </div>
+      </div>
+      <div class="bottom">
+        <div class="surface ledger"><div class="section-label" style="margin-bottom:14px;">持仓与身份</div><div class="tag-row"><span class="tag">畅销书作者身份</span><span class="tag">教育平台 CEO 身价</span><span class="tag">传世著作</span><span class="tag">机构内参权限</span></div></div>
+        <div class="surface log"><div class="section-label" style="margin-bottom:10px;">操盘日志</div><div class="log-list"><div class="log-item"><span>出版传承体系</span><em>本金 +40</em></div><div class="log-item"><span>签售会爆满</span><em>境界突破</em></div><div class="log-item"><span>交易所 CEO 到访</span><em>气运 +10</em></div></div></div>
+      </div>
+    </section>
+    <aside class="right">
+      <div class="surface right-top">
+        <div class="meter"><div class="meter-top"><span>飞升进度</span><span>68%</span></div><div class="track"><div class="fill"></div></div></div>
+        <div class="meter"><div class="meter-top"><span>本轮叙事热度</span><span>爆表</span></div><div class="track"><div class="fill" style="width:92%; background:linear-gradient(90deg, var(--jade), var(--gold2));"></div></div></div>
+      </div>
+      <div class="surface character-card"><div class="section-label" style="margin-bottom:12px;">人物定位</div><h3>V 神 · 以太坊真传</h3><p>不是“会炒币的天才”，而是一个亲手重写规则的人。这个版本里，角色像诸子百家之一，每个人都带着自己的修真体系入局。</p><div class="portrait"><img src="https://unavatar.io/twitter/VitalikButerin" alt="V神" /></div></div>
+      <div class="surface ladder"><div class="section-label" style="margin-bottom:4px;">境界谱</div><div class="step"><code>A3</code><div><b>练气后期</b><br><small>凝练灵气</small></div><i></i></div><div class="step"><code>A4</code><div><b>筑基初期</b><br><small>夯实根基</small></div><i></i></div><div class="step active"><code>A5</code><div><b>筑基中期</b><br><small>根基稳固</small></div><i></i></div><div class="step"><code>A6</code><div><b>筑基后期</b><br><small>厚积待发</small></div><i></i></div><div class="step"><code>A7</code><div><b>金丹初期</b><br><small>丹成一转</small></div><i></i></div></div>
+    </aside>
+  </div>
+</body>
+</html>

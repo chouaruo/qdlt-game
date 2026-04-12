@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>问道链途 Mockup - 朱砂禁录</title>
+  <style>
+    :root{--bg:#0a0708;--panel:#191114;--panel2:#211419;--line:rgba(201,146,110,.18);--bone:#f0e4d6;--muted:#9f7d71;--red:#a7444a;--gold:#d2a26a;--violet:#86639f;--teal:#4da59b}
+    *{box-sizing:border-box} body{margin:0;min-height:100vh;font-family:"Microsoft YaHei UI","PingFang SC",sans-serif;color:var(--bone);background:radial-gradient(circle at 8% 10%, rgba(77,165,155,.08), transparent 18%),radial-gradient(circle at 90% 12%, rgba(167,68,74,.1), transparent 24%),linear-gradient(180deg, rgba(255,255,255,.015), transparent 24%),var(--bg)}
+    body::before{content:"";position:fixed;inset:0;pointer-events:none;background:linear-gradient(transparent 0 119px, rgba(210,162,106,.04) 119px 120px),linear-gradient(90deg, transparent 0 119px, rgba(210,162,106,.03) 119px 120px);background-size:120px 120px}
+    .frame{width:min(1360px, calc(100vw - 48px));margin:24px auto;position:relative;z-index:1;display:grid;grid-template-columns:1.15fr .85fr;gap:18px}.panel{border:1px solid var(--line);border-radius:8px;background:linear-gradient(180deg, rgba(255,255,255,.018), rgba(0,0,0,.12)), var(--panel);box-shadow:0 20px 36px rgba(0,0,0,.28)}.left,.right{display:grid;gap:18px}
+    .top{padding:22px;display:grid;grid-template-columns:1fr auto;gap:16px;min-height:170px;background:radial-gradient(circle at 18% 12%, rgba(167,68,74,.12), transparent 28%),linear-gradient(180deg, rgba(134,99,159,.06), transparent 46%), var(--panel2)}.title{margin:0 0 10px;font-size:48px;font-weight:700;letter-spacing:.18em;color:#f7e8d5}.sub{color:var(--muted);font-size:13px;letter-spacing:.16em}
+    .runes,.chips{display:flex;gap:10px;flex-wrap:wrap}.runes{margin-top:18px}.rune,.chip{padding:8px 12px;border-radius:999px;font-size:12px;border:1px solid rgba(210,162,106,.14);color:#efd9ba;background:rgba(210,162,106,.06)}
+    .sigil{width:132px;height:132px;border-radius:50%;border:1px solid rgba(210,162,106,.24);position:relative;align-self:center;background:radial-gradient(circle at center, rgba(210,162,106,.18), transparent 55%),linear-gradient(180deg, rgba(255,255,255,.02), rgba(0,0,0,.14));box-shadow:0 0 50px rgba(167,68,74,.16)}.sigil::before,.sigil::after{content:"";position:absolute;inset:18px;border-radius:50%;border:1px solid rgba(210,162,106,.18)}.sigil::after{inset:40px}.sigil span{position:absolute;inset:0;display:grid;place-items:center;color:var(--gold);font-size:28px;letter-spacing:.4em;padding-left:.35em}
+    .stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.stat,.tape,.choice{border-radius:8px;border:1px solid var(--line);background:rgba(255,255,255,.012)}.stat{padding:18px 16px}.stat .k{font-size:12px;letter-spacing:.28em;color:var(--muted);margin-bottom:10px}.stat .v{font-size:32px;font-weight:700;color:#f7e2c1}
+    .story-panel{padding:22px;min-height:520px;display:grid;gap:18px}.label{color:var(--gold);font-size:12px;letter-spacing:.28em;text-transform:uppercase}.story{font-size:20px;line-height:2.08;color:#f3e5d9;max-width:92%;position:relative;padding-left:20px}.story::before{content:"";position:absolute;left:0;top:6px;bottom:6px;width:2px;border-radius:999px;background:linear-gradient(180deg, var(--red), transparent)}
+    .choices{display:grid;gap:12px}.choice{display:grid;grid-template-columns:86px 1fr auto;gap:14px;align-items:center;padding:16px;background:linear-gradient(90deg, rgba(167,68,74,.05), transparent 42%), rgba(255,255,255,.015)}.choice .stamp{font-size:11px;letter-spacing:.22em;color:#f1d9c4;padding:8px 10px;border-radius:999px;border:1px solid rgba(210,162,106,.18);text-align:center}.choice b{font-size:18px}.choice p{margin:4px 0 0;color:#bfa395;font-size:13px;line-height:1.8}.arrow{color:var(--gold);font-size:22px}
+    .portrait-card,.ledger,.timeline,.tapes{padding:18px}.portrait-card{position:relative;min-height:260px;overflow:hidden;background:radial-gradient(circle at 84% 14%, rgba(134,99,159,.16), transparent 28%),linear-gradient(180deg, rgba(255,255,255,.015), rgba(0,0,0,.14)), var(--panel)}.portrait-card h3{margin:0 0 8px;font-size:26px;color:#f5d6c4;letter-spacing:.08em}.portrait-card p{margin:0;max-width:68%;color:#cfb1a6;line-height:1.95;font-size:15px}.portrait{position:absolute;right:18px;bottom:18px;width:132px;height:132px;border-radius:8px;overflow:hidden;border:1px solid rgba(210,162,106,.18)}.portrait img{width:100%;height:100%;object-fit:cover}
+    .tapes{display:grid;gap:12px}.tape{padding:14px}.tape-top{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:10px}.tape b{font-size:22px;color:#f7e2c1}.entry{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:13px;color:#d4beb5}.entry em{font-style:normal;color:var(--teal)}
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <section class="left">
+      <div class="panel top">
+        <div><h1 class="title">问道链途</h1><div class="sub">朱砂禁录版 · 更神秘、更危险、更像一部会吞人的密典</div><div class="runes"><span class="rune">天机推演</span><span class="rune">因果叠层</span><span class="rune">角色命格</span><span class="rune">回合 18</span></div></div>
+        <div class="sigil"><span>问 道 链 途</span></div>
+      </div>
+      <div class="stat-grid"><div class="panel stat"><div class="k">本金</div><div class="v">10190</div></div><div class="panel stat"><div class="k">心态</div><div class="v">200</div></div><div class="panel stat"><div class="k">认知</div><div class="v">200</div></div><div class="panel stat"><div class="k">气运</div><div class="v">126</div></div></div>
+      <div class="panel story-panel">
+        <div class="label">禁录展开 · 当前章节</div>
+        <div class="story">夜半烛影摇晃，你把那册写满交易心法的禁录翻到最后一页。纸背浮出一行鲜红小字：“凡教人暴富者，多半先教人献祭。”门外忽然有人敲了三下。来客既不是学生，也不是投资人，而像是知道你真正来历的人。</div>
+        <div class="choices">
+          <div class="choice"><div class="stamp">险</div><div><b>开门迎客</b><p>直接见那位夜访者，看他带来的是天机还是催命符。</p></div><div class="arrow">→</div></div>
+          <div class="choice"><div class="stamp">稳</div><div><b>封卷熄灯</b><p>先把禁录藏好，确认外面没有布下因果陷阱再行动。</p></div><div class="arrow">→</div></div>
+          <div class="choice"><div class="stamp">奇</div><div><b>逆写批注</b><p>在那行红字下留下你的回应，试着反向呼唤真正的作者。</p></div><div class="arrow">→</div></div>
+        </div>
+      </div>
+    </section>
+    <aside class="right">
+      <div class="panel portrait-card"><div class="label" style="margin-bottom:12px;">人物神格</div><h3>中本聪 · 不可直视</h3><p>这个方向把角色写成“有传承、有禁忌、有代价”的存在。更适合做隐藏线、神秘人物线和黑暗奇遇。</p><div class="portrait"><img src="https://unavatar.io/twitter/zachxbt" alt="mystery"></div></div>
+      <div class="panel tapes"><div class="label">观感关键词</div><div class="tape"><div class="tape-top"><span>叙事浓度</span><span>极高</span></div><b>9.4 / 10</b></div><div class="tape"><div class="tape-top"><span>市场工具感</span><span>较弱</span></div><b>4.8 / 10</b></div><div class="tape"><div class="tape-top"><span>角色戏剧张力</span><span>极强</span></div><b>9.1 / 10</b></div></div>
+      <div class="panel ledger"><div class="label" style="margin-bottom:14px;">身份筹码</div><div class="chips"><span class="chip">畅销书作者身份</span><span class="chip">教育平台 CEO 身价</span><span class="chip">传世著作</span><span class="chip">禁录持有人</span></div></div>
+      <div class="panel timeline"><div class="label" style="margin-bottom:10px;">因果回响</div><div class="entry"><span>出版禁录</span><em>认知 +10</em></div><div class="entry"><span>名利反噬</span><em style="color:var(--red)">心态 -4</em></div><div class="entry"><span>夜访者现身</span><em>奇遇开启</em></div></div>
+    </aside>
+  </div>
+</body>
+</html>

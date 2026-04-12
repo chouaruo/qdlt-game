@@ -1,0 +1,1589 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>问道链途</title>
+<link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=ZCOOL+XiaoWei&family=Noto+Serif+SC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#08060300;--ink2:#100d09;--ink3:#1a150e;
+  --paper:#f0e8d0;--paper2:#e0d4b8;--paper3:#c8bc9a;
+  --gold:#c8921a;--gold2:#e8b030;--gold3:#f8d060;
+  --jade:#1a6040;--jade2:#28a060;
+  --crimson:#8b1010;--crimson2:#c03030;
+  --purple:#5a28a0;--purple2:#9060e0;
+  --blue:#1848a0;--blue2:#4080d0;
+  --green-t:#1a5c2a;--green-b:#85c995;
+  --gray2:#5a5040;
+  /* 词条颜色 */
+  --green-card-bg:#eaf5ec;--green-card-bd:#70b880;--green-card-tx:#1a5030;
+  --blue-card-bg:#e8f0fc;--blue-card-bd:#6090d0;--blue-card-tx:#183870;
+  --purple-card-bg:#f0eafc;--purple-card-bd:#9060d0;--purple-card-tx:#401880;
+  --red-card-bg:#fce8e8;--red-card-bd:#d06060;--red-card-tx:#701818;
+  --orange-card-bg:#fff4e0;--orange-card-bd:#d09030;--orange-card-tx:#603000;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html{font-size:16px;}
+body{
+  background:#080603;min-height:100vh;min-height:100dvh;
+  font-family:'Noto Serif SC',serif;color:var(--paper);
+  overflow-x:hidden;-webkit-font-smoothing:antialiased;
+}
+.bg-fx{
+  position:fixed;inset:0;z-index:0;
+  background:
+    radial-gradient(ellipse 60% 50% at 15% 90%,rgba(26,96,64,0.1) 0%,transparent 55%),
+    radial-gradient(ellipse 50% 60% at 85% 10%,rgba(139,16,16,0.07) 0%,transparent 55%),
+    #0a0705;
+}
+.bg-fx::after{
+  content:'';position:absolute;inset:0;
+  background-image:repeating-linear-gradient(90deg,transparent,transparent 79px,rgba(200,146,26,0.015) 79px,rgba(200,146,26,0.015) 80px);
+  pointer-events:none;
+}
+
+/* ═══ OVERLAY BASE ═══ */
+.ov{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;padding:1rem;}
+.ov.hidden{display:none;}
+.ov-bg{background:rgba(5,3,1,0.96);}
+.ov-scroll{overflow-y:auto;-webkit-overflow-scrolling:touch;align-items:flex-start;padding:1.5rem 1rem;}
+
+/* ═══ START OVERLAY ═══ */
+#ov-api{flex-direction:column;gap:1.4rem;}
+.api-logo{
+  font-family:'Ma Shan Zheng',cursive;
+  font-size:clamp(2.2rem,8vw,3.5rem);
+  color:var(--gold2);letter-spacing:0.18em;text-align:center;
+  text-shadow:0 0 60px rgba(200,146,26,0.5);
+}
+.api-tagline{font-size:13px;color:var(--gray2);text-align:center;line-height:2;max-width:400px;}
+.api-form{width:100%;max-width:380px;display:flex;flex-direction:column;gap:10px;}
+.start-panel{
+  width:100%;max-width:420px;background:rgba(240,232,208,0.04);
+  border:1px solid rgba(200,146,26,0.16);border-radius:10px;padding:16px 14px;
+  display:flex;flex-direction:column;gap:10px;
+}
+.start-row{display:flex;justify-content:space-between;align-items:center;gap:12px;}
+.start-k{font-size:11px;color:var(--gray2);letter-spacing:0.1em;font-family:'ZCOOL XiaoWei',serif;}
+.start-v{font-size:12px;color:var(--paper2);text-align:right;}
+.start-v.gold{color:var(--gold2);}
+.start-actions{display:flex;flex-direction:column;gap:10px;width:100%;max-width:380px;}
+.ghost-btn{
+  background:transparent;border:1px solid rgba(200,146,26,0.25);border-radius:8px;
+  color:var(--paper2);padding:12px 14px;cursor:pointer;font-size:13px;
+  font-family:'ZCOOL XiaoWei',serif;letter-spacing:0.14em;min-height:46px;
+}
+.ghost-btn:hover:not(:disabled){background:rgba(200,146,26,0.08);border-color:rgba(200,146,26,0.4);}
+.btn-gold{
+  background:linear-gradient(135deg,rgba(200,146,26,0.18),rgba(200,146,26,0.08));
+  border:1px solid rgba(200,146,26,0.45);border-radius:10px;
+  padding:14px;font-size:14px;color:var(--gold2);cursor:pointer;
+  font-family:'ZCOOL XiaoWei',serif;letter-spacing:0.25em;
+  transition:all .2s;min-height:50px;width:100%;
+}
+.btn-gold:hover:not(:disabled){background:linear-gradient(135deg,rgba(200,146,26,0.28),rgba(200,146,26,0.15));}
+.btn-gold:disabled{opacity:0.35;cursor:not-allowed;}
+.api-err{font-size:12px;color:var(--crimson2);text-align:center;min-height:14px;line-height:1.7;max-width:380px;}
+
+/* ═══ 人物选择 OVERLAY ═══ */
+#ov-char{flex-direction:column;gap:0;}
+.char-ov-inner{width:100%;max-width:680px;display:flex;flex-direction:column;gap:1.1rem;padding:1.5rem 0 2rem;}
+.ov-title{font-family:'Ma Shan Zheng',cursive;font-size:clamp(1.4rem,5vw,2rem);color:var(--gold2);letter-spacing:0.15em;text-align:center;text-shadow:0 0 30px rgba(200,146,26,0.4);}
+.ov-sub{font-size:12px;color:var(--gray2);text-align:center;letter-spacing:0.08em;line-height:1.7;}
+
+/* 人物格子 */
+.char-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+@media(min-width:520px){.char-grid{grid-template-columns:repeat(4,1fr);}}
+@media(min-width:680px){.char-grid{grid-template-columns:repeat(5,1fr);}}
+.char-card{
+  border-radius:10px;border:1.5px solid rgba(200,146,26,0.15);
+  background:rgba(240,232,208,0.04);
+  padding:10px 8px;text-align:center;cursor:pointer;
+  transition:all .2s;position:relative;
+}
+.char-card:hover:not(.locked){border-color:rgba(200,146,26,0.45);background:rgba(200,146,26,0.08);}
+.char-card.selected{border-color:var(--gold2);background:rgba(200,146,26,0.12);box-shadow:0 0 14px rgba(200,146,26,0.2);}
+.char-card.locked{opacity:0.45;cursor:not-allowed;filter:grayscale(0.8);}
+.char-avatar{
+  width:56px;height:56px;border-radius:50%;margin:0 auto 8px;
+  border:2px solid rgba(200,146,26,0.2);
+  background:rgba(200,146,26,0.08);
+  overflow:hidden;display:flex;align-items:center;justify-content:center;
+  font-size:28px;
+}
+.char-avatar img{width:100%;height:100%;object-fit:cover;}
+.char-name{font-size:12px;font-weight:500;color:var(--paper2);margin-bottom:3px;font-family:'ZCOOL XiaoWei',serif;}
+.char-req{font-size:10px;color:var(--gray2);}
+.char-lock-icon{
+  position:absolute;top:6px;right:6px;
+  width:16px;height:16px;border-radius:50%;
+  background:rgba(90,80,64,0.4);
+  display:flex;align-items:center;justify-content:center;
+  font-size:9px;
+}
+/* 散户卡（默认解锁） */
+.char-card.free{border-color:rgba(200,146,26,0.25);}
+
+/* 人物详情弹窗 */
+.char-detail{
+  background:rgba(16,13,9,0.98);
+  border:1px solid rgba(200,146,26,0.3);
+  border-radius:12px;padding:1.2rem;
+  margin-top:0.5rem;animation:fadein .2s ease;
+}
+.char-detail-name{font-family:'Ma Shan Zheng',cursive;font-size:1.2rem;color:var(--gold2);margin-bottom:6px;}
+.char-detail-body{font-size:12px;color:var(--paper2);line-height:1.8;margin-bottom:8px;}
+.char-detail-skill{font-size:11px;color:var(--gray2);border-top:1px solid rgba(200,146,26,0.1);padding-top:8px;line-height:1.7;}
+.char-detail-locked{font-size:13px;color:var(--crimson2);text-align:center;padding:8px 0;}
+
+/* ═══ 属性分配 OVERLAY ═══ */
+#ov-alloc .alloc-inner{width:100%;max-width:560px;display:flex;flex-direction:column;gap:1rem;padding:1.5rem 0 2rem;}
+.pts-pill{
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  background:rgba(240,232,208,0.04);border:1px solid rgba(200,146,26,0.15);
+  border-radius:30px;padding:10px 20px;align-self:center;
+}
+.pts-label{font-size:12px;color:var(--gray2);font-family:'ZCOOL XiaoWei',serif;letter-spacing:0.12em;}
+.pts-num{font-size:26px;font-weight:700;font-family:'ZCOOL XiaoWei',serif;color:var(--gold2);min-width:28px;text-align:center;transition:color .25s;}
+.pts-num.empty{color:var(--crimson2);}
+.attr-cards{display:flex;flex-direction:column;gap:8px;}
+.attr-card{
+  background:rgba(240,232,208,0.04);border:1px solid rgba(200,146,26,0.1);
+  border-radius:10px;padding:12px 14px;
+  display:grid;grid-template-columns:80px 1fr auto;gap:0 12px;align-items:center;
+}
+.attr-icon{
+  width:44px;height:44px;border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;flex-shrink:0;
+}
+.attr-mid{display:flex;flex-direction:column;gap:4px;min-width:0;}
+.attr-name-row{display:flex;align-items:baseline;gap:10px;}
+.attr-name{font-size:14px;color:var(--paper);font-family:'ZCOOL XiaoWei',serif;letter-spacing:0.1em;font-weight:500;}
+.attr-val{font-size:18px;font-weight:700;font-family:'ZCOOL XiaoWei',serif;color:var(--gold2);}
+.attr-desc{font-size:11px;color:var(--gray2);line-height:1.6;}
+.attr-track{height:3px;background:rgba(255,255,255,0.07);border-radius:2px;overflow:hidden;margin-top:2px;}
+.attr-fill{height:100%;border-radius:2px;transition:width .2s ease;}
+.attr-btns{display:flex;flex-direction:column;gap:6px;flex-shrink:0;}
+.abt{
+  width:36px;height:36px;border-radius:8px;
+  border:1px solid rgba(200,146,26,0.22);background:rgba(200,146,26,0.06);
+  color:var(--gold2);font-size:20px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .15s;user-select:none;line-height:1;
+}
+.abt:hover:not(:disabled){background:rgba(200,146,26,0.18);border-color:rgba(200,146,26,0.5);}
+.abt:active:not(:disabled){transform:scale(0.93);}
+.abt:disabled{opacity:0.18;cursor:not-allowed;}
+
+/* ═══ 词条选择 OVERLAY ═══ */
+#ov-trait .trait-inner{width:100%;max-width:680px;display:flex;flex-direction:column;gap:1rem;padding:1.5rem 0 2rem;}
+.trait-pick-info{display:flex;justify-content:space-between;align-items:center;}
+.pick-count{font-size:13px;color:var(--gray2);}
+.pick-count span{color:var(--gold2);font-weight:500;}
+.trait-grid-8{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;}
+@media(min-width:480px){.trait-grid-8{grid-template-columns:repeat(4,1fr);}}
+.tcard{
+  border-radius:10px;padding:11px 12px;border-width:1.5px;border-style:solid;
+  cursor:pointer;transition:all .18s;position:relative;
+  min-height:110px;display:flex;flex-direction:column;gap:4px;
+}
+.tcard.selected-card{box-shadow:0 0 0 2px currentColor,0 0 12px rgba(200,146,26,0.3);}
+.tcard.disabled-card{opacity:0.4;cursor:not-allowed;}
+/* 词条等级颜色 */
+.tcard.green{background:var(--green-card-bg);border-color:var(--green-card-bd);}
+.tcard.blue {background:var(--blue-card-bg); border-color:var(--blue-card-bd);}
+.tcard.purple{background:var(--purple-card-bg);border-color:var(--purple-card-bd);}
+.tcard.red  {background:var(--red-card-bg);  border-color:var(--red-card-bd);}
+.tcard.orange{background:var(--orange-card-bg);border-color:var(--orange-card-bd);}
+.tcard-tier{font-size:9px;padding:1px 6px;border-radius:3px;display:inline-block;font-weight:500;align-self:flex-start;margin-bottom:2px;}
+.green .tcard-tier{background:#c0e8c8;color:var(--green-card-tx);}
+.blue  .tcard-tier{background:#c0d8f0;color:var(--blue-card-tx);}
+.purple .tcard-tier{background:#d8c8f0;color:var(--purple-card-tx);}
+.red   .tcard-tier{background:#f0c8c8;color:var(--red-card-tx);}
+.orange .tcard-tier{background:#f0d8a8;color:var(--orange-card-tx);}
+.tcard-attr{font-size:9px;padding:1px 6px;border-radius:3px;display:inline-block;align-self:flex-start;margin-bottom:1px;}
+.tcard-name{font-size:12px;font-weight:500;}
+.green .tcard-name{color:var(--green-card-tx);}
+.blue  .tcard-name{color:var(--blue-card-tx);}
+.purple .tcard-name{color:var(--purple-card-tx);}
+.red   .tcard-name{color:var(--red-card-tx);}
+.orange .tcard-name{color:var(--orange-card-tx);}
+.tcard-desc{font-size:10px;color:#555;line-height:1.55;flex:1;}
+.tcard.selected-card .tcard-desc{color:#333;}
+.tcard-check{position:absolute;top:7px;right:8px;font-size:14px;}
+/* 轮回词条特殊样式 */
+.tcard.reborn{border-style:dashed;}
+.tcard-reborn-tag{font-size:9px;color:var(--purple-card-tx);font-style:italic;}
+
+/* ═══ 主游戏 ═══ */
+.wrap{
+  position:relative;z-index:1;max-width:720px;margin:0 auto;
+  padding:calc(env(safe-area-inset-top,0px) + 1rem) max(env(safe-area-inset-right,0px),1.25rem)
+          calc(env(safe-area-inset-bottom,0px) + 1.5rem) max(env(safe-area-inset-left,0px),1.25rem);
+  display:flex;flex-direction:column;gap:0.9rem;min-height:100dvh;
+}
+
+/* Header */
+.hdr{display:flex;align-items:center;justify-content:space-between;padding-bottom:0.85rem;border-bottom:1px solid rgba(200,146,26,0.12);}
+.hdr-left{display:flex;flex-direction:column;gap:3px;}
+.hdr-title{font-family:'Ma Shan Zheng',cursive;font-size:clamp(1.4rem,4.5vw,2rem);color:var(--gold2);letter-spacing:0.14em;text-shadow:0 0 24px rgba(200,146,26,0.3);}
+.hdr-char{font-size:11px;color:var(--gray2);letter-spacing:0.12em;font-family:'ZCOOL XiaoWei',serif;}
+.realm-badge{
+  background:rgba(200,146,26,0.1);border:1px solid rgba(200,146,26,0.25);
+  border-radius:20px;padding:5px 13px;font-size:11px;color:var(--gold2);
+  font-family:'ZCOOL XiaoWei',serif;letter-spacing:0.12em;white-space:nowrap;text-align:right;
+}
+.realm-asset{font-size:10px;color:var(--gray2);margin-top:2px;}
+.hdr-meta{display:flex;align-items:center;gap:8px;justify-content:flex-end;margin-top:6px;flex-wrap:wrap;}
+.save-pill{
+  font-size:10px;color:var(--gray2);border:1px solid rgba(200,146,26,0.18);
+  border-radius:999px;padding:4px 8px;font-family:'ZCOOL XiaoWei',serif;letter-spacing:0.1em;
+}
+.mini-btn{
+  border:1px solid rgba(200,146,26,0.2);background:rgba(240,232,208,0.03);color:var(--paper2);
+  border-radius:8px;padding:7px 10px;font-size:10px;cursor:pointer;font-family:'ZCOOL XiaoWei',serif;letter-spacing:0.12em;
+}
+.mini-btn:hover{background:rgba(200,146,26,0.08);border-color:rgba(200,146,26,0.35);}
+
+/* 资产进度条 */
+.asset-section{display:flex;flex-direction:column;gap:5px;}
+.asset-top{display:flex;justify-content:space-between;align-items:baseline;}
+.asset-lbl{font-size:11px;color:var(--gold);font-family:'ZCOOL XiaoWei',serif;letter-spacing:0.15em;}
+.asset-num{font-size:12px;color:var(--gold2);font-family:'ZCOOL XiaoWei',serif;font-weight:500;}
+.asset-track{height:6px;background:rgba(255,255,255,0.06);border-radius:4px;overflow:hidden;}
+.asset-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--gold),var(--gold2));transition:width .7s ease;}
+
+/* 属性格 */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;}
+.scard{
+  background:rgba(240,232,208,0.03);border:1px solid rgba(200,146,26,0.1);
+  border-radius:10px;padding:10px 8px 9px;text-align:center;
+  transition:border-color .3s;
+}
+.scard.pop{animation:scpop .5s ease;}
+@keyframes scpop{0%,100%{border-color:rgba(200,146,26,0.1)}35%{border-color:rgba(200,146,26,0.65);box-shadow:0 0 12px rgba(200,146,26,0.2)}}
+.slbl{font-size:10px;color:var(--gray2);letter-spacing:0.12em;margin-bottom:4px;font-family:'ZCOOL XiaoWei',serif;display:block;}
+.snum{font-size:18px;font-weight:700;color:var(--gold2);font-family:'ZCOOL XiaoWei',serif;display:block;line-height:1;}
+.snum.up{color:var(--jade2);animation:numjump .4s ease;}
+.snum.dn{color:var(--crimson2);animation:numjump .4s ease;}
+@keyframes numjump{0%{transform:scale(1.28)}100%{transform:scale(1)}}
+
+/* 当前词条展示 */
+.traits-bar{display:flex;gap:5px;flex-wrap:wrap;}
+.trait-pip{
+  font-size:10px;padding:2px 8px;border-radius:4px;
+  font-family:'ZCOOL XiaoWei',serif;border:1px solid;
+}
+.tp-green{background:var(--green-card-bg);border-color:var(--green-card-bd);color:var(--green-card-tx);}
+.tp-blue{background:var(--blue-card-bg);border-color:var(--blue-card-bd);color:var(--blue-card-tx);}
+.tp-purple{background:var(--purple-card-bg);border-color:var(--purple-card-bd);color:var(--purple-card-tx);}
+.tp-red{background:var(--red-card-bg);border-color:var(--red-card-bd);color:var(--red-card-tx);}
+.tp-orange{background:var(--orange-card-bg);border-color:var(--orange-card-bd);color:var(--orange-card-tx);}
+
+/* 故事框 */
+.story-wrap{
+  background:rgba(240,232,208,0.03);border:1px solid rgba(200,146,26,0.1);
+  border-radius:12px;padding:1.4rem 1.6rem 1.6rem;min-height:150px;position:relative;
+}
+.story-wrap::before{content:'「';position:absolute;top:10px;left:12px;font-size:22px;color:rgba(200,146,26,0.15);font-family:'Ma Shan Zheng',cursive;}
+.story-wrap::after{content:'」';position:absolute;bottom:10px;right:12px;font-size:22px;color:rgba(200,146,26,0.15);font-family:'Ma Shan Zheng',cursive;}
+#story-text{display:block;font-size:14px;line-height:2.1;color:var(--paper2);font-weight:400;letter-spacing:0.05em;padding:0 4px;}
+.cursor{display:inline-block;width:2px;height:1.1em;background:var(--gold2);vertical-align:text-bottom;animation:blink 1s step-end infinite;margin-left:2px;}
+@keyframes blink{50%{opacity:0}}
+
+/* 等待 */
+.thinking{display:none;align-items:center;gap:10px;padding:4px 2px;}
+.thinking.show{display:flex;}
+.tdots span{display:inline-block;width:5px;height:5px;background:var(--gold);border-radius:50%;animation:td 1.2s ease infinite;margin:0 2px;}
+.tdots span:nth-child(2){animation-delay:.2s}.tdots span:nth-child(3){animation-delay:.4s}
+@keyframes td{0%,80%,100%{transform:scale(0.5);opacity:.3}40%{transform:scale(1);opacity:1}}
+.tlbl{font-size:12px;color:var(--gray2);letter-spacing:0.12em;}
+
+/* 预生成状态 */
+.pd-row{display:flex;align-items:center;gap:8px;height:20px;}
+.pd-dot{width:7px;height:7px;border-radius:50%;transition:all .4s;}
+.pd-dot.spin{background:var(--gold);animation:pdspin 1s ease infinite;}
+.pd-dot.ok{background:var(--jade2);}
+@keyframes pdspin{0%,100%{opacity:.25}50%{opacity:1}}
+.pd-lbl{font-size:10px;color:var(--gray2);font-family:'ZCOOL XiaoWei',serif;letter-spacing:0.1em;}
+
+/* 选项 */
+.choices{display:flex;flex-direction:column;gap:9px;}
+.choice{
+  background:rgba(240,232,208,0.03);border:1px solid rgba(200,146,26,0.13);
+  border-radius:10px;padding:13px 15px;font-size:14px;color:var(--paper2);
+  cursor:pointer;text-align:left;font-family:'Noto Serif SC',serif;
+  letter-spacing:0.05em;transition:all .2s;display:flex;justify-content:space-between;
+  align-items:center;gap:10px;animation:choicein .3s ease both;min-height:50px;line-height:1.55;
+}
+.choice:nth-child(2){animation-delay:.08s}.choice:nth-child(3){animation-delay:.16s}
+@keyframes choicein{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.choice:hover:not(:disabled){background:rgba(200,146,26,0.08);border-color:rgba(200,146,26,0.35);color:var(--gold3);transform:translateX(4px);}
+.choice:active:not(:disabled){transform:translateX(2px);}
+.choice:disabled{opacity:0.2;cursor:not-allowed;transform:none;}
+.choice-text{flex:1;}
+.rtag{font-size:10px;padding:3px 7px;border-radius:3px;font-family:'ZCOOL XiaoWei',serif;letter-spacing:0.1em;flex-shrink:0;white-space:nowrap;border:1px solid;}
+.r-xian{background:rgba(139,16,16,.22);color:#f08070;border-color:rgba(139,16,16,.3);}
+.r-wen{background:rgba(26,96,64,.18);color:#70c090;border-color:rgba(26,96,64,.25);}
+.r-qi{background:rgba(200,146,26,.15);color:var(--gold2);border-color:rgba(200,146,26,.22);}
+
+/* 底部 */
+.bottom-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.bpanel{background:rgba(240,232,208,0.02);border:1px solid rgba(200,146,26,0.08);border-radius:10px;padding:10px 13px;}
+.bp-title{font-size:10px;color:var(--gray2);letter-spacing:0.22em;margin-bottom:7px;font-family:'ZCOOL XiaoWei',serif;border-bottom:1px solid rgba(200,146,26,0.07);padding-bottom:5px;}
+.inv-items{display:flex;flex-wrap:wrap;gap:5px;min-height:22px;}
+.inv-tag{background:rgba(200,146,26,0.08);border:1px solid rgba(200,146,26,0.18);border-radius:4px;padding:2px 9px;font-size:11px;color:var(--gold2);font-family:'ZCOOL XiaoWei',serif;}
+.inv-empty{font-size:11px;color:rgba(90,80,64,0.4);font-style:italic;}
+.log-list{display:flex;flex-direction:column;gap:3px;max-height:90px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:rgba(200,146,26,0.12) transparent;}
+.log-list::-webkit-scrollbar{width:2px}
+.log-list::-webkit-scrollbar-thumb{background:rgba(200,146,26,0.15);border-radius:2px}
+.log-e{font-size:11px;color:var(--gray2);line-height:1.6;}
+.log-e.g{color:var(--jade2)}.log-e.b{color:var(--crimson2)}.log-e.s{color:var(--gold2)}
+
+/* Token */
+.tok-row{display:flex;gap:12px;justify-content:flex-end;font-size:10px;color:var(--gray2);font-family:'ZCOOL XiaoWei',serif;}
+.tok-row span{display:flex;align-items:center;gap:4px;}
+.tok-dot{width:5px;height:5px;border-radius:50%;}
+.tok-dot.i{background:var(--jade2)}.tok-dot.o{background:var(--gold)}.tok-dot.c{background:var(--crimson2)}
+
+/* 奇遇 */
+.ev-mask{display:none;position:fixed;inset:0;z-index:300;background:rgba(0,0,0,0.7);backdrop-filter:blur(2px);}
+.ev-mask.show{display:block;}
+.ev-panel{
+  display:none;position:fixed;bottom:0;left:0;right:0;z-index:310;
+  background:var(--ink2);border:1px solid rgba(200,146,26,0.28);
+  border-radius:14px 14px 0 0;
+  padding:1.4rem 1.5rem calc(env(safe-area-inset-bottom,0px) + 1.5rem);
+  animation:slideup .28s ease;max-height:85dvh;overflow-y:auto;
+}
+.ev-panel.show{display:block;}
+@keyframes slideup{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.ev-handle{width:36px;height:4px;border-radius:2px;background:rgba(200,146,26,0.18);margin:0 auto 1.2rem;}
+.ev-badge{font-size:10px;letter-spacing:0.2em;font-family:'ZCOOL XiaoWei',serif;padding:3px 10px;border-radius:3px;display:inline-block;margin-bottom:9px;}
+.ev-badge.ji{background:rgba(26,96,64,.18);color:#70c090;border:1px solid rgba(26,96,64,.28);}
+.ev-badge.xiong{background:rgba(139,16,16,.18);color:#f08070;border:1px solid rgba(139,16,16,.28);}
+.ev-badge.qi{background:rgba(200,146,26,.14);color:var(--gold2);border:1px solid rgba(200,146,26,.24);}
+.ev-title{font-family:'Ma Shan Zheng',cursive;font-size:1.2rem;color:var(--gold2);margin-bottom:8px;letter-spacing:0.1em;}
+.ev-body{font-size:13px;color:var(--paper2);line-height:1.95;margin-bottom:1.1rem;font-weight:400;}
+.ev-choices-wrap{display:flex;flex-direction:column;gap:8px;}
+.ev-ch{
+  background:rgba(240,232,208,0.04);border:1px solid rgba(200,146,26,.14);border-radius:8px;
+  padding:12px 14px;font-size:13px;color:var(--paper2);cursor:pointer;text-align:left;
+  font-family:'Noto Serif SC',serif;transition:all .18s;display:flex;justify-content:space-between;
+  align-items:center;min-height:48px;
+}
+.ev-ch:hover{background:rgba(200,146,26,.08);border-color:rgba(200,146,26,.35);}
+.ev-ch:active{background:rgba(200,146,26,.13);}
+
+/* 全屏特效 */
+.full-ov{display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.92);align-items:center;justify-content:center;flex-direction:column;gap:1.3rem;padding:2rem;}
+.full-ov.show{display:flex;animation:fadein .5s ease;}
+@keyframes fadein{from{opacity:0}to{opacity:1}}
+.full-ov.breakthrough{overflow:hidden;background:radial-gradient(circle at center,rgba(200,146,26,0.16),rgba(0,0,0,0.94) 58%);}
+.full-aura{
+  display:none;position:absolute;inset:0;pointer-events:none;overflow:hidden;
+}
+.full-ov.breakthrough .full-aura{display:block;}
+.full-ring{
+  position:absolute;left:50%;top:50%;border:1px solid rgba(248,208,96,0.55);border-radius:50%;
+  transform:translate(-50%,-50%) scale(0.4);animation:auraring 2.8s ease-out infinite;
+}
+.full-ring.r1{width:180px;height:180px;}
+.full-ring.r2{width:300px;height:300px;animation-delay:.35s;}
+.full-ring.r3{width:420px;height:420px;animation-delay:.7s;}
+@keyframes auraring{
+  0%{opacity:0;transform:translate(-50%,-50%) scale(0.4)}
+  18%{opacity:1}
+  100%{opacity:0;transform:translate(-50%,-50%) scale(1.18)}
+}
+.full-sparks{
+  position:absolute;inset:0;background:
+  radial-gradient(circle at 50% 20%,rgba(248,208,96,0.28),transparent 18%),
+  radial-gradient(circle at 20% 70%,rgba(40,160,96,0.18),transparent 18%),
+  radial-gradient(circle at 78% 72%,rgba(200,48,48,0.14),transparent 18%);
+  animation:sparkpulse 2.2s ease-in-out infinite;
+}
+@keyframes sparkpulse{0%,100%{opacity:.45}50%{opacity:1}}
+.full-realm{
+  font-size:12px;color:var(--gold3);font-family:'ZCOOL XiaoWei',serif;letter-spacing:0.28em;text-align:center;
+  text-shadow:0 0 16px rgba(248,208,96,0.4);display:none;position:relative;z-index:1;
+}
+.full-ov.breakthrough .full-realm{display:block;animation:realmpop .9s ease;}
+@keyframes realmpop{0%{opacity:0;transform:translateY(10px)}100%{opacity:1;transform:translateY(0)}}
+.full-big{font-family:'Ma Shan Zheng',cursive;font-size:clamp(2rem,9vw,4.5rem);text-align:center;letter-spacing:0.2em;animation:bigpop 1.2s ease;}
+@keyframes bigpop{0%{transform:scale(0.3);opacity:0}65%{transform:scale(1.1)}100%{transform:scale(1);opacity:1}}
+.full-big.gold{color:var(--gold2);text-shadow:0 0 80px rgba(200,146,26,.9);}
+.full-big.red{color:#f05050;text-shadow:0 0 80px rgba(240,80,80,.8);}
+.full-big.purple{color:var(--purple2);text-shadow:0 0 80px rgba(144,96,224,.8);}
+.full-sub{font-size:14px;color:var(--paper2);letter-spacing:0.12em;font-family:'ZCOOL XiaoWei',serif;text-align:center;line-height:1.8;}
+.full-act{background:transparent;border:1px solid currentColor;padding:11px 32px;border-radius:8px;cursor:pointer;font-family:'ZCOOL XiaoWei',serif;font-size:13px;letter-spacing:0.2em;transition:all .2s;min-height:46px;}
+.full-act.gold{color:var(--gold)}.full-act.gold:hover{background:var(--gold);color:#08060300;}
+.full-act.red{color:#f05050}.full-act.red:hover{background:#f05050;color:#fff;}
+.full-act.purple{color:var(--purple2)}.full-act.purple:hover{background:var(--purple2);color:#fff;}
+
+@media(min-width:600px){
+  .ev-panel{bottom:auto;top:50%;left:50%;transform:translate(-50%,-50%);width:min(480px,92vw);border-radius:14px;max-height:80vh;animation:evin .25s ease;}
+  @keyframes evin{from{opacity:0;transform:translate(-50%,-46%)}to{opacity:1;transform:translate(-50%,-50%)}}
+  .ev-handle{display:none;}
+}
+@media(max-width:420px){
+  .stats-grid{grid-template-columns:repeat(2,1fr);}
+  .bottom-grid{grid-template-columns:1fr;}
+  .attr-card{grid-template-columns:60px 1fr auto;}
+}
+</style>
+</head>
+<body>
+<div class="bg-fx"></div>
+
+<!-- ═══ START ═══ -->
+<div class="ov ov-bg" id="ov-api">
+  <div class="api-logo">问道链途</div>
+  <div class="api-tagline">
+    币圈修真传 · AI 预生成驱动<br>
+    服务端代行天机推演，浏览器不再持有 API Key
+  </div>
+  <div class="start-panel">
+    <div class="start-row"><span class="start-k">轮回点数</span><span class="start-v gold" id="start-total-pts">20</span></div>
+    <div class="start-row"><span class="start-k">当前局面</span><span class="start-v" id="start-run-status">无进行中的链途</span></div>
+    <div class="start-row"><span class="start-k">服务端</span><span class="start-v" id="start-backend-status">等待开局</span></div>
+  </div>
+  <div class="start-actions">
+    <button class="btn-gold" id="start-btn" onclick="startFreshRun()">开启新轮回 →</button>
+    <button class="ghost-btn" id="continue-btn" onclick="resumeSavedRun()" disabled>继续上次链途</button>
+    <div class="api-err" id="api-err"></div>
+  </div>
+</div>
+
+<!-- ═══ 选择人物 ═══ -->
+<div class="ov ov-bg ov-scroll hidden" id="ov-char">
+  <div class="char-ov-inner">
+    <div class="ov-title">选择你的人物</div>
+    <div class="ov-sub" id="char-pts-hint">当前累计点数：<span id="char-pts-show" style="color:var(--gold2)">20</span> 点</div>
+    <div class="char-grid" id="char-grid"></div>
+    <div class="char-detail hidden" id="char-detail"></div>
+    <button class="btn-gold" id="char-confirm-btn" onclick="onCharConfirm()" disabled>确认人物，进入加点</button>
+  </div>
+</div>
+
+<!-- ═══ 属性分配 ═══ -->
+<div class="ov ov-bg ov-scroll hidden" id="ov-alloc">
+  <div class="alloc-inner">
+    <div class="ov-title">分配天赋点</div>
+    <div class="ov-sub">共 <strong id="alloc-total" style="color:var(--gold2)">20</strong> 点 · 每属性上限 +10 · 影响开局属性与事件频率</div>
+    <div class="pts-pill">
+      <span class="pts-label">剩余点数</span>
+      <span class="pts-num" id="pts-num">20</span>
+      <span class="pts-label">点</span>
+    </div>
+    <div class="attr-cards" id="attr-cards"></div>
+    <button class="btn-gold" id="alloc-confirm" onclick="onAllocConfirm()">确认分配，抽取词条 →</button>
+  </div>
+</div>
+
+<!-- ═══ 词条选择 ═══ -->
+<div class="ov ov-bg ov-scroll hidden" id="ov-trait">
+  <div class="trait-inner">
+    <div class="ov-title">选择开局词条</div>
+    <div class="trait-pick-info">
+      <div class="ov-sub">从 8 张中选择 3 张 · 必含 1紫 1橙</div>
+      <div class="pick-count">已选 <span id="pick-count">0</span> / 3</div>
+    </div>
+    <div class="trait-grid-8" id="trait-grid"></div>
+    <button class="btn-gold" id="trait-confirm" onclick="onTraitConfirm()" disabled>以此开局，踏入链途 →</button>
+  </div>
+</div>
+
+<!-- ═══ 主游戏 ═══ -->
+<div class="wrap">
+  <header class="hdr">
+    <div class="hdr-left">
+      <div class="hdr-title">问道链途</div>
+      <div class="hdr-char" id="hdr-char">币圈修真传</div>
+    </div>
+    <div style="text-align:right">
+      <div class="realm-badge" id="realm-badge">凡人 A0</div>
+      <div class="realm-asset" id="realm-asset">负债</div>
+      <div class="hdr-meta">
+        <span class="save-pill" id="save-pill">未存档</span>
+        <button class="mini-btn" onclick="restartRun()">新轮回</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="asset-section">
+    <div class="asset-top">
+      <span class="asset-lbl">本金资产</span>
+      <span class="asset-num" id="asset-num">¥0</span>
+    </div>
+    <div class="asset-track"><div class="asset-fill" id="asset-fill" style="width:0%"></div></div>
+  </div>
+
+  <div class="stats-grid">
+    <div class="scard" id="sc-money"><span class="slbl">本　金</span><span class="snum" id="sv-money">0</span></div>
+    <div class="scard" id="sc-mind"> <span class="slbl">心　态</span><span class="snum" id="sv-mind">0</span></div>
+    <div class="scard" id="sc-know"> <span class="slbl">认　知</span><span class="snum" id="sv-know">0</span></div>
+    <div class="scard" id="sc-luck"> <span class="slbl">气　运</span><span class="snum" id="sv-luck">0</span></div>
+  </div>
+
+  <div class="traits-bar" id="traits-bar"></div>
+
+  <div class="story-wrap">
+    <span id="story-text">链途初开，等待命运...</span>
+    <span class="cursor" id="cursor" style="display:none"></span>
+  </div>
+
+  <div class="thinking" id="thinking">
+    <div class="tdots"><span></span><span></span><span></span></div>
+    <span class="tlbl">链上演算中，稍候...</span>
+  </div>
+
+  <div class="pd-row" id="pd-row" style="display:none">
+    <div class="pd-dot" id="pd-dot"></div>
+    <span class="pd-lbl" id="pd-lbl"></span>
+  </div>
+
+  <div class="choices" id="choices"></div>
+
+  <div class="tok-row" id="tok-row" style="display:none">
+    <span><div class="tok-dot i"></div><span id="ti">0</span> in</span>
+    <span><div class="tok-dot o"></div><span id="to">0</span> out</span>
+    <span><div class="tok-dot c"></div><span id="tc">$0.0000</span></span>
+  </div>
+
+  <div class="bottom-grid">
+    <div class="bpanel"><div class="bp-title">持　仓　记　录</div><div class="inv-items" id="inv"><span class="inv-empty">空仓</span></div></div>
+    <div class="bpanel"><div class="bp-title">操　盘　日　志</div><div class="log-list" id="log"><div class="log-e">▸ 进入市场</div></div></div>
+  </div>
+</div>
+
+<!-- 奇遇 -->
+<div class="ev-mask" id="ev-mask"></div>
+<div class="ev-panel" id="ev-panel">
+  <div class="ev-handle"></div>
+  <span class="ev-badge" id="ev-badge"></span>
+  <div class="ev-title" id="ev-title"></div>
+  <div class="ev-body" id="ev-body"></div>
+  <div class="ev-choices-wrap" id="ev-choices"></div>
+</div>
+
+<!-- 全屏特效 -->
+<div class="full-ov" id="full-ov">
+  <div class="full-aura" aria-hidden="true">
+    <div class="full-sparks"></div>
+    <div class="full-ring r1"></div>
+    <div class="full-ring r2"></div>
+    <div class="full-ring r3"></div>
+  </div>
+  <div class="full-realm" id="full-realm"></div>
+  <div class="full-big" id="full-big"></div>
+  <div class="full-sub" id="full-sub"></div>
+  <button class="full-act" id="full-act" onclick="onFullBtn()"></button>
+</div>
+
+<script>
+// ════════════════════════════════════════════════════
+// 数据层
+// ════════════════════════════════════════════════════
+
+// 境界表 A0-A15
+const REALMS = [
+  {code:'A0', name:'凡人',    sub:'入世凡尘',   asset:'负债',      assetNum:0},
+  {code:'A1', name:'练气初期',sub:'感应灵气',   asset:'¥1',        assetNum:1},
+  {code:'A2', name:'练气中期',sub:'吐纳灵气',   asset:'¥10',       assetNum:10},
+  {code:'A3', name:'练气后期',sub:'凝练灵气',   asset:'¥100',      assetNum:100},
+  {code:'A4', name:'筑基初期',sub:'夯实根基',   asset:'¥1,000',    assetNum:1000},
+  {code:'A5', name:'筑基中期',sub:'根基稳固',   asset:'¥1万',      assetNum:10000},
+  {code:'A6', name:'筑基后期',sub:'厚积待发',   asset:'¥10万',     assetNum:100000},
+  {code:'A7', name:'金丹初期',sub:'丹成一转',   asset:'¥100万',    assetNum:1000000},
+  {code:'A8', name:'金丹中期',sub:'丹成三转',   asset:'¥1,000万',  assetNum:10000000},
+  {code:'A9', name:'金丹后期',sub:'丹成九转',   asset:'¥1亿',      assetNum:100000000},
+  {code:'A10',name:'元婴初期',sub:'婴灵初现',   asset:'¥10亿',     assetNum:1000000000},
+  {code:'A11',name:'元婴中期',sub:'婴灵圆满',   asset:'¥100亿',    assetNum:10000000000},
+  {code:'A12',name:'元婴后期',sub:'婴灵化形',   asset:'¥1,000亿',  assetNum:100000000000},
+  {code:'A13',name:'化神初期',sub:'神意初显',   asset:'¥1万亿',    assetNum:1000000000000},
+  {code:'A14',name:'化神中期',sub:'神意贯通',   asset:'¥10万亿',   assetNum:10000000000000},
+  {code:'A15',name:'化神后期',sub:'神意圆满',   asset:'¥100万亿',  assetNum:100000000000000},
+];
+
+// 人物数据
+const CHARS = [
+  {
+    id:'散户',emoji:'👤',
+    name:'李狗蛋（散户）',reqPts:0,reqAttr:null,
+    twitter:null,
+    desc:'普通上班族，工资卡里有三万块，被朋友安利进来了。',
+    skill:'永远在最高点买入、最低点卖出的神奇天赋。',
+    ending:'多个方向，大部分以「上班还贷」结束，极小概率暴富。',
+    rebornTrait:null,
+    aiTag:'普通散户李狗蛋，刚入币圈的普通人',
+  },
+  {
+    id:'CZ',emoji:'🟡',
+    name:'赵长鹏 CZ',reqPts:35,reqAttr:{money:60},
+    twitter:'https://unavatar.io/twitter/cz_binance',
+    desc:'加拿大华裔，麦当劳收银台旁边炒单起家，创立了全球最大交易所。',
+    skill:'发一条推文，整个市场必动——利好利空各50%。专属事件：Funds are SAFU、「4」字推文。',
+    ending:'迪拜隐居 / 认罪缓刑 / 重出江湖',
+    rebornTrait:{name:'SAFU护体',tier:'orange',attr:'money',desc:'本金+25，认知+10，「资产永远安全」——直到不安全的那天',isReborn:true},
+    aiTag:'赵长鹏CZ，币安创始人，全球最大加密交易所掌门人',
+  },
+  {
+    id:'SBF',emoji:'🟦',
+    name:'SBF',reqPts:40,reqAttr:{know:70},
+    twitter:'https://unavatar.io/twitter/SBF_FTX',
+    desc:'MIT高材生，豆袋椅，蓬乱头发，每天只睡4小时，有效利他主义信徒。',
+    skill:'话术大师——用极其复杂的理论让所有人相信你，直到不信为止。专属事件：130亿窟窿、FTX崩盘。',
+    ending:'联邦监狱25年 / 保释期翻盘',
+    rebornTrait:{name:'有效利他Ⅱ',tier:'purple',attr:'know',desc:'认知+30，信仰值拉满，但遇到「聪明人」必信，被骗概率×1.5',isReborn:true},
+    aiTag:'SBF山姆班克曼弗里德，FTX创始人，有效利他主义者',
+  },
+  {
+    id:'宝二爷',emoji:'🟠',
+    name:'宝二爷',reqPts:40,reqAttr:{mind:70},
+    twitter:'https://unavatar.io/twitter/ChandlerGuo',
+    desc:'内蒙古煤老板，手里有大量现金不知道往哪投，自封比特币首席布道师。',
+    skill:'无论市场怎么跌，永远在直播间高喊「抄底」——且每次都真的抄到了。',
+    ending:'美国新生活 / 成为真正的比特币老人',
+    rebornTrait:{name:'布道者',tier:'blue',attr:'mind',desc:'气运+20，心态+20，「信徒越多，命运越好」',isReborn:true},
+    aiTag:'宝二爷郭宏才，比特币首席布道师，内蒙古煤老板',
+  },
+  {
+    id:'徐明星',emoji:'🔵',
+    name:'徐明星',reqPts:45,reqAttr:{luck:65},
+    twitter:'https://unavatar.io/twitter/star_okx',
+    desc:'西安程序员，做了个山寨比特币交易所，时常声称自己是中本聪。',
+    skill:'随时发布「重大公告」，市场必动。专属事件：提币暂停风波、神秘失联。',
+    ending:'重新出现 / 永久失联',
+    rebornTrait:{name:'重大公告',tier:'purple',attr:'luck',desc:'气运+30，认知+15，随时可触发「重磅消息」事件',isReborn:true},
+    aiTag:'徐明星OKX创始人，「我就是中本聪」',
+  },
+  {
+    id:'孙宇晨',emoji:'🌊',
+    name:'孙宇晨',reqPts:50,reqAttr:{luck:75},
+    twitter:'https://unavatar.io/twitter/justinsuntron',
+    desc:'马云门徒，百万美元午餐，波场创始人，格林纳达大使。',
+    skill:'无限画饼，只要你信就永远有新故事。专属事件：吃火锅引发暴跌。',
+    ending:'继续画饼 / 监管收网',
+    rebornTrait:{name:'大饼画手',tier:'red',attr:'luck',desc:'气运+40，认知-10，「饼永远比现实大一圈」',isReborn:true},
+    aiTag:'孙宇晨Justin Sun，波场TRON创始人，格林纳达大使',
+  },
+  {
+    id:'DoKwon',emoji:'🌑',
+    name:'Do Kwon',reqPts:55,reqAttr:{know:85},
+    twitter:'https://unavatar.io/twitter/stablekwon',
+    desc:'斯坦福毕业，「稳定币永不脱钩」，创造了史上最大算法稳定币神话与崩盘。',
+    skill:'创建算法稳定币，早期信徒全部暴富，直到系统崩溃归零。',
+    ending:'黑山被捕 / 韩国受审',
+    rebornTrait:{name:'算法信仰',tier:'red',attr:'know',desc:'认知+35，但本金有40%概率在某一回合触发「脱锚」归零',isReborn:true},
+    aiTag:'Do Kwon，Terra LUNA创始人，算法稳定币之父',
+  },
+  {
+    id:'木头姐',emoji:'🪵',
+    name:'Cathie Wood',reqPts:55,reqAttr:{know:80},
+    twitter:'https://unavatar.io/twitter/CathieDWood',
+    desc:'ARK基金创始人，每年预测比特币涨到100万美元，预测从未改变。',
+    skill:'预测永远是100万美元，时间无限延长。专属：「我的目标从未改变」。',
+    ending:'终于对了一次 / 永远在等那一次',
+    rebornTrait:{name:'百万预言',tier:'blue',attr:'know',desc:'认知+25，气运+15，「信念比时间线更重要」',isReborn:true},
+    aiTag:'Cathie Wood木头姐，ARK基金创始人，BTC百万美元预言家',
+  },
+  {
+    id:'ZachXBT',emoji:'🦫',
+    name:'ZachXBT',reqPts:60,reqAttr:{know:100},
+    twitter:'https://unavatar.io/twitter/zachxbt',
+    desc:'匿名链上侦探，头像是土拨鼠，专门撰写链上调查报告揭露骗局。',
+    skill:'追踪任意钱包，识破跑路地址。梗：「ser this is a rug」',
+    ending:'永远匿名 / 意外被人肉',
+    rebornTrait:{name:'链上记忆',tier:'orange',attr:'know',desc:'认知+40，开局自动识破3种骗局类型，「见过太多了」',isReborn:true},
+    aiTag:'ZachXBT，匿名链上侦探，加密世界的私家侦探',
+  },
+  {
+    id:'Brian',emoji:'🏛️',
+    name:'Brian Armstrong',reqPts:60,reqAttr:{know:85},
+    twitter:'https://unavatar.io/twitter/brian_armstrong',
+    desc:'Coinbase掌门人，擅长把最野的行业包装进最规矩的西装里，永远在合规与增长之间找平衡。',
+    skill:'一纸公告就能让新币飞天或归零。专属事件：美国监管、上币委员会、机构入场。',
+    ending:'继续敲钟 / 监管缠斗 / 成为华尔街入口',
+    rebornTrait:{name:'合规护城河',tier:'blue',attr:'know',desc:'认知+20，气运+20，遇到监管事件时损失减半',isReborn:true},
+    aiTag:'Brian Armstrong，Coinbase创始人，合规交易所路线代表人物',
+  },
+  {
+    id:'Arthur',emoji:'⚔️',
+    name:'Arthur Hayes',reqPts:65,reqAttr:{mind:85},
+    twitter:'https://unavatar.io/twitter/CryptoHayes',
+    desc:'BitMEX灵魂人物，嘴上谈宏观、手上开高倍，市场越疯他越像回家。',
+    skill:'一篇长文即可让全网开始猜顶部和底部。专属事件：永续合约、宏观转向、流动性踩踏。',
+    ending:'写完宏观神文 / 再次押中周期 / 被市场教育',
+    rebornTrait:{name:'永续道心',tier:'red',attr:'mind',desc:'心态+35，本金+15，极端波动时额外获得一次翻盘机会',isReborn:true},
+    aiTag:'Arthur Hayes，BitMEX联合创始人，宏观叙事与高杠杆交易代表人物',
+  },
+  {
+    id:'Saylor',emoji:'₿',
+    name:'Michael Saylor',reqPts:70,reqAttr:{money:90},
+    twitter:'https://unavatar.io/twitter/saylor',
+    desc:'把公司资产负债表改造成比特币圣杯的男人，任何问题都能回答成「买BTC」。',
+    skill:'信仰型满仓，回撤只会让你更想加仓。专属事件：可转债、财报买币、激进布道。',
+    ending:'账面封神 / 长期穿越 / 被迫解释波动',
+    rebornTrait:{name:'比特币圣约',tier:'orange',attr:'money',desc:'本金+30，心态+20，持有BTC相关事件收益显著提升',isReborn:true},
+    aiTag:'Michael Saylor，Strategy掌舵人，比特币企业国库模式的极致信徒',
+  },
+  {
+    id:'HeYi',emoji:'🟨',
+    name:'何一 He Yi',reqPts:72,reqAttr:{luck:90},
+    twitter:'https://unavatar.io/twitter/heyibinance',
+    desc:'Binance 联合创始人，擅长用户增长、社区运营和平台节奏控制，是交易所叙事背后的关键推手。',
+    skill:'一句话就能把市场情绪从观望推到 FOMO。专属事件：上币风向、社区运营、平台流量倾斜。',
+    ending:'继续掌控流量入口 / 舆论反噬 / 把下一轮情绪推到极致',
+    rebornTrait:{name:'流量天枢',tier:'red',attr:'luck',desc:'气运+35，认知+15，叙事型事件更容易变成实际收益',isReborn:true},
+    aiTag:'何一He Yi，Binance联合创始人，擅长用户增长、社区运营和平台节奏掌控',
+  },
+  {
+    id:'吴忌寒',emoji:'⛏️',
+    name:'吴忌寒',reqPts:75,reqAttr:{money:90},
+    twitter:null,
+    desc:'矿圈枭雄，懂芯片、懂矿机、懂算力，也懂如何在最冷的时候囤下下一轮的火种。',
+    skill:'掌控矿机与算力周期，熊市里埋伏，牛市里收割。专属事件：矿机关停、算力迁徙、矿池大战。',
+    ending:'矿海称王 / 周期再起 / 被成本线反噬',
+    rebornTrait:{name:'算力命门',tier:'red',attr:'money',desc:'本金+25，认知+20，熊市回合额外积累资源',isReborn:true},
+    aiTag:'吴忌寒，矿圈核心人物，矿机、矿池与算力周期的代表玩家',
+  },
+  {
+    id:'V神',emoji:'💎',
+    name:'V神 Vitalik',reqPts:80,reqAttr:{know:90},
+    twitter:'https://unavatar.io/twitter/VitalikButerin',
+    desc:'19岁俄裔加拿大少年，比特币周刊编辑，被拒后自建以太坊，改变了整个行业。',
+    skill:'说一句话整个生态震动，但他只关心去中心化本身。专属：捐款SHIB、以太坊合并。',
+    ending:'唯一纯正面结局（需放弃所有本金才能达到）',
+    rebornTrait:{name:'以太坊精神',tier:'orange',attr:'know',desc:'认知满值，本金归零但解锁「飞升」真结局线',isReborn:true},
+    aiTag:'Vitalik Buterin V神，以太坊创始人，去中心化信仰者',
+  },
+  {
+    id:'中本聪',emoji:'∞',
+    name:'中本聪',reqPts:100,reqAttr:{money:80,mind:80,know:80,luck:80},
+    twitter:null,
+    desc:'不知道是谁，不知道在哪，只有一封邮件和一个创世区块。每人都说自己是你。',
+    skill:'创世区块、最后一封邮件、永久消失。没有人真的是你，但你改变了一切。',
+    ending:'唯一结局：消失。留下改变世界的遗产。',
+    rebornTrait:{name:'创世记忆',tier:'orange',attr:null,desc:'解锁全部隐藏内容，所有属性+20，开局即触发传奇事件',isReborn:true},
+    aiTag:'中本聪Satoshi Nakamoto，比特币创始人，身份至今成谜',
+  },
+];
+
+// 词条库（每属性5张，绿蓝紫红橙各一）
+const TRAIT_POOL = [
+  // 本金词条
+  {id:'t1',tier:'green', attr:'money',name:'工资定投',    desc:'每N回合固定加仓，本金+10。「不管涨跌，坚持就是胜利」'},
+  {id:'t2',tier:'blue',  attr:'money',name:'空投猎人',    desc:'本金+20，每N回合随机触发空投——可能是土狗也可能是传奇'},
+  {id:'t3',tier:'purple',attr:'money',name:'杠杆战神',    desc:'本金×2，同时负债×2，清算线始终悬在头顶一线之差'},
+  {id:'t4',tier:'red',   attr:'money',name:'梭哈天才',    desc:'本金×3，但每次决策只有「全仓进」和「全仓出」，没有中间'},
+  {id:'t5',tier:'orange',attr:'money',name:'VC估值魔法',  desc:'本金×5，FDV永远比市值高100倍，但总能找到下一轮接盘侠'},
+  // 心态词条
+  {id:'t6',tier:'green', attr:'mind',name:'套牢不卖',     desc:'心态+15，亏损时自动触发「等回本」信念，触发止损线时帮你拒绝'},
+  {id:'t7',tier:'blue',  attr:'mind',name:'钻石手',       desc:'心态+25，割肉概率-40%，熊市存活率大幅提升'},
+  {id:'t8',tier:'purple',attr:'mind',name:'熊市建仓派',   desc:'心态+35，熊市期间本金积累+50%，但牛市来了反而开始焦虑'},
+  {id:'t9',tier:'red',   attr:'mind',name:'永不止损',     desc:'心态+45，触发止损线时系统强制「再等等」，历史成功率62%'},
+  {id:'t10',tier:'orange',attr:'mind',name:'禅定',        desc:'心态满值，任何行情无法动摇，代价是气运-30（太平静了错过所有暴涨）'},
+  // 认知词条
+  {id:'t11',tier:'green', attr:'know',name:'白皮书读完',  desc:'认知+15，遇到技术问题能唬住90%的人，包括偶尔唬住自己'},
+  {id:'t12',tier:'blue',  attr:'know',name:'四年周期论',  desc:'认知+25，深刻理解减半周期，减半年必有重大奇遇触发'},
+  {id:'t13',tier:'purple',attr:'know',name:'链上侦探',    desc:'认知+38，识破跑路概率+60%，可追踪资金流向，气运+15'},
+  {id:'t14',tier:'red',   attr:'know',name:'宏观研究员',  desc:'认知+48，每天读美联储，看懂了每个字，但还是猜错了方向'},
+  {id:'t15',tier:'orange',attr:'know',name:'中本聪遗稿',  desc:'认知满值，理解比特币终极意义，解锁中本聪隐藏对话线'},
+  // 气运词条
+  {id:'t16',tier:'green', attr:'luck',name:'第一批用户',  desc:'气运+15，总比别人早一步发现项目，也总早一步卖掉'},
+  {id:'t17',tier:'blue',  attr:'luck',name:'土狗猎手',    desc:'气运+25，专在垃圾堆里找百倍币，成功率5%，但5%已经够了'},
+  {id:'t18',tier:'purple',attr:'luck',name:'做市商朋友',  desc:'气运+38，提前知道拉盘窗口，本金增益×1.3，顺便被SEC盯上概率+20%'},
+  {id:'t19',tier:'red',   attr:'luck',name:'天选散户',    desc:'气运+50，每次极端行情必然在场——可能是最高点也可能是最低点'},
+  {id:'t20',tier:'orange',attr:'luck',name:'中本聪遗产',  desc:'气运满值，100万枚BTC的气场加持，触发概率极低的传奇级事件'},
+];
+
+// 奇遇事件库（币圈主题）
+const EVENTS = [
+  {type:'ji',title:'空投大礼',desc:'钱包里突然出现一笔不明来历的空投，链上显示是某知名项目的早期奖励，价值可观。',
+    choices:[{text:'立刻卖出',risk:'wen',fx:{money:+20}},{text:'继续持有',risk:'qi',fx:{know:+15,luck:+10}}]},
+  {type:'xiong',title:'合约爆仓',desc:'你的10倍杠杆多单在流动性最差的时间段被针刺穿，强制平仓通知已经发到邮箱。',
+    choices:[{text:'认亏止损',risk:'wen',fx:{money:-25,mind:+10}},{text:'加仓摊低',risk:'xian',fx:{money:-40,mind:-20}}]},
+  {type:'qi',title:'神秘大佬私信',desc:'一位链上数据显示持有数千枚BTC的地址给你发来私信，表示对你的项目感兴趣。',
+    choices:[{text:'积极回应',risk:'qi',fx:{luck:+25,know:+10}},{text:'谨慎核实',risk:'wen',fx:{know:+20}}]},
+  {type:'ji',title:'牛市信号',desc:'链上数据显示长期持有者开始移动筹码，历史上这个信号出现后三个月内必有大行情。',
+    choices:[{text:'重仓买入',risk:'xian',fx:{money:+35,mind:-15}},{text:'分批建仓',risk:'wen',fx:{money:+15,mind:+5}}]},
+  {type:'xiong',title:'交易所暂停提币',desc:'你资产所在的交易所突然发公告：「由于系统维护，提币暂时暂停」，用户社区已炸锅。',
+    choices:[{text:'静待公告',risk:'qi',fx:{mind:-20,know:+10}},{text:'联系客服',risk:'wen',fx:{mind:-10,luck:+5}}]},
+  {type:'qi',title:'KOL喊单',desc:'一位百万粉丝KOL在直播中点名推荐你持有的一个山寨币，粉丝正在跟单涌入。',
+    choices:[{text:'趁机出货',risk:'wen',fx:{money:+20,know:+10}},{text:'继续持有',risk:'xian',fx:{money:+40,luck:-15}}]},
+  {type:'xiong',title:'项目方跑路',desc:'你投资的一个DeFi项目在TVL达到高峰时，官推删帖，Discord解散，合约权限被转移。',
+    choices:[{text:'立刻撤资',risk:'wen',fx:{money:-15,know:+20}},{text:'相信还会回来',risk:'xian',fx:{money:-40,mind:-25}}]},
+  {type:'ji',title:'链上大佬跟单',desc:'链上监控显示某个「聪明钱」地址刚刚复制了你的仓位，这让你感到莫名的自信。',
+    choices:[{text:'继续持有',risk:'qi',fx:{money:+25,luck:+15}},{text:'加仓跟进',risk:'xian',fx:{money:+40,mind:-10}}]},
+  {type:'xiong',title:'监管突袭',desc:'某国监管机构突然宣布全面禁止加密货币交易，消息在凌晨3点发出，市场瞬间暴跌30%。',
+    choices:[{text:'割肉离场',risk:'wen',fx:{money:-20,mind:-10}},{text:'抄底加仓',risk:'xian',fx:{money:+50,luck:-20}}]},
+  {type:'qi',title:'技术顿悟',desc:'在反复研究白皮书和链上数据之后，你突然对整个市场结构有了前所未有的清晰认知。',
+    choices:[{text:'整理并分享',risk:'wen',fx:{know:+30,luck:+10}},{text:'独自建仓',risk:'qi',fx:{know:+20,money:+15}}]},
+  {type:'ji',title:'牛市来了',desc:'比特币突破历史高位，全市场FOMO情绪蔓延，你的所有持仓全线飘红。',
+    choices:[{text:'落袋为安',risk:'wen',fx:{money:+30,mind:+10}},{text:'继续骑牛',risk:'xian',fx:{money:+60,mind:-20}}]},
+  {type:'xiong',title:'被人肉',desc:'因为在社区发表了争议性观点，有人开始公开你的个人信息，你的链上地址也被标记。',
+    choices:[{text:'低调处理',risk:'wen',fx:{luck:-15,know:+10}},{text:'正面回击',risk:'xian',fx:{mind:+10,luck:-25}}]},
+  {type:'qi',title:'SEC传票',desc:'一封信从美国证监会寄来，询问你某笔交易的相关信息，律师费已经在心里开始计算。',
+    choices:[{text:'聘请律师配合',risk:'wen',fx:{money:-15,know:+20}},{text:'转移资产',risk:'xian',fx:{luck:+20,know:-15}}]},
+  {type:'ji',title:'减半行情',desc:'比特币第四次减半正式到来，历史数据显示减半后12个月内平均涨幅超过300%。',
+    choices:[{text:'满仓押注',risk:'xian',fx:{money:+50,mind:-20}},{text:'定期定额',risk:'wen',fx:{money:+20,know:+10}}]},
+];
+
+// ════════════════════════════════════════════════════
+// 游戏状态
+// ════════════════════════════════════════════════════
+const STORAGE = {
+  meta: 'qdlt_meta',
+  run: 'qdlt_run'
+};
+const SAVE_VERSION = 2;
+
+const G = {
+  realmIdx: 0,
+  money: 0, mind: 0, know: 0, luck: 0,
+  inv: [], hist: [], turn: 0, alive: true,
+  logs: ['进入市场'],
+  char: null, traits: [],
+  totalPts: 20, // 累计可用点数
+  prevChar: null, prevTraits: [], prevKey: null, // 轮回数据
+};
+const TOK = {i:0, o:0};
+let cache = {}, pdCount = 0, lastEvIdx = -1;
+let META = null;
+let RUN = null;
+let currentStory = '链途初开，等待命运...';
+let currentChoices = [];
+let selectedFullAction = null;
+
+// ════════════════════════════════════════════════════
+// 持久化
+// ════════════════════════════════════════════════════
+function readStore(key) {
+  try { return JSON.parse(localStorage.getItem(key) || 'null'); }
+  catch (_) { return null; }
+}
+function saveMeta() {
+  localStorage.setItem(STORAGE.meta, JSON.stringify({
+    version: SAVE_VERSION,
+    totalPts: G.totalPts,
+    prevChar: G.prevChar,
+    prevTraits: G.prevTraits,
+    prevKey: G.prevKey,
+  }));
+}
+function loadPersist() {
+  META = readStore(STORAGE.meta) || readStore('qdlt_save');
+  RUN = readStore(STORAGE.run);
+  if (!META) return;
+  G.totalPts = META.totalPts || 20;
+  G.prevChar = META.prevChar || null;
+  G.prevTraits = META.prevTraits || [];
+  G.prevKey = META.prevKey || null;
+}
+function updateSavePill(text='未存档') {
+  const el = document.getElementById('save-pill');
+  if (el) el.textContent = text;
+}
+function persistRun() {
+  if (!G.char || !G.traits.length || !G.alive) return;
+  const snapshot = {
+    version: SAVE_VERSION,
+    savedAt: Date.now(),
+    lastEvIdx,
+    TOK: { i: TOK.i, o: TOK.o },
+    currentStory,
+    currentChoices,
+    G: JSON.parse(JSON.stringify(G))
+  };
+  localStorage.setItem(STORAGE.run, JSON.stringify(snapshot));
+  RUN = snapshot;
+  updateSavePill('已存档 ' + new Date(snapshot.savedAt).toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }));
+}
+function clearRunSave() {
+  localStorage.removeItem(STORAGE.run);
+  RUN = null;
+  updateSavePill('未存档');
+}
+function restoreRun(snapshot) {
+  if (!snapshot?.G) return false;
+  Object.assign(G, snapshot.G);
+  TOK.i = snapshot.TOK?.i || 0;
+  TOK.o = snapshot.TOK?.o || 0;
+  lastEvIdx = snapshot.lastEvIdx ?? -1;
+  currentStory = snapshot.currentStory || currentStory;
+  currentChoices = Array.isArray(snapshot.currentChoices) ? snapshot.currentChoices : [];
+  return true;
+}
+
+// ════════════════════════════════════════════════════
+// 工具函数
+// ════════════════════════════════════════════════════
+function log(msg, cls='') {
+  const b = document.getElementById('log');
+  const e = document.createElement('div');
+  e.className = 'log-e ' + cls;
+  e.textContent = '▸ ' + msg;
+  b.insertBefore(e, b.firstChild);
+  G.logs = [`${cls}|${msg}`,...(G.logs||[])].slice(0,50);
+  while (b.children.length > 50) b.removeChild(b.lastChild);
+}
+function renderLogs() {
+  const b = document.getElementById('log');
+  b.innerHTML = '';
+  (G.logs||['进入市场']).forEach((entry) => {
+    const [cls, ...parts] = String(entry).split('|');
+    const e = document.createElement('div');
+    e.className = 'log-e ' + (parts.length ? cls : '');
+    e.textContent = '▸ ' + (parts.length ? parts.join('|') : cls);
+    b.appendChild(e);
+  });
+}
+function pop(id) {
+  const e = document.getElementById(id);
+  e.classList.remove('pop'); void e.offsetWidth; e.classList.add('pop');
+}
+function animNum(id, from, to) {
+  const el = document.getElementById(id);
+  if (!el || from === to) return;
+  el.classList.remove('up','dn'); void el.offsetWidth;
+  el.classList.add(to > from ? 'up' : 'dn');
+  const steps=8, ms=360, d=to-from; let i=0;
+  const t = setInterval(()=>{
+    i++; el.textContent = Math.round(from + d*(i/steps));
+    if (i>=steps){clearInterval(t);el.textContent=to;setTimeout(()=>el.classList.remove('up','dn'),500);}
+  }, ms/steps);
+}
+function tierLabel(tier) {
+  return {green:'🟢 普通',blue:'🔵 精良',purple:'🟣 稀有',red:'🔴 史诗',orange:'🟠 传说'}[tier] || tier;
+}
+function attrLabel(attr) {
+  return {money:'本金',mind:'心态',know:'认知',luck:'气运'}[attr] || attr;
+}
+
+function updateStats(prev) {
+  // 境界
+  const r = REALMS[G.realmIdx];
+  document.getElementById('realm-badge').textContent = r.name + ' ' + r.code;
+  document.getElementById('realm-asset').textContent = r.asset;
+  // 资产进度条（当前境界内进度）
+  const nextR = REALMS[Math.min(G.realmIdx+1, REALMS.length-1)];
+  const pct = G.realmIdx >= REALMS.length-1 ? 100 :
+    Math.min(100, Math.max(0, ((G.money - r.assetNum)/(nextR.assetNum - r.assetNum))*100));
+  document.getElementById('asset-fill').style.width = pct + '%';
+  document.getElementById('asset-num').textContent = G.money > 1e12 ? '¥'+Math.round(G.money/1e12)+'万亿' :
+    G.money > 1e8 ? '¥'+Math.round(G.money/1e8)+'亿' :
+    G.money > 1e4 ? '¥'+Math.round(G.money/1e4)+'万' : '¥'+G.money;
+  // 属性
+  ['money','mind','know','luck'].forEach(k=>{
+    if(prev && G[k]!==prev[k]){animNum('sv-'+k,prev[k],G[k]);pop('sc-'+k);}
+    else{const el=document.getElementById('sv-'+k);if(el)el.textContent=G[k];}
+  });
+  // 背包
+  const inv = document.getElementById('inv'); inv.innerHTML='';
+  if(!G.inv.length) inv.innerHTML='<span class="inv-empty">空仓</span>';
+  else G.inv.forEach(it=>{const t=document.createElement('span');t.className='inv-tag';t.textContent=it;inv.appendChild(t);});
+  renderLogs();
+}
+
+function updateTok(i,o) {
+  TOK.i+=i; TOK.o+=o;
+  const cost=(TOK.i/1e6)*3+(TOK.o/1e6)*15;
+  document.getElementById('ti').textContent=TOK.i.toLocaleString();
+  document.getElementById('to').textContent=TOK.o.toLocaleString();
+  document.getElementById('tc').textContent='$'+cost.toFixed(4);
+  document.getElementById('tok-row').style.display='flex';
+}
+
+function setPD(on) {
+  // 预生成未完成时禁用选项，完成后启用
+  if(on) setEnabled(false);
+  else setEnabled(true);
+  const row=document.getElementById('pd-row'),dot=document.getElementById('pd-dot'),lbl=document.getElementById('pd-lbl');
+  row.style.display='flex';
+  dot.className='pd-dot '+(on?'spin':'ok');
+  lbl.textContent=on?'天机演算中，请稍候...':'天机已备，点击选择';
+}
+
+function applyFx(fx, prev) {
+  if(!fx)return;
+  if(fx.money!=null){G.money=Math.max(0,G.money+fx.money);log((fx.money>=0?'本金+':'本金')+fx.money,fx.money>=0?'g':'b');}
+  if(fx.mind!=null){G.mind=Math.max(0,Math.min(200,G.mind+fx.mind));log((fx.mind>=0?'心态+':'心态')+fx.mind,fx.mind>=0?'g':'b');}
+  if(fx.know!=null){G.know=Math.max(0,Math.min(200,G.know+fx.know));log((fx.know>=0?'认知+':'认知')+fx.know,fx.know>=0?'g':'b');}
+  if(fx.luck!=null&&fx.luck!==0){G.luck=Math.max(0,Math.min(200,G.luck+fx.luck));log((fx.luck>=0?'气运+':'气运')+fx.luck,fx.luck>=0?'g':'b');}
+  if(fx.item&&!G.inv.includes(fx.item)){G.inv.push(fx.item);log('获得：'+fx.item,'s');}
+  if(fx.lose_item&&G.inv.includes(fx.lose_item)){G.inv=G.inv.filter(it=>it!==fx.lose_item);log('失去：'+fx.lose_item,'b');}
+  updateStats(prev);
+  checkRealm();
+  checkDeath();
+  persistRun();
+}
+
+function checkRealm() {
+  for(let i=REALMS.length-1;i>=0;i--){
+    if(G.money>=REALMS[i].assetNum){
+      if(i>G.realmIdx){
+        G.realmIdx=i;
+        log('境界突破！晋入'+REALMS[i].name,'s');
+        showFull('境界突破！',REALMS[i].name+' '+REALMS[i].code+'\n'+REALMS[i].sub,'gold','继续操盘','breakthrough');
+      }
+      break;
+    }
+  }
+}
+
+function checkDeath() {
+  if(!G.alive)return;
+  if(G.money<=0&&G.realmIdx>0){G.alive=false;showFull('本金归零，破产清算','所有持仓已被强制平仓\n「这次真的学到了」','red','重新入场');return;}
+  if(G.mind<=0){G.alive=false;showFull('心态崩了，恐慌踩踏','在最低点全仓割肉离场\n「我再也不碰这个了」','red','重新入场');return;}
+  if(G.know<=0){G.alive=false;showFull('认知归零，永远被割','被同一个骗局骗了第三次\n「他们太坏了」','red','重新入场');}
+}
+
+function showFull(big, sub, color, btn, mode='') {
+  document.getElementById('full-big').textContent=big;
+  document.getElementById('full-big').className='full-big '+color;
+  document.getElementById('full-sub').textContent=sub;
+  document.getElementById('full-realm').textContent = mode==='breakthrough' ? '灵压暴涨 · 天机震荡 · 道心凝成' : '';
+  const b=document.getElementById('full-act');b.textContent=btn;b.className='full-act '+color;
+  selectedFullAction = mode;
+  document.getElementById('full-ov').className='full-ov show'+(mode==='breakthrough'?' breakthrough':'');
+}
+function onFullBtn() {
+  document.getElementById('full-ov').className='full-ov';
+  if(!G.alive){
+    // 通关/死亡：保存轮回数据
+    G.totalPts += 10;
+    G.prevChar = G.char?.id||null;
+    G.prevTraits = G.traits.map(t=>t.id);
+    G.prevKey = G.prevChar; // 记录上世人物
+    saveMeta();
+    clearRunSave();
+    location.reload();
+    return;
+  }
+  selectedFullAction = null;
+  persistRun();
+}
+
+// ════════════════════════════════════════════════════
+// 开场与续档
+// ════════════════════════════════════════════════════
+function updateStartOverlay() {
+  document.getElementById('start-total-pts').textContent = G.totalPts;
+  document.getElementById('continue-btn').disabled = !RUN?.G;
+  document.getElementById('start-run-status').textContent = RUN?.savedAt
+    ? '已保存到 ' + new Date(RUN.savedAt).toLocaleString('zh-CN', { month:'2-digit', day:'2-digit', hour:'2-digit', minute:'2-digit' })
+    : '无进行中的链途';
+  document.getElementById('start-backend-status').textContent = '等待开局';
+}
+window.addEventListener('load', ()=>{
+  loadPersist();
+  updateStartOverlay();
+  updateSavePill(RUN?.savedAt ? '可续档' : '未存档');
+});
+function startFreshRun(){
+  clearRunSave();
+  document.getElementById('api-err').textContent='';
+  document.getElementById('ov-api').className='ov ov-bg hidden';
+  setTimeout(showCharSelect,120);
+}
+function resumeSavedRun() {
+  if (!restoreRun(RUN)) return;
+  document.getElementById('api-err').textContent='';
+  document.getElementById('ov-api').className='ov ov-bg hidden';
+  document.getElementById('hdr-char').textContent = G.char?.name || '币圈修真传';
+  renderTraitsBar();
+  updateStats(null);
+  updateTok(0,0);
+  document.getElementById('story-text').textContent = currentStory;
+  renderChoices(currentChoices);
+  setEnabled(true);
+  if (currentChoices.length) prefetchAll(currentChoices,[...G.hist]);
+  updateSavePill('已续档');
+}
+function restartRun() {
+  clearRunSave();
+  location.reload();
+}
+
+// ════════════════════════════════════════════════════
+// 人物选择
+// ════════════════════════════════════════════════════
+let selectedChar = null;
+function showCharSelect(){
+  document.getElementById('ov-char').className='ov ov-bg ov-scroll';
+  document.getElementById('char-pts-show').textContent=G.totalPts;
+  renderCharGrid();
+}
+function renderCharGrid(){
+  const grid=document.getElementById('char-grid');grid.innerHTML='';
+  CHARS.forEach(ch=>{
+    const locked=!canUnlockChar(ch);
+    const card=document.createElement('div');
+    card.className='char-card'+(locked?' locked':'')+(ch.id==='散户'?' free':'');
+    // 头像
+    const av=document.createElement('div');av.className='char-avatar';
+    if(ch.twitter){const img=document.createElement('img');img.src=ch.twitter;img.onerror=()=>{av.textContent=ch.emoji;};av.appendChild(img);}
+    else av.textContent=ch.emoji;
+    card.appendChild(av);
+    // 名字
+    const nm=document.createElement('div');nm.className='char-name';nm.textContent=ch.name;card.appendChild(nm);
+    // 解锁要求
+    const req=document.createElement('div');req.className='char-req';
+    req.textContent=ch.reqPts>0?ch.reqPts+'点':'默认解锁';card.appendChild(req);
+    // 锁图标
+    if(locked){const lk=document.createElement('div');lk.className='char-lock-icon';lk.textContent='🔒';card.appendChild(lk);}
+    card.onclick=()=>onCharClick(ch,locked);
+    grid.appendChild(card);
+  });
+}
+function canUnlockChar(ch){
+  if(G.totalPts<ch.reqPts)return false;
+  if(!ch.reqAttr)return true;
+  // 属性要求在选完词条/加点后才能满足，这里只检查点数
+  return true;
+}
+let _selectedCharEl=null;
+function onCharClick(ch,locked){
+  // 清除之前选中
+  document.querySelectorAll('.char-card').forEach(c=>c.classList.remove('selected'));
+  const detail=document.getElementById('char-detail');
+  if(locked){
+    detail.className='char-detail';
+    detail.innerHTML=`<div class="char-detail-locked">🔒 点数不足（需 ${ch.reqPts} 点，当前 ${G.totalPts} 点）<br><small>每次通关可获得 +10 点</small></div>`;
+    detail.className='char-detail';
+    selectedChar=null;
+    document.getElementById('char-confirm-btn').disabled=true;
+    return;
+  }
+  // 选中
+  event.currentTarget.classList.add('selected');
+  selectedChar=ch;
+  document.getElementById('char-confirm-btn').disabled=false;
+  // 显示详情
+  detail.innerHTML=`
+    <div class="char-detail-name">${ch.name}</div>
+    <div class="char-detail-body">${ch.desc}<br><br><strong>技能：</strong>${ch.skill}</div>
+    <div class="char-detail-skill">🏁 结局方向：${ch.ending}${ch.rebornTrait?'<br>🔄 轮回词条：'+ch.rebornTrait.name+'（通关后继承）':''}</div>
+  `;
+  detail.className='char-detail';
+}
+function onCharConfirm(){
+  if(!selectedChar)return;
+  G.char=selectedChar;
+  document.getElementById('hdr-char').textContent=selectedChar.name+' · '+selectedChar.id;
+  document.getElementById('ov-char').className='ov ov-bg hidden';
+  showAllocScreen();
+}
+
+// ════════════════════════════════════════════════════
+// 属性分配
+// ════════════════════════════════════════════════════
+const ATTR_DEFS=[
+  {key:'money',name:'本金',emoji:'💰',color:'#c8921a',desc:'资产规模，决定参与游戏的门票级别'},
+  {key:'mind', name:'心态',emoji:'🧠',color:'#4080d0',desc:'持仓心理承受力，扛跌不割肉的能力'},
+  {key:'know', name:'认知',emoji:'🔍',color:'#9060e0',desc:'看穿叙事、识别骗局、理解市场周期的能力'},
+  {key:'luck', name:'气运',emoji:'🎲',color:'#28a060',desc:'天命+消息面，奇遇触发与项目命中率'},
+];
+let pts=0, alloc={money:0,mind:0,know:0,luck:0};
+
+function showAllocScreen(){
+  pts=G.totalPts; alloc={money:0,mind:0,know:0,luck:0};
+  document.getElementById('alloc-total').textContent=G.totalPts;
+  document.getElementById('ov-alloc').className='ov ov-bg ov-scroll';
+  renderAllocCards();
+}
+function renderAllocCards(){
+  const container=document.getElementById('attr-cards');container.innerHTML='';
+  ATTR_DEFS.forEach(a=>{
+    const val=alloc[a.key];
+    const pct=Math.round(val/10*100);
+    const card=document.createElement('div');card.className='attr-card';
+    card.innerHTML=`
+      <div class="attr-icon" style="background:${a.color}22;border:1px solid ${a.color}33">${a.emoji}</div>
+      <div class="attr-mid">
+        <div class="attr-name-row">
+          <span class="attr-name">${a.name}</span>
+          <span class="attr-val" id="av-${a.key}">+${val}</span>
+        </div>
+        <div class="attr-desc">${a.desc}</div>
+        <div class="attr-track"><div class="attr-fill" id="af-${a.key}" style="width:${pct}%;background:${a.color}"></div></div>
+      </div>
+      <div class="attr-btns">
+        <button class="abt" id="ap-${a.key}" onclick="adjAttr('${a.key}',1)">+</button>
+        <button class="abt" id="am-${a.key}" onclick="adjAttr('${a.key}',-1)">−</button>
+      </div>`;
+    container.appendChild(card);
+  });
+  syncAllocUI();
+}
+function adjAttr(key,d){
+  if(alloc[key]+d<0||alloc[key]+d>10||(d>0&&pts<=0))return;
+  alloc[key]+=d;pts-=d;syncAllocUI();
+}
+function syncAllocUI(){
+  document.getElementById('pts-num').textContent=pts;
+  document.getElementById('pts-num').className='pts-num'+(pts===0?' empty':'');
+  ATTR_DEFS.forEach(a=>{
+    const val=alloc[a.key],pct=Math.round(val/10*100);
+    const avEl=document.getElementById('av-'+a.key);
+    const afEl=document.getElementById('af-'+a.key);
+    const btnP=document.getElementById('ap-'+a.key);
+    const btnM=document.getElementById('am-'+a.key);
+    if(avEl)avEl.textContent='+'+val;
+    if(afEl)afEl.style.width=pct+'%';
+    if(btnP)btnP.disabled=(pts<=0||alloc[a.key]>=10);
+    if(btnM)btnM.disabled=alloc[a.key]<=0;
+  });
+}
+function onAllocConfirm(){
+  // 应用加点
+  G.money=alloc.money; G.mind=alloc.mind; G.know=alloc.know; G.luck=alloc.luck;
+  document.getElementById('ov-alloc').className='ov ov-bg hidden';
+  showTraitSelect();
+}
+
+// ════════════════════════════════════════════════════
+// 词条选择
+// ════════════════════════════════════════════════════
+let drawnTraits=[], selectedTraits=new Set();
+
+function showTraitSelect(){
+  drawnTraits=drawTraits();
+  selectedTraits=new Set();
+  document.getElementById('pick-count').textContent='0';
+  document.getElementById('trait-confirm').disabled=true;
+  document.getElementById('ov-trait').className='ov ov-bg ov-scroll';
+  renderTraitGrid();
+}
+
+function drawTraits(){
+  // 权重：green44 blue30 purple16 red8 orange2
+  const weights={green:44,blue:30,purple:16,red:8,orange:2};
+  const byTier={green:[],blue:[],purple:[],red:[],orange:[]};
+  TRAIT_POOL.forEach(t=>byTier[t.tier].push(t));
+  // 加入上世轮回词条
+  const rebornPool=[];
+  if(G.prevChar){
+    const prevCharData=CHARS.find(c=>c.id===G.prevChar);
+    if(prevCharData?.rebornTrait)rebornPool.push({...prevCharData.rebornTrait,id:'reborn_'+G.prevChar,isReborn:true});
+  }
+  // 抽取：保底1紫1橙，剩余6张按权重
+  const result=[];
+  const used=new Set();
+  // 保底橙色
+  const orangePool=[...byTier.orange];
+  if(orangePool.length){const pick=orangePool[Math.floor(Math.random()*orangePool.length)];result.push(pick);used.add(pick.id);}
+  // 保底紫色
+  const purplePool=byTier.purple.filter(t=>!used.has(t.id));
+  if(purplePool.length){const pick=purplePool[Math.floor(Math.random()*purplePool.length)];result.push(pick);used.add(pick.id);}
+  // 如果有轮回词条，必定加入一张
+  if(rebornPool.length){result.push(rebornPool[0]);used.add(rebornPool[0].id);}
+  // 剩余位置按权重随机
+  const remaining=Math.max(0,8-result.length);
+  const allByWeight=[];
+  Object.entries(weights).forEach(([tier,w])=>{
+    byTier[tier].filter(t=>!used.has(t.id)).forEach(t=>{for(let i=0;i<w;i++)allByWeight.push(t);});
+  });
+  for(let i=0;i<remaining&&allByWeight.length>0;i++){
+    let pick;
+    do{pick=allByWeight[Math.floor(Math.random()*allByWeight.length)];}while(used.has(pick.id));
+    result.push(pick);used.add(pick.id);
+  }
+  // 打乱顺序
+  return result.sort(()=>Math.random()-0.5);
+}
+
+function renderTraitGrid(){
+  const grid=document.getElementById('trait-grid');grid.innerHTML='';
+  drawnTraits.forEach(t=>{
+    const card=document.createElement('div');
+    card.className='tcard '+t.tier+(t.isReborn?' reborn':'');
+    card.dataset.id=t.id;
+    card.innerHTML=`
+      <span class="tcard-tier">${tierLabel(t.tier)}</span>
+      ${t.attr?`<span class="tcard-attr" style="background:rgba(0,0,0,0.08);color:${t.tier==='green'?'#1a5030':t.tier==='blue'?'#183870':t.tier==='purple'?'#401880':t.tier==='red'?'#701818':'#603000'}">${attrLabel(t.attr)}</span>`:''}
+      ${t.isReborn?'<span class="tcard-reborn-tag">🔄 上世遗留</span>':''}
+      <div class="tcard-name">${t.name}</div>
+      <div class="tcard-desc">${t.desc}</div>
+      <span class="tcard-check"></span>
+    `;
+    card.onclick=()=>toggleTrait(t,card);
+    grid.appendChild(card);
+  });
+}
+
+function toggleTrait(t,card){
+  if(selectedTraits.has(t.id)){
+    selectedTraits.delete(t.id);
+    card.classList.remove('selected-card');
+    card.querySelector('.tcard-check').textContent='';
+  }else{
+    if(selectedTraits.size>=3)return;
+    selectedTraits.add(t.id);
+    card.classList.add('selected-card');
+    card.querySelector('.tcard-check').textContent='✓';
+  }
+  // 更新未选满时禁用其他
+  document.querySelectorAll('.tcard').forEach(c=>{
+    if(!c.classList.contains('selected-card')){
+      c.classList.toggle('disabled-card',selectedTraits.size>=3);
+    }
+  });
+  const count=selectedTraits.size;
+  document.getElementById('pick-count').textContent=count;
+  document.getElementById('trait-confirm').disabled=count<3;
+}
+
+function onTraitConfirm(){
+  G.traits=drawnTraits.filter(t=>selectedTraits.has(t.id));
+  // 应用词条效果
+  applyTraitEffects();
+  document.getElementById('ov-trait').className='ov ov-bg hidden';
+  // 展示已选词条
+  renderTraitsBar();
+  updateStats(null);
+  initGame();
+}
+
+function applyTraitEffects(){
+  G.traits.forEach(t=>{
+    // 根据词条调整属性
+    const fx={};
+    if(t.id==='t1')  fx.money=10;
+    if(t.id==='t2')  fx.money=20;
+    if(t.id==='t3')  {G.money*=2;}
+    if(t.id==='t4')  {G.money*=3;}
+    if(t.id==='t5')  {G.money*=5;}
+    if(t.id==='t6')  fx.mind=15;
+    if(t.id==='t7')  fx.mind=25;
+    if(t.id==='t8')  fx.mind=35;
+    if(t.id==='t9')  fx.mind=45;
+    if(t.id==='t10') {fx.mind=100;fx.luck=-30;}
+    if(t.id==='t11') fx.know=15;
+    if(t.id==='t12') fx.know=25;
+    if(t.id==='t13') {fx.know=38;fx.luck=15;}
+    if(t.id==='t14') fx.know=48;
+    if(t.id==='t15') fx.know=100;
+    if(t.id==='t16') fx.luck=15;
+    if(t.id==='t17') fx.luck=25;
+    if(t.id==='t18') fx.luck=38;
+    if(t.id==='t19') fx.luck=50;
+    if(t.id==='t20') fx.luck=100;
+    // 轮回词条
+    if(t.isReborn&&t.attr){
+      const delta={money:25,mind:20,know:30,luck:20}[t.attr]||20;
+      fx[t.attr]=(fx[t.attr]||0)+delta;
+    }
+    if(fx.money)G.money=Math.max(0,G.money+fx.money);
+    if(fx.mind) G.mind=Math.max(0,G.mind+fx.mind);
+    if(fx.know) G.know=Math.max(0,G.know+fx.know);
+    if(fx.luck) G.luck=Math.max(0,G.luck+fx.luck);
+  });
+}
+
+function renderTraitsBar(){
+  const bar=document.getElementById('traits-bar');bar.innerHTML='';
+  G.traits.forEach(t=>{
+    const pip=document.createElement('span');
+    pip.className='trait-pip tp-'+t.tier;
+    pip.textContent=t.name;
+    pip.title=t.desc;
+    bar.appendChild(pip);
+  });
+}
+
+// ════════════════════════════════════════════════════
+// AI 调用
+// ════════════════════════════════════════════════════
+async function callAI(userMsg, histSnap){
+  const res=await fetch('/api/chat',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({
+      userMsg,
+      histSnap,
+      state: {
+        realmIdx: G.realmIdx,
+        money: G.money,
+        mind: G.mind,
+        know: G.know,
+        luck: G.luck,
+        turn: G.turn,
+        inv: G.inv,
+        char: G.char,
+        traits: G.traits
+      }
+    })
+  });
+  const data=await res.json();
+  if(!res.ok) throw new Error(data.error||'API error');
+  if(data.usage) updateTok(data.usage.input_tokens||0,data.usage.output_tokens||0);
+  const result=data;
+  if(!result.story)result.story='天道蒙尘，市场休眠。';
+  if(!Array.isArray(result.choices)||result.choices.length<2)result.choices=['持仓等待','分析链上','联系律师'];
+  return result;
+}
+
+function prefetchAll(choices, histSnap){
+  if(!choices?.length)return;
+  cache={};pdCount=choices.length;setPD(true);
+  choices.forEach(async c=>{
+    try{cache[c]=await callAI('我的选择：'+c,histSnap);}
+    catch(_){cache[c]=null;}
+    if(--pdCount<=0)setPD(false);
+  });
+}
+
+// ════════════════════════════════════════════════════
+// 奇遇
+// ════════════════════════════════════════════════════
+function tryEvent(cb){
+  const chance=0.2+Math.min(G.luck*0.01,0.18);
+  if(!G.alive||Math.random()>chance)return cb();
+  const pool=EVENTS.map((e,i)=>({e,i})).filter(({i})=>i!==lastEvIdx);
+  const {e:ev,i:idx}=pool[Math.floor(Math.random()*pool.length)];
+  lastEvIdx=idx;showEv(ev,cb);
+}
+function showEv(ev,onClose){
+  const badge=document.getElementById('ev-badge');
+  badge.textContent=ev.type==='ji'?'利好':ev.type==='xiong'?'暴雷':'奇遇';
+  badge.className='ev-badge '+ev.type;
+  document.getElementById('ev-title').textContent=ev.title;
+  document.getElementById('ev-body').textContent=ev.desc;
+  const cb=document.getElementById('ev-choices');cb.innerHTML='';
+  ev.choices.forEach(ch=>{
+    const btn=document.createElement('button');btn.className='ev-ch';
+    const rc=ch.risk==='xian'?'r-xian':ch.risk==='wen'?'r-wen':'r-qi';
+    const rt=ch.risk==='xian'?'险':ch.risk==='wen'?'稳':'奇';
+    btn.innerHTML=`<span>${ch.text}</span><span class="rtag ${rc}">${rt}</span>`;
+    btn.onclick=()=>{
+      const prev={money:G.money,mind:G.mind,know:G.know,luck:G.luck};
+      applyFx(ch.fx,prev);log('【'+ev.title+'】','s');
+      document.getElementById('ev-mask').className='ev-mask';
+      document.getElementById('ev-panel').className='ev-panel';
+      onClose();
+    };
+    cb.appendChild(btn);
+  });
+  document.getElementById('ev-mask').className='ev-mask show';
+  document.getElementById('ev-panel').className='ev-panel show';
+}
+
+// ════════════════════════════════════════════════════
+// 选项渲染
+// ════════════════════════════════════════════════════
+const RISKS=['xian','wen','qi'];
+function renderChoices(choices){
+  const wrap=document.getElementById('choices');wrap.innerHTML='';
+  currentChoices = [...choices];
+  choices.forEach((c,i)=>{
+    const risk=RISKS[i%3],rc=risk==='xian'?'r-xian':risk==='wen'?'r-wen':'r-qi',rt=risk==='xian'?'险':risk==='wen'?'稳':'奇';
+    const btn=document.createElement('button');btn.className='choice';
+    btn.innerHTML=`<span class="choice-text">${c}</span><span class="rtag ${rc}">${rt}</span>`;
+    btn.onclick=()=>onChoice(c);wrap.appendChild(btn);
+  });
+  persistRun();
+}
+function setEnabled(on){document.querySelectorAll('.choice').forEach(b=>b.disabled=!on);}
+
+async function typeText(text){
+  const el=document.getElementById('story-text');
+  const cur=document.getElementById('cursor');
+  currentStory = text;
+  el.textContent='';cur.style.display='inline-block';
+  for(let i=0;i<text.length;i++){
+    el.textContent+=text[i];
+    if(i%4===0)await new Promise(r=>setTimeout(r,20));
+  }
+  cur.style.display='none';
+  persistRun();
+}
+
+// ════════════════════════════════════════════════════
+// 主流程
+// ════════════════════════════════════════════════════
+async function onChoice(choice){
+  if(!G.alive)return;
+  setEnabled(false);document.getElementById('choices').innerHTML='';
+  currentChoices = [];
+  G.turn++;
+  persistRun();
+
+  const cached=cache[choice];
+  if(cached&&typeof cached==='object'&&cached.story){
+    await typeText(cached.story);
+    const prev={money:G.money,mind:G.mind,know:G.know,luck:G.luck};
+    G.hist.push({role:'user',content:'我的选择：'+choice});
+    G.hist.push({role:'assistant',content:JSON.stringify(cached)});
+    if(G.hist.length>16)G.hist=G.hist.slice(-16);
+    applyFx(cached.effects,prev);
+    tryEvent(()=>{renderChoices(cached.choices);setEnabled(true);prefetchAll(cached.choices,[...G.hist]);});
+  }else{
+    document.getElementById('pd-row').style.display='none';
+    document.getElementById('thinking').className='thinking show';
+    let result;
+    try{result=await callAI('我的选择：'+choice,[...G.hist]);}
+    catch(_){result={story:'网络信号断了，链上演算失败。',choices:['持仓等待','分析链上','联系律师'],effects:{}};}
+    document.getElementById('thinking').className='thinking';
+    await typeText(result.story);
+    const prev={money:G.money,mind:G.mind,know:G.know,luck:G.luck};
+    G.hist.push({role:'user',content:'我的选择：'+choice});
+    G.hist.push({role:'assistant',content:JSON.stringify(result)});
+    if(G.hist.length>16)G.hist=G.hist.slice(-16);
+    applyFx(result.effects,prev);
+    tryEvent(()=>{renderChoices(result.choices);setEnabled(true);prefetchAll(result.choices,[...G.hist]);});
+  }
+}
+
+async function initGame(){
+  updateStats(null);
+  document.getElementById('thinking').className='thinking show';
+  document.getElementById('start-backend-status').textContent='推演中';
+
+  // 开篇 prompt 根据角色定制
+  const charOpeners={
+    '散户':'你是一个刚被朋友安利进币圈的普通上班族，工资卡里有点积蓄，第一次打开交易所的那个夜晚开始了你的链途。',
+    'CZ':'你是赵长鹏，在加拿大麦当劳收银台旁的折叠桌上盯着屏幕炒单，有个想法在你脑子里越来越清晰——为什么不自己做一个交易所呢？',
+    'SBF':'你是山姆·班克曼-弗里德，MIT毕业，坐在豆袋椅上，手边是三台显示器，有效利他主义让你确信：赚到足够的钱，是为了做更多好事。',
+    '宝二爷':'你是郭宏才，内蒙古来的煤老板，兜里装着这辈子花不完的钱，朋友给你讲了一个叫比特币的东西，你觉得这比挖煤有意思多了。',
+    '徐明星':'你是徐明星，西安程序员，刚写完一个比特币交易所的代码，你盯着屏幕上的撮合引擎，心里有一个大胆的想法。',
+    '孙宇晨':'你是孙宇晨，马云的门徒，手里攥着一个叫波场的项目白皮书，你知道这个行业最重要的不是技术，是叙事。',
+    'DoKwon':'你是Do Kwon，斯坦福毕业，你有一个彻底解决稳定币问题的方案——算法稳定币。所有人都说这行不通，但你确信他们错了。',
+    '木头姐':'你是Cathie Wood，ARK基金的掌舵人，你看着比特币的价格，内心有一个数字从来没有改变过——100万美元。',
+    'ZachXBT':'你是ZachXBT，没有人知道你是谁，你的头像是一只土拨鼠，你的武器是链上数据和调查报告。又有一个项目开始了可疑的资金转移。',
+    'Brian':'你是Brian Armstrong，站在交易所后台和监管函之间，桌上一边是纳斯达克钟声，一边是上百种等待审核的新币，你知道入口意味着权力。',
+    'Arthur':'你是Arthur Hayes，深夜的交易界面像战场一样发亮，你刚写完一篇宏观长文，脑子里下一个念头不是休息，而是把仓位再拧大一点。',
+    'Saylor':'你是Michael Saylor，董事会正在看着你，你却已经把答案写在白板上了：现金会贬值，债会稀释，只有比特币配得上公司的未来。',
+    'HeYi':'你是何一，盯着后台数据、社区舆论和市场热词的波动，你知道真正的权力不只在撮合引擎里，也在用户情绪的入口上。',
+    '吴忌寒':'你是吴忌寒，矿场的风声和服务器的轰鸣混在一起，你知道真正的战争不在推特上，而在电价、芯片和算力迁徙的每一个拐点。',
+    'V神':'你是Vitalik Buterin，19岁，刚被比特币核心团队拒绝了你的提案。你打开一个新文档，开始写一个新的白皮书。',
+    '中本聪':'你是中本聪。没有人知道你是谁。你发送了最后一封邮件，关掉了电脑。世界还不知道将会发生什么。',
+  };
+
+  const opener = charOpeners[G.char?.id||'散户'] || charOpeners['散户'];
+  const traitHint = G.traits.length ? `玩家开局词条：${G.traits.map(t=>t.name).join('、')}。` : '';
+  const prompt=`游戏开始。${opener} ${traitHint}请描述开场场景，给出三个走向各异的选择。`;
+
+  let result;
+  try{result=await callAI(prompt,[]);}
+  catch(e){
+    document.getElementById('api-err').textContent = e.message || '服务端连接失败';
+    document.getElementById('start-backend-status').textContent='推演失败';
+    result={story:'链上连接失败，请检查服务端环境变量后重试。',choices:[],effects:{}};
+  }
+  document.getElementById('thinking').className='thinking';
+  await typeText(result.story);
+  G.hist.push({role:'assistant',content:JSON.stringify(result)});
+  updateStats(null);
+  renderChoices(result.choices);
+  setEnabled(true);
+  document.getElementById('start-backend-status').textContent='在线';
+  prefetchAll(result.choices,[...G.hist]);
+}
+</script>
+</body>
+</html>
