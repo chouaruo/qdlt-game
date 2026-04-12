@@ -442,7 +442,7 @@ body{
     服务端代行天机推演，浏览器不再持有 API Key
   </div>
   <div class="start-panel">
-    <div class="start-row"><span class="start-k">轮回点数</span><span class="start-v gold" id="start-total-pts">20</span></div>
+    <div class="start-row"><span class="start-k">历史最高</span><span class="start-v gold" id="start-best-realm">凡人</span></div>
     <div class="start-row"><span class="start-k">当前局面</span><span class="start-v" id="start-run-status">无进行中的链途</span></div>
     <div class="start-row"><span class="start-k">服务端</span><span class="start-v" id="start-backend-status">等待开局</span></div>
   </div>
@@ -457,7 +457,7 @@ body{
 <div class="ov ov-bg ov-scroll hidden" id="ov-char">
   <div class="char-ov-inner">
     <div class="ov-title">选择你的人物</div>
-    <div class="ov-sub" id="char-pts-hint">当前累计点数：<span id="char-pts-show" style="color:var(--gold2)">20</span> 点</div>
+    <div class="ov-sub" id="char-pts-hint">历史最高境界：<span id="char-pts-show" style="color:var(--gold2)">凡人</span>　·　属性点：20</div>
     <div class="char-grid" id="char-grid"></div>
     <div class="char-detail hidden" id="char-detail"></div>
     <button class="btn-gold" id="char-confirm-btn" onclick="onCharConfirm()" disabled>确认人物，进入加点</button>
@@ -608,8 +608,9 @@ const REALMS = [
 const CHARS = [
   {
     id:'散户',emoji:'👤',
-    name:'李狗蛋（散户）',reqPts:0,reqAttr:null,
+    name:'李狗蛋（散户）',reqRealm:0,
     twitter:null,
+    baseStats:null, baseTrait:null,
     desc:'普通上班族，工资卡里有三万块，被朋友安利进来了。',
     skill:'永远在最高点买入、最低点卖出的神奇天赋。',
     ending:'多个方向，大部分以「上班还贷」结束，极小概率暴富。',
@@ -618,8 +619,9 @@ const CHARS = [
   },
   {
     id:'CZ',emoji:'🟡',
-    name:'赵长鹏 CZ',reqPts:35,reqAttr:{money:60},
+    name:'赵长鹏 CZ',reqRealm:3,
     twitter:'https://unavatar.io/twitter/cz_binance',
+    baseStats:{money:8,mind:3,know:5,luck:4}, baseTrait:{name:'SAFU护体',tier:'orange',attr:'money',desc:'「资产永远安全」——直到不安全的那天'},
     desc:'加拿大华裔，麦当劳收银台旁边炒单起家，创立了全球最大交易所。',
     skill:'发一条推文，整个市场必动——利好利空各50%。专属事件：Funds are SAFU、「4」字推文。',
     ending:'迪拜隐居 / 认罪缓刑 / 重出江湖',
@@ -628,8 +630,9 @@ const CHARS = [
   },
   {
     id:'SBF',emoji:'🟦',
-    name:'SBF',reqPts:40,reqAttr:{know:70},
+    name:'SBF',reqRealm:3,
     twitter:'https://unavatar.io/twitter/SBF_FTX',
+    baseStats:{money:5,mind:2,know:10,luck:3}, baseTrait:{name:'有效利他',tier:'orange',attr:'know',desc:'用极其复杂的理论让所有人相信你'},
     desc:'MIT高材生，豆袋椅，蓬乱头发，每天只睡4小时，有效利他主义信徒。',
     skill:'话术大师——用极其复杂的理论让所有人相信你，直到不信为止。专属事件：130亿窟窿、FTX崩盘。',
     ending:'联邦监狱25年 / 保释期翻盘',
@@ -638,8 +641,9 @@ const CHARS = [
   },
   {
     id:'宝二爷',emoji:'🟠',
-    name:'宝二爷',reqPts:40,reqAttr:{mind:70},
+    name:'宝二爷',reqRealm:3,
     twitter:'https://unavatar.io/twitter/ChandlerGuo',
+    baseStats:{money:6,mind:8,know:2,luck:4}, baseTrait:{name:'布道之力',tier:'orange',attr:'mind',desc:'信仰就是力量，永远高喊抄底'},
     desc:'内蒙古煤老板，手里有大量现金不知道往哪投，自封比特币首席布道师。',
     skill:'无论市场怎么跌，永远在直播间高喊「抄底」——且每次都真的抄到了。',
     ending:'美国新生活 / 成为真正的比特币老人',
@@ -648,8 +652,9 @@ const CHARS = [
   },
   {
     id:'徐明星',emoji:'🔵',
-    name:'徐明星',reqPts:45,reqAttr:{luck:65},
+    name:'徐明星',reqRealm:4,
     twitter:'https://unavatar.io/twitter/star_okx',
+    baseStats:{money:5,mind:4,know:5,luck:8}, baseTrait:{name:'重大公告',tier:'orange',attr:'luck',desc:'随时可触发「重磅消息」事件'},
     desc:'西安程序员，做了个山寨比特币交易所，时常声称自己是中本聪。',
     skill:'随时发布「重大公告」，市场必动。专属事件：提币暂停风波、神秘失联。',
     ending:'重新出现 / 永久失联',
@@ -658,8 +663,9 @@ const CHARS = [
   },
   {
     id:'孙宇晨',emoji:'🌊',
-    name:'孙宇晨',reqPts:50,reqAttr:{luck:75},
+    name:'孙宇晨',reqRealm:5,
     twitter:'https://unavatar.io/twitter/justinsuntron',
+    baseStats:{money:4,mind:5,know:3,luck:10}, baseTrait:{name:'画饼大师',tier:'orange',attr:'luck',desc:'只要你信就永远有新故事'},
     desc:'马云门徒，百万美元午餐，波场创始人，格林纳达大使。',
     skill:'无限画饼，只要你信就永远有新故事。专属事件：吃火锅引发暴跌。',
     ending:'继续画饼 / 监管收网',
@@ -668,8 +674,9 @@ const CHARS = [
   },
   {
     id:'DoKwon',emoji:'🌑',
-    name:'Do Kwon',reqPts:55,reqAttr:{know:85},
+    name:'Do Kwon',reqRealm:6,
     twitter:'https://unavatar.io/twitter/stablekwon',
+    baseStats:{money:6,mind:3,know:10,luck:3}, baseTrait:{name:'算法信仰',tier:'orange',attr:'know',desc:'创建算法稳定币，信徒暴富直到归零'},
     desc:'斯坦福毕业，「稳定币永不脱钩」，创造了史上最大算法稳定币神话与崩盘。',
     skill:'创建算法稳定币，早期信徒全部暴富，直到系统崩溃归零。',
     ending:'黑山被捕 / 韩国受审',
@@ -678,8 +685,9 @@ const CHARS = [
   },
   {
     id:'木头姐',emoji:'🪵',
-    name:'Cathie Wood',reqPts:55,reqAttr:{know:80},
+    name:'Cathie Wood',reqRealm:6,
     twitter:'https://unavatar.io/twitter/CathieDWood',
+    baseStats:{money:5,mind:6,know:8,luck:3}, baseTrait:{name:'百万预言',tier:'orange',attr:'know',desc:'「我的目标从未改变：100万美元」'},
     desc:'ARK基金创始人，每年预测比特币涨到100万美元，预测从未改变。',
     skill:'预测永远是100万美元，时间无限延长。专属：「我的目标从未改变」。',
     ending:'终于对了一次 / 永远在等那一次',
@@ -688,8 +696,9 @@ const CHARS = [
   },
   {
     id:'ZachXBT',emoji:'🦫',
-    name:'ZachXBT',reqPts:60,reqAttr:{know:100},
+    name:'ZachXBT',reqRealm:7,
     twitter:'https://unavatar.io/twitter/zachxbt',
+    baseStats:{money:2,mind:5,know:12,luck:3}, baseTrait:{name:'链上记忆',tier:'orange',attr:'know',desc:'开局自动识破3种骗局类型'},
     desc:'匿名链上侦探，头像是土拨鼠，专门撰写链上调查报告揭露骗局。',
     skill:'追踪任意钱包，识破跑路地址。梗：「ser this is a rug」',
     ending:'永远匿名 / 意外被人肉',
@@ -698,8 +707,9 @@ const CHARS = [
   },
   {
     id:'Brian',emoji:'🏛️',
-    name:'Brian Armstrong',reqPts:60,reqAttr:{know:85},
+    name:'Brian Armstrong',reqRealm:7,
     twitter:'https://unavatar.io/twitter/brian_armstrong',
+    baseStats:{money:7,mind:5,know:7,luck:5}, baseTrait:{name:'合规护城河',tier:'orange',attr:'know',desc:'遇到监管事件时损失减半'},
     desc:'Coinbase掌门人，擅长把最野的行业包装进最规矩的西装里，永远在合规与增长之间找平衡。',
     skill:'一纸公告就能让新币飞天或归零。专属事件：美国监管、上币委员会、机构入场。',
     ending:'继续敲钟 / 监管缠斗 / 成为华尔街入口',
@@ -708,8 +718,9 @@ const CHARS = [
   },
   {
     id:'Arthur',emoji:'⚔️',
-    name:'Arthur Hayes',reqPts:65,reqAttr:{mind:85},
+    name:'Arthur Hayes',reqRealm:8,
     twitter:'https://unavatar.io/twitter/CryptoHayes',
+    baseStats:{money:6,mind:10,know:5,luck:3}, baseTrait:{name:'永续道心',tier:'orange',attr:'mind',desc:'极端波动时额外获得一次翻盘机会'},
     desc:'BitMEX灵魂人物，嘴上谈宏观、手上开高倍，市场越疯他越像回家。',
     skill:'一篇长文即可让全网开始猜顶部和底部。专属事件：永续合约、宏观转向、流动性踩踏。',
     ending:'写完宏观神文 / 再次押中周期 / 被市场教育',
@@ -718,8 +729,9 @@ const CHARS = [
   },
   {
     id:'Saylor',emoji:'₿',
-    name:'Michael Saylor',reqPts:70,reqAttr:{money:90},
+    name:'Michael Saylor',reqRealm:9,
     twitter:'https://unavatar.io/twitter/saylor',
+    baseStats:{money:12,mind:6,know:3,luck:3}, baseTrait:{name:'比特币圣约',tier:'orange',attr:'money',desc:'持有BTC相关事件收益显著提升'},
     desc:'把公司资产负债表改造成比特币圣杯的男人，任何问题都能回答成「买BTC」。',
     skill:'信仰型满仓，回撤只会让你更想加仓。专属事件：可转债、财报买币、激进布道。',
     ending:'账面封神 / 长期穿越 / 被迫解释波动',
@@ -728,8 +740,9 @@ const CHARS = [
   },
   {
     id:'HeYi',emoji:'🟨',
-    name:'何一 He Yi',reqPts:72,reqAttr:{luck:90},
+    name:'何一 He Yi',reqRealm:9,
     twitter:'https://unavatar.io/twitter/heyibinance',
+    baseStats:{money:5,mind:4,know:5,luck:10}, baseTrait:{name:'流量天枢',tier:'orange',attr:'luck',desc:'叙事型事件更容易变成实际收益'},
     desc:'Binance 联合创始人，擅长用户增长、社区运营和平台节奏控制，是交易所叙事背后的关键推手。',
     skill:'一句话就能把市场情绪从观望推到 FOMO。专属事件：上币风向、社区运营、平台流量倾斜。',
     ending:'继续掌控流量入口 / 舆论反噬 / 把下一轮情绪推到极致',
@@ -738,8 +751,9 @@ const CHARS = [
   },
   {
     id:'吴忌寒',emoji:'⛏️',
-    name:'吴忌寒',reqPts:75,reqAttr:{money:90},
+    name:'吴忌寒',reqRealm:10,
     twitter:null,
+    baseStats:{money:10,mind:4,know:6,luck:4}, baseTrait:{name:'算力命门',tier:'orange',attr:'money',desc:'熊市回合额外积累资源'},
     desc:'矿圈枭雄，懂芯片、懂矿机、懂算力，也懂如何在最冷的时候囤下下一轮的火种。',
     skill:'掌控矿机与算力周期，熊市里埋伏，牛市里收割。专属事件：矿机关停、算力迁徙、矿池大战。',
     ending:'矿海称王 / 周期再起 / 被成本线反噬',
@@ -748,8 +762,9 @@ const CHARS = [
   },
   {
     id:'V神',emoji:'💎',
-    name:'V神 Vitalik',reqPts:80,reqAttr:{know:90},
+    name:'V神 Vitalik',reqRealm:12,
     twitter:'https://unavatar.io/twitter/VitalikButerin',
+    baseStats:{money:2,mind:5,know:15,luck:4}, baseTrait:{name:'以太坊精神',tier:'orange',attr:'know',desc:'解锁「飞升」真结局线'},
     desc:'19岁俄裔加拿大少年，比特币周刊编辑，被拒后自建以太坊，改变了整个行业。',
     skill:'说一句话整个生态震动，但他只关心去中心化本身。专属：捐款SHIB、以太坊合并。',
     ending:'唯一纯正面结局（需放弃所有本金才能达到）',
@@ -758,8 +773,9 @@ const CHARS = [
   },
   {
     id:'中本聪',emoji:'∞',
-    name:'中本聪',reqPts:100,reqAttr:{money:80,mind:80,know:80,luck:80},
+    name:'中本聪',reqRealm:15,
     twitter:null,
+    baseStats:{money:10,mind:10,know:10,luck:10}, baseTrait:{name:'创世记忆',tier:'orange',attr:null,desc:'解锁全部隐藏内容，开局即触发传奇事件'},
     desc:'不知道是谁，不知道在哪，只有一封邮件和一个创世区块。每人都说自己是你。',
     skill:'创世区块、最后一封邮件、永久消失。没有人真的是你，但你改变了一切。',
     ending:'唯一结局：消失。留下改变世界的遗产。',
@@ -843,7 +859,8 @@ const G = {
   inv: [], hist: [], turn: 0, alive: true,
   logs: ['进入市场'],
   char: null, traits: [],
-  totalPts: 20, // 累计可用点数
+  totalPts: 20, // 固定20点
+  bestRealm: 0, // 历史最高境界
   prevChar: null, prevTraits: [], prevKey: null, // 轮回数据
 };
 const TOK = {i:0, o:0};
@@ -864,7 +881,8 @@ function readStore(key) {
 function saveMeta() {
   localStorage.setItem(STORAGE.meta, JSON.stringify({
     version: SAVE_VERSION,
-    totalPts: G.totalPts,
+    totalPts: 20,
+    bestRealm: META?.bestRealm || 0,
     prevChar: G.prevChar,
     prevTraits: G.prevTraits,
     prevKey: G.prevKey,
@@ -874,7 +892,8 @@ function loadPersist() {
   META = readStore(STORAGE.meta) || readStore('qdlt_save');
   RUN = readStore(STORAGE.run);
   if (!META) return;
-  G.totalPts = META.totalPts || 20;
+  G.totalPts = 20; // 固定20点
+  G.bestRealm = META.bestRealm || 0;
   G.prevChar = META.prevChar || null;
   G.prevTraits = META.prevTraits || [];
   G.prevKey = META.prevKey || null;
@@ -1050,7 +1069,7 @@ function onFullBtn() {
   document.getElementById('full-ov').className='full-ov';
   if(!G.alive){
     // 通关/死亡：保存轮回数据
-    G.totalPts += 10;
+    if(G.realmIdx > (META?.bestRealm||0)) META = {...(META||{}), bestRealm: G.realmIdx};
     G.prevChar = G.char?.id||null;
     G.prevTraits = G.traits.map(t=>t.id);
     G.prevKey = G.prevChar; // 记录上世人物
@@ -1067,7 +1086,7 @@ function onFullBtn() {
 // 开场与续档
 // ════════════════════════════════════════════════════
 function updateStartOverlay() {
-  document.getElementById('start-total-pts').textContent = G.totalPts;
+  document.getElementById('start-best-realm').textContent = G.bestRealm>0?REALMS[G.bestRealm].name+' '+REALMS[G.bestRealm].code:'凡人';
   document.getElementById('continue-btn').disabled = !RUN?.G;
   document.getElementById('start-run-status').textContent = RUN?.savedAt
     ? '已保存到 ' + new Date(RUN.savedAt).toLocaleString('zh-CN', { month:'2-digit', day:'2-digit', hour:'2-digit', minute:'2-digit' })
@@ -1110,7 +1129,7 @@ function restartRun() {
 let selectedChar = null;
 function showCharSelect(){
   document.getElementById('ov-char').className='ov ov-bg ov-scroll';
-  document.getElementById('char-pts-show').textContent=G.totalPts;
+  document.getElementById('char-pts-show').textContent=G.bestRealm>0?REALMS[G.bestRealm].name:'凡人';
   renderCharGrid();
 }
 function renderCharGrid(){
@@ -1128,7 +1147,7 @@ function renderCharGrid(){
     const nm=document.createElement('div');nm.className='char-name';nm.textContent=ch.name;card.appendChild(nm);
     // 解锁要求
     const req=document.createElement('div');req.className='char-req';
-    req.textContent=ch.reqPts>0?ch.reqPts+'点':'默认解锁';card.appendChild(req);
+    req.textContent=ch.reqRealm>0?'突破'+REALMS[ch.reqRealm].name:'默认解锁';card.appendChild(req);
     // 锁图标
     if(locked){const lk=document.createElement('div');lk.className='char-lock-icon';lk.textContent='🔒';card.appendChild(lk);}
     card.onclick=()=>onCharClick(ch,locked);
@@ -1136,10 +1155,8 @@ function renderCharGrid(){
   });
 }
 function canUnlockChar(ch){
-  if(G.totalPts<ch.reqPts)return false;
-  if(!ch.reqAttr)return true;
-  // 属性要求在选完词条/加点后才能满足，这里只检查点数
-  return true;
+  if(!ch.reqRealm)return true;
+  return G.bestRealm >= ch.reqRealm;
 }
 let _selectedCharEl=null;
 function onCharClick(ch,locked){
@@ -1148,7 +1165,7 @@ function onCharClick(ch,locked){
   const detail=document.getElementById('char-detail');
   if(locked){
     detail.className='char-detail';
-    detail.innerHTML=`<div class="char-detail-locked">🔒 点数不足（需 ${ch.reqPts} 点，当前 ${G.totalPts} 点）<br><small>每次通关可获得 +10 点</small></div>`;
+    detail.innerHTML=`<div class="char-detail-locked">🔒 需突破${REALMS[ch.reqRealm].name}（${REALMS[ch.reqRealm].code}）解锁<br><small>当前历史最高：${G.bestRealm>0?REALMS[G.bestRealm].name:'凡人'}</small></div>`;
     detail.className='char-detail';
     selectedChar=null;
     document.getElementById('char-confirm-btn').disabled=true;
@@ -1237,6 +1254,13 @@ function syncAllocUI(){
 function onAllocConfirm(){
   // 应用加点
   G.money=alloc.money; G.mind=alloc.mind; G.know=alloc.know; G.luck=alloc.luck;
+  // 叠加角色自带属性
+  if(G.char?.baseStats){
+    G.money+=G.char.baseStats.money||0;
+    G.mind+=G.char.baseStats.mind||0;
+    G.know+=G.char.baseStats.know||0;
+    G.luck+=G.char.baseStats.luck||0;
+  }
   document.getElementById('ov-alloc').className='ov ov-bg hidden';
   showTraitSelect();
 }
@@ -1335,6 +1359,10 @@ function toggleTrait(t,card){
 
 function onTraitConfirm(){
   G.traits=drawnTraits.filter(t=>selectedTraits.has(t.id));
+  // 角色自带橙色词条（不占选择名额，直接加入）
+  if(G.char?.baseTrait){
+    G.traits.unshift({...G.char.baseTrait, id:'char_base_'+G.char.id});
+  }
   // 应用词条效果
   applyTraitEffects();
   document.getElementById('ov-trait').className='ov ov-bg hidden';
