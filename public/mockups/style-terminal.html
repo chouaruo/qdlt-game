@@ -1,0 +1,234 @@
+<!-- 风格：终端/黑客 Terminal — 纯黑背景 / 终端绿 / monospace / 扫描线 / ASCII进度条 -->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>问道链途 — 终端黑客风</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #0a0a0a;
+    color: #00ff41;
+    font-family: 'Courier New', 'Noto Sans SC', monospace;
+    font-size: 14px;
+    min-height: 100vh;
+    display: flex; justify-content: center;
+    padding: 16px;
+    line-height: 1.6;
+  }
+  .container {
+    max-width: 480px; width: 100%;
+    position: relative;
+  }
+
+  /* 扫描线 */
+  .container::after {
+    content: ''; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    background: repeating-linear-gradient(
+      0deg, transparent, transparent 1px, #00ff4106 1px, #00ff4106 2px
+    );
+    pointer-events: none; z-index: 999;
+  }
+
+  /* CRT 闪烁 */
+  @keyframes crt-flicker {
+    0% { opacity: 0.98; }
+    50% { opacity: 1; }
+  }
+  .container { animation: crt-flicker 0.1s infinite; }
+
+  /* 光标闪烁 */
+  @keyframes blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0; }
+  }
+  .cursor {
+    display: inline-block;
+    animation: blink 1s infinite;
+    color: #00ff41;
+  }
+
+  /* 标题 */
+  .header {
+    padding: 20px 0 12px;
+    border-bottom: 1px solid #00ff4130;
+    margin-bottom: 16px;
+  }
+  .header pre {
+    color: #00ff41;
+    font-size: 11px;
+    line-height: 1.2;
+    text-align: center;
+    text-shadow: 0 0 4px #00ff4140;
+  }
+  .header .sys-info {
+    font-size: 11px; color: #00ff4180;
+    margin-top: 8px; text-align: center;
+  }
+
+  /* 区块 */
+  .block {
+    margin-bottom: 14px;
+    padding: 0 4px;
+  }
+  .block-header {
+    color: #00ff4180;
+    font-size: 11px;
+    margin-bottom: 6px;
+    border-bottom: 1px dashed #00ff4120;
+    padding-bottom: 4px;
+  }
+
+  /* 人物 */
+  .line { margin-bottom: 2px; }
+  .prompt { color: #00ff4180; }
+  .key { color: #00ff41; }
+  .val { color: #00ff41; font-weight: 700; }
+  .dim { color: #00ff4160; }
+  .highlight { color: #ffff00; text-shadow: 0 0 4px #ffff0040; }
+
+  /* ASCII 属性条 */
+  .stat-line {
+    display: flex; gap: 0; align-items: center;
+    font-size: 13px;
+    margin-bottom: 3px;
+  }
+  .stat-name { width: 50px; color: #00ff4180; }
+  .stat-ascii { color: #00ff41; letter-spacing: -1px; flex-shrink: 0; }
+  .stat-ascii .filled { color: #00ff41; }
+  .stat-ascii .empty { color: #00ff4125; }
+  .stat-num { margin-left: 8px; color: #00ff41; font-weight: 700; min-width: 36px; }
+
+  /* 词条 */
+  .traits-line { margin-top: 8px; }
+  .tag { padding: 0; margin-right: 4px; }
+  .tag.green  { color: #00ff41; }
+  .tag.purple { color: #bf7fff; }
+  .tag.blue   { color: #41a0ff; }
+
+  /* 剧情 */
+  .story-text {
+    color: #00ff41;
+    line-height: 1.8;
+    text-shadow: 0 0 2px #00ff4120;
+  }
+
+  /* 选项 */
+  .choices { margin-top: 4px; }
+  .choice-btn {
+    display: block; width: 100%;
+    padding: 10px 12px;
+    background: transparent;
+    border: 1px solid #00ff4130;
+    color: #00ff41;
+    font-size: 14px; font-family: inherit;
+    cursor: pointer;
+    text-align: left;
+    margin-bottom: 6px;
+    transition: all 0.2s;
+  }
+  .choice-btn:hover {
+    background: #00ff4115;
+    border-color: #00ff4180;
+    text-shadow: 0 0 6px #00ff4180;
+    box-shadow: 0 0 10px #00ff4120;
+  }
+  .choice-btn .idx { color: #ffff00; font-weight: 700; }
+
+  /* 底部 */
+  .footer {
+    display: flex; gap: 16px;
+    border-top: 1px solid #00ff4130;
+    padding-top: 12px;
+    margin-top: 8px;
+  }
+  .footer-item { flex: 1; }
+  .footer-item .label { font-size: 11px; color: #00ff4160; }
+  .footer-item .value { font-size: 13px; color: #00ff41; margin-top: 2px; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <pre>
+ ██████╗ ██████╗ ██╗  ████████╗
+██╔═══██╗██╔══██╗██║  ╚══██╔══╝
+██║   ██║██║  ██║██║     ██║
+██║▄▄ ██║██║  ██║██║     ██║
+╚██████╔╝██████╔╝███████╗██║
+ ╚══▀▀═╝ ╚═════╝ ╚══════╝╚═╝
+    </pre>
+    <div class="sys-info">QDLT Terminal v0.1.0 // session #4a7f // pid 31337</div>
+  </div>
+
+  <div class="block">
+    <div class="block-header">[ PLAYER_INFO ]</div>
+    <div class="line"><span class="prompt">$ </span><span class="key">name:</span> <span class="val">散户李狗蛋</span> <span class="dim">(散户)</span></div>
+    <div class="line"><span class="prompt">$ </span><span class="key">realm:</span> <span class="highlight">凡人 A0</span></div>
+  </div>
+
+  <div class="block">
+    <div class="block-header">[ ATTRIBUTES ]</div>
+    <div class="stat-line">
+      <span class="stat-name">本金</span>
+      <span class="stat-ascii"><span class="filled">█</span><span class="empty">░░░░░░░░░</span></span>
+      <span class="stat-num">10/100</span>
+    </div>
+    <div class="stat-line">
+      <span class="stat-name">心态</span>
+      <span class="stat-ascii"><span class="filled">██████████</span><span class="empty"></span></span>
+      <span class="stat-num">125/100</span>
+    </div>
+    <div class="stat-line">
+      <span class="stat-name">认知</span>
+      <span class="stat-ascii"><span class="filled">███░</span><span class="empty">░░░░░░</span></span>
+      <span class="stat-num">38/100</span>
+    </div>
+    <div class="stat-line">
+      <span class="stat-name">气运</span>
+      <span class="stat-ascii"><span class="empty">░░░░░░░░░░</span></span>
+      <span class="stat-num">0/100</span>
+    </div>
+  </div>
+
+  <div class="block">
+    <div class="block-header">[ TRAITS ]</div>
+    <div class="traits-line">
+      <span class="prompt">> </span>
+      <span class="tag green">[普通] 套牢不卖</span>
+      <span class="tag purple">[稀有] 链上侦探</span>
+      <span class="tag blue">[精良] 淡定</span>
+    </div>
+  </div>
+
+  <div class="block">
+    <div class="block-header">[ STORY_OUTPUT ]</div>
+    <div class="story-text">
+      <span class="prompt">> </span>晚上11点，你躺在出租屋的床上，手机屏幕照亮了黑暗。币安App刚装好，K线图跳动得像心电图。朋友的微信还在闪烁：<span class="cursor">█</span>
+    </div>
+  </div>
+
+  <div class="block">
+    <div class="block-header">[ SELECT_ACTION ]</div>
+    <div class="choices">
+      <button class="choice-btn"><span class="idx">[1]</span> 梭哈比特币，一夜暴富</button>
+      <button class="choice-btn"><span class="idx">[2]</span> 研究基本面，稳健建仓</button>
+      <button class="choice-btn"><span class="idx">[3]</span> 先充钱体验，小额试水</button>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div class="footer-item">
+      <div class="label">[ PORTFOLIO ]</div>
+      <div class="value"><span class="prompt">$ </span>空仓</div>
+    </div>
+    <div class="footer-item">
+      <div class="label">[ LOG ]</div>
+      <div class="value"><span class="prompt">$ </span>▸ 进入市场</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

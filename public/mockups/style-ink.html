@@ -1,0 +1,261 @@
+<!-- 风格：水墨修真 Ink — 宣纸底色 / 墨色文字 / 毛笔字标题 / 竹简按钮 -->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>问道链途 — 水墨修真风</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700;900&family=Ma+Shan+Zheng&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #f5f0e8;
+    background-image:
+      radial-gradient(ellipse at 20% 80%, #e8dcc880 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 20%, #d4c8a820 0%, transparent 40%);
+    color: #2a1f1a;
+    font-family: 'Noto Serif SC', 'SimSun', serif;
+    min-height: 100vh;
+    display: flex; justify-content: center;
+    padding: 16px;
+  }
+  .container {
+    max-width: 480px; width: 100%;
+  }
+
+  /* 标题 */
+  .header {
+    text-align: center; padding: 32px 0 20px;
+    position: relative;
+  }
+  .header h1 {
+    font-family: 'Ma Shan Zheng', 'Noto Serif SC', serif;
+    font-size: 42px; font-weight: 900;
+    color: #2a1f1a;
+    letter-spacing: 16px;
+    text-indent: 16px;
+  }
+  .header .subtitle {
+    font-size: 13px; color: #8a7a6a; margin-top: 8px;
+    letter-spacing: 4px;
+  }
+  .header::after {
+    content: '';
+    display: block;
+    width: 120px; height: 2px;
+    background: linear-gradient(90deg, transparent, #2a1f1a40, transparent);
+    margin: 16px auto 0;
+  }
+
+  /* 卡片通用 — 无边框，墨渍装饰 */
+  .card {
+    background: #faf6ef;
+    border-radius: 4px;
+    margin-bottom: 16px;
+    padding: 18px 20px;
+    position: relative;
+    box-shadow: 0 1px 4px #2a1f1a0a;
+  }
+  .card::before {
+    content: '';
+    position: absolute; top: -4px; left: 10px;
+    width: 40px; height: 8px;
+    background: radial-gradient(ellipse, #2a1f1a12 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .card::after {
+    content: '';
+    position: absolute; bottom: -3px; right: 16px;
+    width: 60px; height: 6px;
+    background: radial-gradient(ellipse, #2a1f1a08 0%, transparent 70%);
+    border-radius: 50%;
+  }
+
+  /* 人物信息 */
+  .char-info {
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .char-name {
+    font-family: 'Ma Shan Zheng', serif;
+    font-size: 22px; color: #2a1f1a;
+  }
+  .char-title {
+    font-size: 12px; color: #8a7a6a; margin-top: 2px;
+  }
+  .realm {
+    font-size: 14px; color: #6b4c2a;
+    background: #f0e8d8;
+    border-radius: 2px; padding: 4px 12px;
+    border: 1px solid #d4c4a8;
+  }
+
+  /* 属性 */
+  .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .stat-row { display: flex; align-items: center; gap: 8px; }
+  .stat-label {
+    font-size: 13px; color: #6b5a4a; width: 36px; flex-shrink: 0;
+    font-weight: 700;
+  }
+  .stat-bar-bg {
+    flex: 1; height: 10px; background: #ece4d4; border-radius: 2px;
+    overflow: hidden;
+  }
+  .stat-bar {
+    height: 100%; border-radius: 2px;
+    transition: width 0.6s;
+  }
+  .stat-bar.money { background: #b8860b; }
+  .stat-bar.mind  { background: #6b8e23; }
+  .stat-bar.know  { background: #4a6fa5; }
+  .stat-bar.luck  { background: #8b5e3c; }
+  .stat-val {
+    font-size: 13px; color: #2a1f1a; width: 30px; text-align: right;
+    font-weight: 700;
+    font-family: 'Noto Serif SC', serif;
+  }
+
+  /* 词条 */
+  .traits { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+  .trait {
+    font-size: 12px; padding: 3px 10px; border-radius: 2px;
+    border: 1px solid;
+  }
+  .trait.green  { color: #4a7a3a; border-color: #4a7a3a40; background: #4a7a3a0c; }
+  .trait.purple { color: #7a4a8a; border-color: #7a4a8a40; background: #7a4a8a0c; }
+  .trait.blue   { color: #3a5a8a; border-color: #3a5a8a40; background: #3a5a8a0c; }
+
+  /* 分隔 */
+  .divider {
+    height: 1px; margin: 0 20px;
+    background: linear-gradient(90deg, transparent 0%, #2a1f1a18 30%, #2a1f1a18 70%, transparent 100%);
+  }
+
+  /* 剧情 */
+  .story {
+    font-size: 15px; line-height: 2; color: #3a2f2a;
+    text-indent: 2em;
+  }
+
+  /* 选项 — 竹简风 */
+  .choices { display: flex; flex-direction: column; gap: 10px; }
+  .choice-btn {
+    display: block; width: 100%; padding: 14px 20px;
+    background: linear-gradient(180deg, #f5edd8, #efe5cc);
+    border: 1px solid #d4c4a8;
+    border-radius: 20px;
+    color: #4a3a2a;
+    font-size: 14px;
+    font-family: 'Noto Serif SC', serif;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-align: center;
+    position: relative;
+  }
+  .choice-btn::before {
+    content: ''; position: absolute;
+    left: 8px; top: 50%; transform: translateY(-50%);
+    width: 6px; height: 6px;
+    background: #8b7355; border-radius: 50%;
+  }
+  .choice-btn:hover {
+    background: linear-gradient(180deg, #efe5cc, #e8dbb8);
+    box-shadow: 0 2px 8px #2a1f1a15;
+    border-color: #b8a888;
+  }
+
+  /* 底部 */
+  .footer-row {
+    display: flex; gap: 12px;
+  }
+  .footer-row .card { flex: 1; padding: 14px; text-align: center; }
+  .footer-label { font-size: 11px; color: #8a7a6a; margin-bottom: 4px; }
+  .footer-val { font-size: 13px; color: #4a3a2a; }
+
+  /* 印章装饰 */
+  .seal {
+    position: absolute; top: 12px; right: 12px;
+    width: 36px; height: 36px;
+    border: 2px solid #c0392b40;
+    border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; color: #c0392b60;
+    font-family: 'Ma Shan Zheng', serif;
+    transform: rotate(-8deg);
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>问道链途</h1>
+    <div class="subtitle">修 真 文 字 冒 险</div>
+  </div>
+
+  <div class="card">
+    <div class="seal">道</div>
+    <div class="char-info">
+      <div>
+        <div class="char-name">散户李狗蛋</div>
+        <div class="char-title">身份：散户</div>
+      </div>
+      <div class="realm">凡人 A0</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="stats">
+      <div class="stat-row">
+        <span class="stat-label">本金</span>
+        <div class="stat-bar-bg"><div class="stat-bar money" style="width:10%"></div></div>
+        <span class="stat-val">10</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">心态</span>
+        <div class="stat-bar-bg"><div class="stat-bar mind" style="width:100%"></div></div>
+        <span class="stat-val">125</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">认知</span>
+        <div class="stat-bar-bg"><div class="stat-bar know" style="width:38%"></div></div>
+        <span class="stat-val">38</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">气运</span>
+        <div class="stat-bar-bg"><div class="stat-bar luck" style="width:0%"></div></div>
+        <span class="stat-val">0</span>
+      </div>
+    </div>
+    <div class="traits">
+      <span class="trait green">套牢不卖</span>
+      <span class="trait purple">链上侦探</span>
+      <span class="trait blue">淡定</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="story">
+      晚上11点，你躺在出租屋的床上，手机屏幕照亮了黑暗。币安App刚装好，K线图跳动得像心电图。朋友的微信还在闪烁：
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="choices">
+      <button class="choice-btn">梭哈比特币，一夜暴富</button>
+      <button class="choice-btn">研究基本面，稳健建仓</button>
+      <button class="choice-btn">先充钱体验，小额试水</button>
+    </div>
+  </div>
+
+  <div class="footer-row">
+    <div class="card">
+      <div class="footer-label">持仓记录</div>
+      <div class="footer-val">空仓</div>
+    </div>
+    <div class="card">
+      <div class="footer-label">株主日志</div>
+      <div class="footer-val">▸ 进入市场</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

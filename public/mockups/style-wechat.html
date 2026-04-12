@@ -1,0 +1,238 @@
+<!-- 风格：微信白卡 WeChat — #f5f5f5底色 / 纯白卡片 / 0.5px细线 / 品牌金#d4881a / 圆角8-12px -->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>问道链途 — 微信白卡风</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #f5f5f5;
+    color: #111111;
+    font-family: -apple-system, 'Noto Sans SC', 'PingFang SC', 'Helvetica Neue', sans-serif;
+    min-height: 100vh;
+    display: flex; justify-content: center;
+    padding: 0;
+  }
+  .container {
+    max-width: 480px; width: 100%;
+  }
+
+  /* Header */
+  .header {
+    background: #ffffff;
+    text-align: center;
+    padding: 16px 0 14px;
+    border-bottom: 0.5px solid #e8e8e8;
+    position: sticky; top: 0; z-index: 10;
+  }
+  .header h1 {
+    font-size: 17px; font-weight: 700; color: #111;
+    letter-spacing: 2px;
+  }
+
+  .content { padding: 12px 16px; }
+
+  /* 卡片 */
+  .card {
+    background: #ffffff;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    overflow: hidden;
+  }
+  .card-inner { padding: 16px; }
+  .card-row {
+    padding: 14px 16px;
+    border-bottom: 0.5px solid #e8e8e8;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .card-row:last-child { border-bottom: none; }
+
+  /* 人物 */
+  .char-info {
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .char-name {
+    font-size: 17px; font-weight: 700; color: #111;
+  }
+  .char-title {
+    font-size: 13px; color: #999; margin-top: 2px;
+  }
+  .realm {
+    font-size: 13px; color: #d4881a;
+    background: #d4881a10;
+    border-radius: 6px; padding: 4px 12px;
+    font-weight: 500;
+  }
+
+  /* 属性 — 列表风格 */
+  .stat-row-label { font-size: 15px; color: #111; }
+  .stat-right { display: flex; align-items: center; gap: 10px; }
+  .stat-bar-bg {
+    width: 100px; height: 4px; background: #f0f0f0; border-radius: 2px;
+    overflow: hidden;
+  }
+  .stat-bar {
+    height: 100%; border-radius: 2px; transition: width 0.5s;
+  }
+  .stat-bar.money { background: #d4881a; }
+  .stat-bar.mind  { background: #07c160; }
+  .stat-bar.know  { background: #576b95; }
+  .stat-bar.luck  { background: #fa5151; }
+  .stat-val {
+    font-size: 14px; color: #555; width: 32px; text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* 词条 */
+  .traits { display: flex; gap: 8px; flex-wrap: wrap; padding: 12px 16px; }
+  .trait {
+    font-size: 12px; padding: 4px 10px; border-radius: 6px;
+    font-weight: 500;
+  }
+  .trait.green  { color: #07c160; background: #07c16012; }
+  .trait.purple { color: #8b5cf6; background: #8b5cf612; }
+  .trait.blue   { color: #576b95; background: #576b9512; }
+
+  /* 剧情 */
+  .story {
+    font-size: 15px; line-height: 1.8; color: #333;
+  }
+
+  /* 选项 */
+  .choices { display: flex; flex-direction: column; gap: 8px; }
+  .choice-btn {
+    display: block; width: 100%; padding: 14px 16px;
+    background: #d4881a;
+    border: none;
+    border-radius: 8px;
+    color: #ffffff;
+    font-size: 15px; font-weight: 500;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+  }
+  .choice-btn:hover {
+    background: #c07a16;
+  }
+  .choice-btn:active {
+    transform: scale(0.98);
+    background: #b06e12;
+  }
+
+  /* 底部 */
+  .footer-row {
+    display: flex; gap: 10px;
+  }
+  .footer-row .card { flex: 1; }
+  .footer-card {
+    padding: 14px 16px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .footer-label { font-size: 15px; color: #111; }
+  .footer-val { font-size: 13px; color: #999; }
+  .footer-arrow { color: #c0c0c0; font-size: 14px; margin-left: 4px; }
+
+  /* 细节 */
+  .section-title {
+    font-size: 13px; color: #999; padding: 8px 0 4px;
+    font-weight: 400;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>问道链途</h1>
+  </div>
+
+  <div class="content">
+
+    <div class="card">
+      <div class="card-inner">
+        <div class="char-info">
+          <div>
+            <div class="char-name">散户李狗蛋</div>
+            <div class="char-title">身份：散户</div>
+          </div>
+          <div class="realm">凡人 A0</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-row">
+        <span class="stat-row-label">本金</span>
+        <div class="stat-right">
+          <div class="stat-bar-bg"><div class="stat-bar money" style="width:10%"></div></div>
+          <span class="stat-val">10</span>
+        </div>
+      </div>
+      <div class="card-row">
+        <span class="stat-row-label">心态</span>
+        <div class="stat-right">
+          <div class="stat-bar-bg"><div class="stat-bar mind" style="width:100%"></div></div>
+          <span class="stat-val">125</span>
+        </div>
+      </div>
+      <div class="card-row">
+        <span class="stat-row-label">认知</span>
+        <div class="stat-right">
+          <div class="stat-bar-bg"><div class="stat-bar know" style="width:38%"></div></div>
+          <span class="stat-val">38</span>
+        </div>
+      </div>
+      <div class="card-row">
+        <span class="stat-row-label">气运</span>
+        <div class="stat-right">
+          <div class="stat-bar-bg"><div class="stat-bar luck" style="width:0%"></div></div>
+          <span class="stat-val">0</span>
+        </div>
+      </div>
+      <div class="traits">
+        <span class="trait green">套牢不卖</span>
+        <span class="trait purple">链上侦探</span>
+        <span class="trait blue">淡定</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-inner">
+        <div class="story">
+          晚上11点，你躺在出租屋的床上，手机屏幕照亮了黑暗。币安App刚装好，K线图跳动得像心电图。朋友的微信还在闪烁：
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-inner">
+        <div class="choices">
+          <button class="choice-btn">梭哈比特币，一夜暴富</button>
+          <button class="choice-btn">研究基本面，稳健建仓</button>
+          <button class="choice-btn">先充钱体验，小额试水</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-row">
+      <div class="card">
+        <div class="footer-card">
+          <span class="footer-label">持仓记录</span>
+          <span><span class="footer-val">空仓</span><span class="footer-arrow">›</span></span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="footer-card">
+          <span class="footer-label">株主日志</span>
+          <span><span class="footer-val">▸ 进入市场</span><span class="footer-arrow">›</span></span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+</body>
+</html>
