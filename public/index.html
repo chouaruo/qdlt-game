@@ -874,68 +874,57 @@ const TRAIT_POOL = [
 ];
 
 // 奇遇事件库（币圈主题）
+// 突发事件：每个都是改变命运级别的大事件，money 效果翻倍暴涨/暴跌
 const EVENTS = [
-  {type:'ji',title:'空投大礼',desc:'钱包里突然出现一笔不明来历的空投，链上显示是某知名项目的早期奖励，价值可观。',
-    choices:[{text:'立刻卖出',risk:'wen',fx:{money:+20}},{text:'继续持有',risk:'qi',fx:{know:+15,luck:+10}}]},
-  {type:'xiong',title:'合约爆仓',desc:'你的10倍杠杆多单在流动性最差的时间段被针刺穿，强制平仓通知已经发到邮箱。',
-    choices:[{text:'认亏止损',risk:'wen',fx:{money:-25,mind:+10}},{text:'加仓摊低',risk:'xian',fx:{money:-40,mind:-20}}]},
-  {type:'qi',title:'神秘大佬私信',desc:'一位链上数据显示持有数千枚BTC的地址给你发来私信，表示对你的项目感兴趣。',
-    choices:[{text:'积极回应',risk:'qi',fx:{luck:+25,know:+10}},{text:'谨慎核实',risk:'wen',fx:{know:+20}}]},
-  {type:'ji',title:'牛市信号',desc:'链上数据显示长期持有者开始移动筹码，历史上这个信号出现后三个月内必有大行情。',
-    choices:[{text:'重仓买入',risk:'xian',fx:{money:+35,mind:-15}},{text:'分批建仓',risk:'wen',fx:{money:+15,mind:+5}}]},
-  {type:'xiong',title:'交易所暂停提币',desc:'你资产所在的交易所突然发公告：「由于系统维护，提币暂时暂停」，用户社区已炸锅。',
-    choices:[{text:'静待公告',risk:'qi',fx:{mind:-20,know:+10}},{text:'联系客服',risk:'wen',fx:{mind:-10,luck:+5}}]},
-  {type:'qi',title:'KOL喊单',desc:'一位百万粉丝KOL在直播中点名推荐你持有的一个山寨币，粉丝正在跟单涌入。',
-    choices:[{text:'趁机出货',risk:'wen',fx:{money:+20,know:+10}},{text:'继续持有',risk:'xian',fx:{money:+40,luck:-15}}]},
-  {type:'xiong',title:'项目方跑路',desc:'你投资的一个DeFi项目在TVL达到高峰时，官推删帖，Discord解散，合约权限被转移。',
-    choices:[{text:'立刻撤资',risk:'wen',fx:{money:-15,know:+20}},{text:'相信还会回来',risk:'xian',fx:{money:-40,mind:-25}}]},
-  {type:'ji',title:'链上大佬跟单',desc:'链上监控显示某个「聪明钱」地址刚刚复制了你的仓位，这让你感到莫名的自信。',
-    choices:[{text:'继续持有',risk:'qi',fx:{money:+25,luck:+15}},{text:'加仓跟进',risk:'xian',fx:{money:+40,mind:-10}}]},
-  {type:'xiong',title:'监管突袭',desc:'某国监管机构突然宣布全面禁止加密货币交易，消息在凌晨3点发出，市场瞬间暴跌30%。',
-    choices:[{text:'割肉离场',risk:'wen',fx:{money:-20,mind:-10}},{text:'抄底加仓',risk:'xian',fx:{money:+50,luck:-20}}]},
-  {type:'qi',title:'技术顿悟',desc:'在反复研究白皮书和链上数据之后，你突然对整个市场结构有了前所未有的清晰认知。',
-    choices:[{text:'整理并分享',risk:'wen',fx:{know:+30,luck:+10}},{text:'独自建仓',risk:'qi',fx:{know:+20,money:+15}}]},
-  {type:'ji',title:'牛市来了',desc:'比特币突破历史高位，全市场FOMO情绪蔓延，你的所有持仓全线飘红。',
-    choices:[{text:'落袋为安',risk:'wen',fx:{money:+30,mind:+10}},{text:'继续骑牛',risk:'xian',fx:{money:+60,mind:-20}}]},
-  {type:'xiong',title:'被人肉',desc:'因为在社区发表了争议性观点，有人开始公开你的个人信息，你的链上地址也被标记。',
-    choices:[{text:'低调处理',risk:'wen',fx:{luck:-15,know:+10}},{text:'正面回击',risk:'xian',fx:{mind:+10,luck:-25}}]},
-  {type:'qi',title:'SEC传票',desc:'一封信从美国证监会寄来，询问你某笔交易的相关信息，律师费已经在心里开始计算。',
-    choices:[{text:'聘请律师配合',risk:'wen',fx:{money:-15,know:+20}},{text:'转移资产',risk:'xian',fx:{luck:+20,know:-15}}]},
-  {type:'ji',title:'减半行情',desc:'比特币第四次减半正式到来，历史数据显示减半后12个月内平均涨幅超过300%。',
-    choices:[{text:'满仓押注',risk:'xian',fx:{money:+50,mind:-20}},{text:'定期定额',risk:'wen',fx:{money:+20,know:+10}}]},
-  // ── 新增事件 ──
-  {type:'ji',title:'矿工投降',desc:'矿工大面积关机，全网算力暴跌，历史上每次矿工投降后都是绝佳抄底窗口。',
-    choices:[{text:'加仓主流币',risk:'wen',fx:{money:+25,know:+5}},{text:'抄底矿机股',risk:'xian',fx:{money:+45,mind:-15}}]},
-  {type:'ji',title:'稳定币脱锚套利',desc:'USDC短暂脱锚到0.87，套利窗口只有几个小时，敢不敢用全部仓位去接？',
-    choices:[{text:'全仓接盘',risk:'xian',fx:{money:+60,mind:-20}},{text:'小仓试水',risk:'wen',fx:{money:+15,know:+10}}]},
-  {type:'ji',title:'巨鲸转账',desc:'链上监控显示某沉睡5年的地址突然转出10万枚ETH到交易所，整个市场屏住呼吸。',
-    choices:[{text:'先减仓观望',risk:'wen',fx:{mind:+10,money:-10}},{text:'跟巨鲸方向走',risk:'qi',fx:{luck:+20,money:+20}}]},
-  {type:'ji',title:'Meme币起飞',desc:'一只以柴犬穿西装为头像的Meme币在一小时内涨了800%，你的朋友群已经炸了。',
-    choices:[{text:'冲一把',risk:'xian',fx:{money:+70,mind:-15,luck:-10}},{text:'看热闹不参与',risk:'wen',fx:{know:+15,mind:+5}}]},
-  {type:'ji',title:'机构入场',desc:'某主权基金宣布将1%资产配置到BTC，消息一出所有K线集体拉升。',
-    choices:[{text:'顺势加仓',risk:'wen',fx:{money:+30,mind:+5}},{text:'开杠杆做多',risk:'xian',fx:{money:+55,mind:-20}}]},
-  {type:'xiong',title:'预言机攻击',desc:'你参与的DeFi协议遭遇闪电贷攻击，预言机价格被操纵，池子被抽干。',
-    choices:[{text:'止损撤出',risk:'wen',fx:{money:-20,know:+15}},{text:'等项目方补偿',risk:'xian',fx:{money:-35,luck:+10}}]},
-  {type:'xiong',title:'内部人抛售',desc:'某项目创始人被发现在解锁期前通过多个钱包悄悄出货，社区信任崩塌。',
-    choices:[{text:'跟着跑',risk:'wen',fx:{money:-15,know:+10}},{text:'逆势抄底',risk:'xian',fx:{money:+30,mind:-20}}]},
-  {type:'xiong',title:'钱包被盗',desc:'你点了一个不明链接，授权了一个恶意合约。钱包里的代币正在被转走。',
-    choices:[{text:'立刻撤销授权',risk:'wen',fx:{money:-20,know:+20}},{text:'转移到新钱包',risk:'qi',fx:{money:-10,luck:+15}}]},
-  {type:'xiong',title:'稳定币暴雷',desc:'你持仓的一个算法稳定币开始脱锚，从1美元跌到0.6，社区在争论能不能救回来。',
-    choices:[{text:'割肉跑路',risk:'wen',fx:{money:-25,mind:+10}},{text:'加仓等回锚',risk:'xian',fx:{money:-45,mind:-20}}]},
-  {type:'xiong',title:'矿场断电',desc:'某省突然发文要求所有矿场限期关停，你投资的矿池一夜之间算力归零。',
-    choices:[{text:'认亏',risk:'wen',fx:{money:-20,know:+10}},{text:'转移海外矿场',risk:'qi',fx:{money:-10,luck:+15,know:+10}}]},
-  {type:'qi',title:'链上考古',desc:'你在一个被遗忘的钱包里发现了2017年买的一小笔代币，现在居然涨了50倍。',
-    choices:[{text:'立刻变现',risk:'wen',fx:{money:+35,mind:+10}},{text:'继续放着等100倍',risk:'qi',fx:{luck:+25,mind:-10}}]},
-  {type:'qi',title:'DAO提案',desc:'一个你参与治理的DAO正在投票：是否将国库50%换成BTC。你手里有关键票。',
-    choices:[{text:'投赞成票',risk:'wen',fx:{know:+15,luck:+10}},{text:'投反对票',risk:'qi',fx:{know:+20,mind:+10}}]},
-  {type:'qi',title:'大佬饭局',desc:'有人邀请你参加一个只有20人的闭门晚宴，据说在座的管理着超过100亿美元的加密资产。',
-    choices:[{text:'赴宴社交',risk:'qi',fx:{luck:+30,know:+10}},{text:'婉拒保持低调',risk:'wen',fx:{mind:+15,know:+5}}]},
-  {type:'qi',title:'黑客悬赏',desc:'某协议被盗3000万，项目方发布悬赏：找到漏洞归还资金者奖励10%。你发现了一条线索。',
-    choices:[{text:'提交线索',risk:'qi',fx:{know:+25,luck:+15}},{text:'私下联系黑客',risk:'xian',fx:{money:+40,luck:-20,mind:-15}}]},
-  {type:'qi',title:'熊市咖啡馆',desc:'熊市里你常去的咖啡馆老板说要关门了，他想用店里的设备挖矿。问你要不要合伙。',
-    choices:[{text:'合伙挖矿',risk:'qi',fx:{luck:+20,money:+15}},{text:'请他喝最后一杯',risk:'wen',fx:{mind:+20}}]},
-  {type:'qi',title:'推特论战',desc:'你发的一条市场分析推特意外爆火，大V转发，粉丝暴涨，有人开始叫你"老师"。',
-    choices:[{text:'低调删推',risk:'wen',fx:{mind:+15,know:+5}},{text:'开始做KOL喊单',risk:'xian',fx:{money:+30,know:-10,luck:-15}}]},
+  // ═══ 利好（大幅翻倍机会） ═══
+  {type:'ji',title:'空投大礼',desc:'钱包里突然出现一笔巨额空投，链上显示是某顶级项目的早期奖励，价值已经超过你总资产的一半。',
+    choices:[{text:'立刻全部卖出',risk:'wen',fx:{money:+80,mind:+5}},{text:'只卖一半继续持有',risk:'qi',fx:{money:+40,luck:+15}}]},
+  {type:'ji',title:'牛市信号',desc:'链上数据显示长期持有者开始大规模移动筹码，所有指标全部亮绿灯，这是教科书级别的牛市起点信号。',
+    choices:[{text:'满仓梭哈',risk:'xian',fx:{money:+100,mind:-15}},{text:'分批建仓',risk:'wen',fx:{money:+50,mind:+5}}]},
+  {type:'ji',title:'牛市来了',desc:'比特币一周内暴涨40%突破历史高位，全市场疯狂FOMO，你的持仓全线暴涨，账户数字在跳动。',
+    choices:[{text:'落袋为安',risk:'wen',fx:{money:+60,mind:+10}},{text:'加杠杆继续骑牛',risk:'xian',fx:{money:+100,mind:-20}}]},
+  {type:'ji',title:'减半行情',desc:'比特币减半正式到来，历史数据显示减半后涨幅超过300%。所有人都在喊"这次不一样"。',
+    choices:[{text:'满仓押注',risk:'xian',fx:{money:+100,mind:-15}},{text:'定期定额',risk:'wen',fx:{money:+50,know:+10}}]},
+  {type:'ji',title:'Meme币起飞',desc:'一只Meme币一小时内涨了2000%，你的朋友群全在晒收益截图，有人已经赚了百倍。',
+    choices:[{text:'冲一把梭哈',risk:'xian',fx:{money:+100,mind:-15,luck:-10}},{text:'小仓位试水',risk:'wen',fx:{money:+40,know:+5}}]},
+  {type:'ji',title:'机构入场',desc:'全球最大主权基金宣布将5%资产配置到BTC，消息一出整个市场瞬间拉升30%。',
+    choices:[{text:'顺势重仓',risk:'wen',fx:{money:+70,mind:+5}},{text:'开10倍杠杆',risk:'xian',fx:{money:+100,mind:-20}}]},
+  {type:'ji',title:'稳定币脱锚套利',desc:'USDC短暂脱锚到0.82，套利窗口只有几个小时，全仓接盘能赚20%无风险利润。',
+    choices:[{text:'全仓接盘',risk:'xian',fx:{money:+80,mind:-10}},{text:'小仓试水',risk:'wen',fx:{money:+30,know:+10}}]},
+  {type:'ji',title:'矿工投降',desc:'矿工大面积关机，全网算力暴跌50%。历史上每次矿工投降后6个月内至少翻3倍。',
+    choices:[{text:'重仓抄底',risk:'xian',fx:{money:+90,mind:-10}},{text:'观望等确认',risk:'wen',fx:{money:+30,know:+10}}]},
+  // ═══ 暴雷（大幅亏损风险） ═══
+  {type:'xiong',title:'合约爆仓',desc:'你的高倍杠杆多单在流动性最差的凌晨被精准爆破，强制平仓，保证金全部归零。',
+    choices:[{text:'认亏止损',risk:'wen',fx:{money:-40,mind:+10}},{text:'借钱加仓摊低',risk:'xian',fx:{money:-50,mind:-20}}]},
+  {type:'xiong',title:'交易所暂停提币',desc:'你全部资产所在的交易所突然暂停提币，创始人失联，社区传言资不抵债。',
+    choices:[{text:'死等公告',risk:'qi',fx:{money:-30,mind:-15}},{text:'找内部人打听',risk:'wen',fx:{money:-20,know:+15}}]},
+  {type:'xiong',title:'项目方跑路',desc:'你重仓的DeFi项目一夜之间官推删帖、Discord解散、合约权限转移，TVL归零。',
+    choices:[{text:'立刻止损',risk:'wen',fx:{money:-35,know:+15}},{text:'等社区自救',risk:'xian',fx:{money:-50,mind:-15}}]},
+  {type:'xiong',title:'监管突袭',desc:'G20联合声明将加密货币列为"系统性金融风险"，多国同步宣布禁令，市场一天暴跌45%。',
+    choices:[{text:'恐慌抛售',risk:'wen',fx:{money:-40,mind:-10}},{text:'逆势抄底',risk:'xian',fx:{money:+80,luck:-15}}]},
+  {type:'xiong',title:'预言机攻击',desc:'你重仓的DeFi协议遭遇闪电贷攻击，价格被操纵，你的仓位被清算，损失惨重。',
+    choices:[{text:'撤出剩余资金',risk:'wen',fx:{money:-35,know:+15}},{text:'等项目方补偿',risk:'xian',fx:{money:-45,luck:+10}}]},
+  {type:'xiong',title:'稳定币暴雷',desc:'你大量持有的算法稳定币突然脱锚，从1美元暴跌到0.2，死亡螺旋开始了。',
+    choices:[{text:'割肉跑路',risk:'wen',fx:{money:-40,mind:+10}},{text:'抄底等回锚',risk:'xian',fx:{money:-50,mind:-20}}]},
+  {type:'xiong',title:'钱包被盗',desc:'你点了一个钓鱼链接，恶意合约获得了无限授权，钱包里的资产正在被一笔笔转走。',
+    choices:[{text:'紧急撤销授权',risk:'wen',fx:{money:-30,know:+20}},{text:'转移到新钱包',risk:'qi',fx:{money:-20,luck:+15}}]},
+  // ═══ 奇遇（命运转折） ═══
+  {type:'qi',title:'神秘大佬私信',desc:'一个链上持有上万枚BTC的巨鲸地址给你发来加密私信，邀请你参与一个未公开的项目。',
+    choices:[{text:'全力参与',risk:'xian',fx:{money:+80,luck:+10,mind:-10}},{text:'谨慎核实再说',risk:'wen',fx:{know:+20,luck:+10}}]},
+  {type:'qi',title:'链上考古',desc:'你在一个2016年注册的旧钱包里发现了一笔早期投资，现在价值已经翻了100倍。',
+    choices:[{text:'立刻全部变现',risk:'wen',fx:{money:+90,mind:+10}},{text:'只卖一半',risk:'qi',fx:{money:+50,luck:+20}}]},
+  {type:'qi',title:'SEC传票',desc:'一封来自美国证监会的传票，要求你解释过去一年的所有交易记录。律师费预估六位数。',
+    choices:[{text:'花大钱请最好的律师',risk:'wen',fx:{money:-30,know:+20}},{text:'转移资产到冷钱包',risk:'xian',fx:{money:+20,luck:-20,know:-10}}]},
+  {type:'qi',title:'大佬饭局',desc:'你被邀请参加一个顶级闭门晚宴，在座的人管理着超过500亿美元的加密资产。有人愿意投你。',
+    choices:[{text:'接受投资扩大规模',risk:'qi',fx:{money:+70,luck:+15}},{text:'保持独立运营',risk:'wen',fx:{know:+15,mind:+10}}]},
+  {type:'qi',title:'黑客悬赏',desc:'某协议被盗1亿美元，你发现了关键线索。项目方悬赏10%给找到漏洞的人。',
+    choices:[{text:'提交线索领赏金',risk:'qi',fx:{money:+60,know:+15}},{text:'私下联系黑客分成',risk:'xian',fx:{money:+90,luck:-20,mind:-15}}]},
+  {type:'qi',title:'KOL喊单',desc:'一位千万粉丝的KOL在直播中疯狂推荐你重仓的币，粉丝蜂拥而入，价格暴拉50%。',
+    choices:[{text:'趁高位出货',risk:'wen',fx:{money:+60,know:+10}},{text:'继续持有等更高',risk:'xian',fx:{money:+100,luck:-15}}]},
+  {type:'qi',title:'技术顿悟',desc:'你突然理解了整个市场周期的底层逻辑，这个认知如果用对了，能让你的资产翻几倍。',
+    choices:[{text:'大胆重仓执行',risk:'xian',fx:{money:+80,know:+15}},{text:'保守验证策略',risk:'wen',fx:{know:+25,money:+30}}]},
+  {type:'qi',title:'推特论战',desc:'你的一条分析推特被全网转发，粉丝暴涨到50万，有人出价让你开付费社群。',
+    choices:[{text:'开付费社群变现',risk:'xian',fx:{money:+70,know:-10}},{text:'保持免费继续研究',risk:'wen',fx:{know:+20,luck:+15}}]},
 ];
 
 // ════════════════════════════════════════════════════
@@ -1963,20 +1952,16 @@ function prefetchAll(choices, histSnap){
 // ════════════════════════════════════════════════════
 // 奇遇
 // ════════════════════════════════════════════════════
-let recentEvts=[]; // 最近触发过的事件索引，避免短期内重复
+let recentEvts=[]; // 最近触发过的事件索引，避免重复
+const EVENT_TURNS = [6, 12, 18, 24]; // 固定在这些回合触发突发事件
 function tryEvent(cb){
-  const raw=G.rawAlloc||{luck:5};
-  // 降低基础概率：12% + luck加成最高到25%，约每4-5回合一次
-  let chance=0.12+Math.min(G.luck*0.006,0.13);
-  // 气运惩罚
-  if(raw.luck<DEBUFF_DANGER) chance*=0.3;
-  else if(raw.luck<DEBUFF_WEAK) chance*=0.6;
-  // 徐明星：每3回合必定触发奇遇
-  if(G.char?.id==='徐明星' && G.turn>0 && G.turn%3===0) chance=1.0;
-  // 连续触发冷却：上回合刚触发过则概率减半
-  if(lastEvIdx>=0 && G.turn>1) chance*=0.5;
-  if(!G.alive||Math.random()>chance)return cb();
-  // 排除最近3次触发过的事件
+  if(!G.alive) return cb();
+  // 只在固定回合触发
+  if(!EVENT_TURNS.includes(G.turn)){
+    // 徐明星特殊：每3回合额外触发
+    if(!(G.char?.id==='徐明星' && G.turn>0 && G.turn%3===0)) return cb();
+  }
+  // 排除最近触发过的事件
   let pool=EVENTS.map((e,i)=>({e,i})).filter(({i})=>!recentEvts.includes(i));
   if(!pool.length){recentEvts=[];pool=EVENTS.map((e,i)=>({e,i}));}
   // 何一：利好类型出现概率翻倍（加权）
@@ -1987,7 +1972,7 @@ function tryEvent(cb){
   }
   const {e:ev,i:idx}=pool[Math.floor(Math.random()*pool.length)];
   lastEvIdx=idx;
-  recentEvts.push(idx);if(recentEvts.length>3)recentEvts.shift(); // 保留最近3次
+  recentEvts.push(idx);if(recentEvts.length>4)recentEvts.shift(); // 保留最近4次（不重复）
   showEv(ev,cb);
 }
 function showEv(ev,onClose){
