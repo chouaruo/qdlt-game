@@ -1,6 +1,6 @@
 export const config = { runtime: 'edge' };
 
-const MODEL = process.env.AI_MODEL || 'qwen3.5-plus';
+const MODEL = process.env.AI_MODEL || 'qwen-plus';
 const API_BASE = process.env.AI_API_BASE || 'https://dashscope.aliyuncs.com/compatible-mode/v1';
 const FALLBACK_CHOICES = ['持仓等待', '分析链上', '联系律师'];
 
