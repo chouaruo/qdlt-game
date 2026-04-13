@@ -1416,9 +1416,15 @@ function onCharClick(ch,locked){
   selectedChar=ch;
   document.getElementById('char-confirm-btn').disabled=false;
   // 显示详情
+  const traitHtml = ch.baseTrait
+    ? `<div style="margin-top:8px;padding:8px 10px;background:var(--orange-card-bg);border:1px solid var(--orange-card-bd);border-radius:6px;font-size:12px;">
+        <span style="color:var(--orange-card-tx);font-weight:600;">专属词条：${ch.baseTrait.name}</span>
+        <span style="color:var(--orange-card-tx);opacity:0.7;margin-left:4px;">${ch.baseTrait.desc}</span>
+      </div>` : '';
   detail.innerHTML=`
     <div class="char-detail-name">${ch.name}</div>
-    <div class="char-detail-body">${ch.desc}<br><br><strong>技能：</strong>${ch.skill}</div>
+    <div class="char-detail-body">${ch.desc}</div>
+    ${traitHtml}
     <div class="char-detail-skill">🏁 结局方向：${ch.ending}${ch.rebornTrait?'<br>🔄 轮回词条：'+ch.rebornTrait.name+'（通关后继承）':''}</div>
   `;
   detail.className='char-detail';
