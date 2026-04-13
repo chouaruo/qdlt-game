@@ -1678,9 +1678,9 @@ async function initGame(){
 
   const charId = G.char?.id||'散户';
   const opener = charId==='散户' ? getRetailOpener(G.money) : charOpeners[charId];
-  const traitHint = G.traits.length ? `玩家开局词条：${G.traits.map(t=>t.name).join('、')}。` : '';
-  const assetHint = `玩家当前总资产：${fmtAsset(G.money)}，当前境界：${REALMS[G.realmIdx].name}。`;
-  const prompt=`游戏开始。${opener} ${assetHint}${traitHint}请描述开场场景，给出三个走向各异的选择。`;
+  const traitHint = G.traits.length ? `开局词条：${G.traits.map(t=>t.name).join('、')}。` : '';
+  const assetNum = fmtAsset(G.money);
+  const prompt=`游戏开始。${opener}\n\n【重要】玩家总资产精确为${assetNum}（数字：${G.money}），境界：${REALMS[G.realmIdx].name}。${traitHint}剧情中提到的任何金额必须与${assetNum}的总量级一致，不要编造其他数字。请描述开场场景，给出三个走向各异的选择。`;
 
   let result;
   try{result=await callAI(prompt,[]);}
