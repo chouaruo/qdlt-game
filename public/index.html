@@ -927,6 +927,160 @@ const EVENTS = [
     choices:[{text:'开付费社群变现',risk:'xian',fx:{money:+70,know:-10}},{text:'保持免费继续研究',risk:'wen',fx:{know:+20,luck:+15}}]},
 ];
 
+// 角色专属突发事件（按回合顺序：6→12→18→24）
+const CHAR_EVENTS = {
+  'CZ':[
+    {type:'ji',title:'币安上线',desc:'Binance正式上线第一天，你和何一盯着后台数据——注册用户像洪水一样涌入，服务器差点崩了。交易量远超预期。',
+      choices:[{text:'疯狂扩容抢市场',risk:'xian',fx:{money:+100,mind:-10}},{text:'稳步运营控风险',risk:'wen',fx:{money:+50,know:+10}}]},
+    {type:'qi',title:'「4」字推文',desc:'你在推特上只发了一个数字「4」，整个市场瞬间炸锅。有人说是利好，有人说是利空，交易量暴增。',
+      choices:[{text:'趁乱扩大影响力',risk:'xian',fx:{money:+80,luck:+15}},{text:'保持沉默观望',risk:'wen',fx:{mind:+15,know:+10}}]},
+    {type:'xiong',title:'Funds are SAFU?',desc:'一家竞争对手交易所暴雷，用户开始恐慌性提币。你的SAFU基金能撑住吗？提币量已经超过了储备的警戒线。',
+      choices:[{text:'公开储备证明',risk:'wen',fx:{money:-30,mind:+15,know:+10}},{text:'暂停大额提币',risk:'xian',fx:{money:-40,mind:-20}}]},
+    {type:'xiong',title:'认罪协议',desc:'美国司法部找上门了。你的律师说最好的结果是认罪协议——缴纳巨额罚款，辞去CEO。你看着窗外的迪拜天际线。',
+      choices:[{text:'签署协议保全公司',risk:'wen',fx:{money:-40,mind:+10,know:+15}},{text:'拒绝认罪硬刚',risk:'xian',fx:{money:+60,mind:-20,luck:-15}}]},
+  ],
+  'SBF':[
+    {type:'ji',title:'日本套利',desc:'你发现日本交易所的比特币价格比美国高10%——一个完美的套利机会。Alameda Research靠这个赚到了第一桶金。',
+      choices:[{text:'加大资金全力套利',risk:'xian',fx:{money:+100,mind:-10}},{text:'控制规模稳健操作',risk:'wen',fx:{money:+50,know:+10}}]},
+    {type:'ji',title:'FTX爆发',desc:'FTX上线后用户暴增，交易量冲到全球前三。你同时管理着交易所和Alameda，钱在两边之间流动。',
+      choices:[{text:'用Alameda给FTX做市',risk:'xian',fx:{money:+90,luck:-10}},{text:'严格隔离两家公司',risk:'wen',fx:{money:+40,know:+15}}]},
+    {type:'xiong',title:'130亿窟窿',desc:'CoinDesk的一篇文章揭露了Alameda的资产负债表——130亿美元的窟窿。CZ发推说要清仓FTT。挤兑开始了。',
+      choices:[{text:'发推说一切正常',risk:'xian',fx:{money:-50,mind:-15}},{text:'紧急寻求收购',risk:'wen',fx:{money:-40,mind:-10}}]},
+    {type:'xiong',title:'被捕',desc:'FBI特工出现在巴哈马你的公寓门口。你的律师已经在电话里了。外面全是记者的闪光灯。',
+      choices:[{text:'配合调查争取减刑',risk:'wen',fx:{money:-50,mind:+5,know:+10}},{text:'坚持无罪辩护',risk:'xian',fx:{money:-40,mind:-20,luck:+10}}]},
+  ],
+  '宝二爷':[
+    {type:'ji',title:'矿场建成',desc:'你在内蒙古的矿场终于建好了，几千台矿机同时轰鸣。电费便宜得离谱，每天都在印钱。你在直播间里激动地喊：挖矿就是印钞机！',
+      choices:[{text:'继续扩大矿场规模',risk:'xian',fx:{money:+90,mind:-5}},{text:'边挖边囤BTC',risk:'wen',fx:{money:+50,know:+10}}]},
+    {type:'qi',title:'布道成名',desc:'你的一段直播视频被疯传——你赤膊坐在游泳池边，一边撸串一边喊"比特币会涨到100万"。粉丝暴涨到百万级。',
+      choices:[{text:'趁热度开始卖课',risk:'xian',fx:{money:+70,know:-10}},{text:'继续免费布道',risk:'wen',fx:{luck:+20,mind:+15}}]},
+    {type:'xiong',title:'币价暴跌',desc:'比特币从高位暴跌70%，你的矿场已经在亏电费。社区里很多人在骂你是骗子。但你还是在直播间里喊：抄底！',
+      choices:[{text:'坚持不卖继续布道',risk:'xian',fx:{money:-35,mind:+15}},{text:'关掉矿场止损',risk:'wen',fx:{money:-25,know:+10}}]},
+    {type:'qi',title:'移居美国',desc:'你带着全家移居美国，在硅谷买了房。你开始在海外华人圈布道比特币，有人叫你先知，有人叫你骗子。',
+      choices:[{text:'在美国重新开始',risk:'wen',fx:{money:+50,mind:+10}},{text:'回国抄底矿场',risk:'xian',fx:{money:+80,luck:-15}}]},
+  ],
+  '徐明星':[
+    {type:'ji',title:'OKCoin上线',desc:'你的交易所OKCoin正式上线了。界面简陋但撮合引擎够快，第一天就有几百个用户注册。你盯着屏幕上跳动的数字，感觉历史正在被创造。',
+      choices:[{text:'烧钱推广抢用户',risk:'xian',fx:{money:+90,mind:-10}},{text:'打磨产品体验',risk:'wen',fx:{money:+40,know:+15}}]},
+    {type:'xiong',title:'暂停提币风波',desc:'系统突然出现异常，你不得不暂停提币。用户社区炸锅了，有人开始在公司楼下拉横幅。「系统维护」四个字成了你的标签。',
+      choices:[{text:'发公告解释原因',risk:'wen',fx:{money:-30,mind:-10,know:+10}},{text:'保持沉默等修复',risk:'xian',fx:{money:-40,luck:+10}}]},
+    {type:'xiong',title:'被堵门',desc:'一群投资者堵在你公司门口，警察也来了。你从后门溜出去，坐在车里看着手机上的骂声。你开始怀疑这条路走得对不对。',
+      choices:[{text:'站出来面对投资者',risk:'wen',fx:{money:-25,mind:+15}},{text:'暂时消失避风头',risk:'xian',fx:{money:-35,luck:+15}}]},
+    {type:'ji',title:'OKX品牌重塑',desc:'你把OKCoin改名为OKX，重新定位为全球化交易所。新品牌发布的那天，全球注册用户突破了千万。',
+      choices:[{text:'大举进军海外市场',risk:'xian',fx:{money:+80,luck:+10}},{text:'巩固现有市场份额',risk:'wen',fx:{money:+50,mind:+10}}]},
+  ],
+  '孙宇晨':[
+    {type:'ji',title:'波场ICO',desc:'波场的ICO在几分钟内就被抢光了。你的白皮书写得天花乱坠，投资者疯了一样往里冲钱。你知道，叙事的力量是无穷的。',
+      choices:[{text:'趁热继续画饼',risk:'xian',fx:{money:+100,know:-10}},{text:'兑现承诺做产品',risk:'wen',fx:{money:+50,know:+10}}]},
+    {type:'qi',title:'巴菲特午餐',desc:'你花了456万美元拍下了巴菲特午餐，全世界的媒体都在报道。巴菲特说加密货币是"老鼠药"，但你不在乎——流量才是王道。',
+      choices:[{text:'大肆宣传蹭热度',risk:'xian',fx:{money:+80,luck:+15}},{text:'低调赴宴真学习',risk:'wen',fx:{know:+20,mind:+10}}]},
+    {type:'qi',title:'格林纳达大使',desc:'你成为了格林纳达的驻世贸组织大使，获得了外交豁免权。这步棋让所有人都看不懂，但你知道这意味着什么。',
+      choices:[{text:'利用身份拓展业务',risk:'xian',fx:{money:+70,luck:+10,know:-10}},{text:'低调运作保护资产',risk:'wen',fx:{mind:+15,luck:+15}}]},
+    {type:'xiong',title:'USDD风波',desc:'你推出的算法稳定币USDD开始出现脱锚迹象，社区质疑声四起。你在推特上说"一切尽在掌控"，但市场并不买账。',
+      choices:[{text:'动用储备金救市',risk:'wen',fx:{money:-35,mind:+10}},{text:'继续喊口号稳军心',risk:'xian',fx:{money:-45,luck:-15}}]},
+  ],
+  'DoKwon':[
+    {type:'ji',title:'Terra上线',desc:'Terra正式上线，你的算法稳定币UST开始吸引DeFi用户。Anchor Protocol提供20%年化收益，TVL像火箭一样增长。',
+      choices:[{text:'大力推广20%年化',risk:'xian',fx:{money:+100,mind:-10}},{text:'降低收益率保安全',risk:'wen',fx:{money:+50,know:+15}}]},
+    {type:'ji',title:'百亿TVL',desc:'Terra生态TVL突破100亿美元。你在推特上嘲笑质疑者："你们穷是有原因的。"LUNA价格创历史新高。',
+      choices:[{text:'继续扩张生态',risk:'xian',fx:{money:+90,mind:-15}},{text:'开始建立储备金',risk:'wen',fx:{money:+40,know:+10}}]},
+    {type:'xiong',title:'脱锚崩盘',desc:'UST开始脱锚了。0.98...0.90...0.60...死亡螺旋启动，LUNA从80美元跌向零。400亿美元在48小时内蒸发。你看着屏幕，说不出话。',
+      choices:[{text:'发布救市方案',risk:'wen',fx:{money:-50,mind:-10}},{text:'拒绝承认失败',risk:'xian',fx:{money:-50,mind:-20,luck:-10}}]},
+    {type:'xiong',title:'黑山被捕',desc:'你在黑山机场用假护照试图出境时被逮捕。韩国和美国同时发出引渡请求。你的律师说，准备好打一场很长的官司。',
+      choices:[{text:'配合调查争取从轻',risk:'wen',fx:{money:-40,mind:+10}},{text:'坚持自己没有错',risk:'xian',fx:{money:-30,mind:-15,luck:+10}}]},
+  ],
+  '木头姐':[
+    {type:'qi',title:'ARK诞生',desc:'你创立了ARK Invest，主打颠覆性创新投资。华尔街没人相信你——一个中年女性基金经理，要投什么比特币和基因编辑？',
+      choices:[{text:'坚持信念重仓创新',risk:'xian',fx:{money:+80,mind:-10}},{text:'平衡配置降低风险',risk:'wen',fx:{money:+40,know:+15}}]},
+    {type:'ji',title:'精准预测',desc:'你在所有人都看空的时候重仓了特斯拉和比特币，两个都涨了10倍。CNBC请你上节目，华尔街开始叫你"牛市女皇"。',
+      choices:[{text:'加大仓位继续看多',risk:'xian',fx:{money:+100,mind:-15}},{text:'适当止盈锁利润',risk:'wen',fx:{money:+50,mind:+10}}]},
+    {type:'xiong',title:'基金暴跌',desc:'2022年熊市来了，ARKK从高点暴跌75%。你的基金被做空，媒体开始嘲笑你。但你在每周的研报里继续写："BTC将到100万美元。"',
+      choices:[{text:'逆势加仓坚持信念',risk:'xian',fx:{money:-35,mind:+15}},{text:'调整仓位降低风险',risk:'wen',fx:{money:-20,know:+10}}]},
+    {type:'ji',title:'比特币ETF',desc:'比特币现货ETF终于获批了！你从第一天就在呼吁的事情成真了。ARK是第一批申请者，资金开始回流。',
+      choices:[{text:'全力宣传ARK的ETF',risk:'xian',fx:{money:+90,luck:+10}},{text:'静待市场验证',risk:'wen',fx:{money:+50,mind:+10}}]},
+  ],
+  'ZachXBT':[
+    {type:'qi',title:'第一篇调查报告',desc:'你花了三周追踪一个可疑项目的链上资金流向，终于发现了证据：创始人在通过多个钱包洗钱。你把报告发到了推特上。',
+      choices:[{text:'实名举报到SEC',risk:'xian',fx:{money:+60,know:+15,luck:-10}},{text:'匿名发布保护自己',risk:'wen',fx:{know:+20,luck:+15}}]},
+    {type:'ji',title:'揭露大案',desc:'你揭露了一个估值10亿美元的项目是彻头彻尾的骗局，创始人是连环诈骗犯。推特粉丝一夜暴涨50万，项目方威胁要起诉你。',
+      choices:[{text:'继续深挖更多证据',risk:'xian',fx:{money:+70,know:+10,mind:-10}},{text:'交给执法部门处理',risk:'wen',fx:{know:+15,mind:+10}}]},
+    {type:'xiong',title:'被威胁人肉',desc:'你调查的某个项目背后有黑帮背景。有人开始在论坛上悬赏你的真实身份。你的Telegram收到了死亡威胁。',
+      choices:[{text:'坚持不退缩',risk:'xian',fx:{money:-20,mind:-15,know:+20}},{text:'暂停调查换个方向',risk:'wen',fx:{mind:+10,luck:+10}}]},
+    {type:'ji',title:'社区众筹',desc:'加密社区为你发起了众筹，几天内就筹到了几十万美元。他们说你是这个行业最需要的人。你第一次感受到了"去中心化正义"的力量。',
+      choices:[{text:'用资金建调查团队',risk:'qi',fx:{money:+80,know:+10}},{text:'继续独立调查',risk:'wen',fx:{mind:+20,luck:+15}}]},
+  ],
+  'Brian':[
+    {type:'ji',title:'Y Combinator',desc:'Coinbase从Y Combinator毕业了。你的产品很简单——让美国人能用银行卡一键买比特币。第一批用户正在注册。',
+      choices:[{text:'烧钱获客抢市场',risk:'xian',fx:{money:+90,mind:-10}},{text:'打磨合规体系',risk:'wen',fx:{money:+40,know:+15}}]},
+    {type:'ji',title:'纳斯达克敲钟',desc:'Coinbase在纳斯达克直接上市。开盘价远超预期，你的身家在一天内增加了几十亿美元。华尔街终于承认了加密货币。',
+      choices:[{text:'趁势大举扩张',risk:'xian',fx:{money:+100,mind:-10}},{text:'保持谨慎运营',risk:'wen',fx:{money:+50,mind:+10}}]},
+    {type:'xiong',title:'SEC起诉',desc:'SEC正式起诉Coinbase，指控你交易的部分代币是未注册证券。股价暴跌，律师费每月烧几百万。',
+      choices:[{text:'全面应诉绝不妥协',risk:'xian',fx:{money:-35,mind:-10,know:+15}},{text:'协商和解降低风险',risk:'wen',fx:{money:-25,mind:+10}}]},
+    {type:'ji',title:'比特币ETF获批',desc:'比特币现货ETF正式获批，Coinbase被选为多只ETF的托管方。海量机构资金即将通过你的平台流入加密市场。',
+      choices:[{text:'全力承接机构业务',risk:'xian',fx:{money:+90,luck:+10}},{text:'稳步扩容确保安全',risk:'wen',fx:{money:+60,know:+10}}]},
+  ],
+  'Arthur':[
+    {type:'ji',title:'永续合约',desc:'BitMEX上线了比特币永续合约——一个不过期的期货产品。交易员疯了，100倍杠杆，日交易量迅速突破10亿美元。',
+      choices:[{text:'继续加大杠杆上限',risk:'xian',fx:{money:+100,mind:-15}},{text:'控制风险降低杠杆',risk:'wen',fx:{money:+50,know:+10}}]},
+    {type:'qi',title:'宏观神文',desc:'你写了一篇关于美元流动性和比特币周期的长文，被全球交易员疯转。所有人都在猜你的仓位方向。',
+      choices:[{text:'按自己的分析重仓',risk:'xian',fx:{money:+80,know:+10}},{text:'只发文不加仓',risk:'wen',fx:{know:+20,luck:+15}}]},
+    {type:'xiong',title:'CFTC起诉',desc:'美国商品期货交易委员会起诉BitMEX违规运营。你被迫辞去CEO，护照被扣押。你在香港的公寓里写下一篇新的宏观分析。',
+      choices:[{text:'自首配合调查',risk:'wen',fx:{money:-35,mind:+10,know:+10}},{text:'据理力争打官司',risk:'xian',fx:{money:-40,mind:-15,luck:+15}}]},
+    {type:'ji',title:'回归市场',desc:'官司结束了。你带着积累的宏观认知重新回到市场，这次你不做交易所了，你做家族办公室。第一笔交易，精准抄底。',
+      choices:[{text:'大手笔重仓入场',risk:'xian',fx:{money:+90,mind:-10}},{text:'谨慎建仓分批买入',risk:'wen',fx:{money:+50,mind:+15}}]},
+  ],
+  'Saylor':[
+    {type:'ji',title:'第一次买BTC',desc:'你说服了MicroStrategy董事会，用公司2.5亿美元现金买入了比特币。华尔街说你疯了，你说他们不懂货币的未来。',
+      choices:[{text:'继续加仓all in',risk:'xian',fx:{money:+100,mind:-10}},{text:'观察市场反应',risk:'wen',fx:{money:+50,know:+10}}]},
+    {type:'ji',title:'可转债买币',desc:'你发行了可转债，把融来的钱全部买成比特币。分析师说这是"杠杆买币"，你说这是"企业国库战略"。Strategy的股价和BTC同步暴涨。',
+      choices:[{text:'再发一轮可转债',risk:'xian',fx:{money:+90,luck:-10}},{text:'暂停加仓消化持仓',risk:'wen',fx:{money:+40,mind:+10}}]},
+    {type:'xiong',title:'BTC暴跌',desc:'比特币跌到了你的持仓均价以下，Strategy的股价腰斩。董事会有人开始质疑你的决策。媒体标题是："Saylor的豪赌失败了？"',
+      choices:[{text:'加仓摊低成本',risk:'xian',fx:{money:-30,mind:+15}},{text:'暂停买入等回暖',risk:'wen',fx:{money:-20,know:+10}}]},
+    {type:'ji',title:'BTC新高',desc:'比特币突破历史新高，Strategy的BTC持仓浮盈超过百亿美元。你在推特上只写了一个词："Bitcoin." 全网沸腾。',
+      choices:[{text:'继续永不卖出',risk:'xian',fx:{money:+100,luck:+10}},{text:'适当减持锁利润',risk:'wen',fx:{money:+60,mind:+10}}]},
+  ],
+  'HeYi':[
+    {type:'qi',title:'从主持人到CMO',desc:'你从旅游卫视辞职加入了OKCoin，负责市场和运营。你发现自己天生适合这个行业——用户增长就像收视率，但更刺激。',
+      choices:[{text:'大胆创新营销策略',risk:'xian',fx:{money:+80,luck:+10}},{text:'稳扎稳打做品牌',risk:'wen',fx:{money:+40,know:+10}}]},
+    {type:'ji',title:'共创币安',desc:'你和CZ一起创立了币安。你负责用户增长和社区运营，三个月内币安成为全球交易量第一。你的营销直觉比任何数据都准。',
+      choices:[{text:'继续激进扩张',risk:'xian',fx:{money:+100,mind:-10}},{text:'建立品牌护城河',risk:'wen',fx:{money:+50,mind:+10}}]},
+    {type:'xiong',title:'舆论风暴',desc:'社区开始出现针对你个人的攻击，有人质疑你在公司的角色。推特上每天都有新的阴谋论。你需要决定是正面回应还是无视。',
+      choices:[{text:'公开回应澄清',risk:'wen',fx:{money:-20,mind:+15}},{text:'用业绩说话',risk:'xian',fx:{money:-30,luck:+15}}]},
+    {type:'ji',title:'流量为王',desc:'你策划的一次营销活动让币安在24小时内新增了100万注册用户。竞争对手都在研究你是怎么做到的。答案是——你懂人性。',
+      choices:[{text:'趁热推出新产品',risk:'xian',fx:{money:+80,luck:+10}},{text:'沉淀用户提升留存',risk:'wen',fx:{money:+50,know:+10}}]},
+  ],
+  '吴忌寒':[
+    {type:'qi',title:'翻译白皮书',desc:'你刚刚完成了比特币白皮书的中文翻译——这是第一个中文版本。你开始意识到，挖矿才是这个生态最底层的生意。比特大陆，就从这里开始。',
+      choices:[{text:'all in矿机研发',risk:'xian',fx:{money:+90,know:+10}},{text:'先做矿池试水',risk:'wen',fx:{money:+40,luck:+15}}]},
+    {type:'xiong',title:'BCH分叉大战',desc:'你支持大区块方案，和Core派正面开战。BCH分叉了，你投入了大量算力支持BCH，但社区撕裂得很严重。',
+      choices:[{text:'全力支持BCH',risk:'xian',fx:{money:-30,mind:-10,luck:+15}},{text:'两边都布局',risk:'wen',fx:{money:-15,know:+15}}]},
+    {type:'xiong',title:'矿场大迁徙',desc:'中国全面禁止挖矿，你的矿场一夜之间要全部搬走。几十万台矿机需要运到海外，每一天都在烧钱。',
+      choices:[{text:'紧急转移到哈萨克',risk:'xian',fx:{money:-35,luck:+10}},{text:'暂停运营等政策',risk:'wen',fx:{money:-40,mind:-10}}]},
+    {type:'ji',title:'算力回归',desc:'海外矿场终于稳定运行了。比特币价格开始回升，你的矿机又在日夜不停地印钱。你在办公室里看着算力曲线，嘴角微微上扬。',
+      choices:[{text:'大规模扩张矿场',risk:'xian',fx:{money:+90,mind:-5}},{text:'多元化投资布局',risk:'wen',fx:{money:+50,know:+10}}]},
+  ],
+  'V神':[
+    {type:'ji',title:'以太坊ICO',desc:'以太坊ICO开始了，18天募集了31,000枚比特币。你19岁，手里掌握着一个可能改变世界的平台。开发者们开始涌入。',
+      choices:[{text:'全力推进开发',risk:'xian',fx:{money:+80,know:+15}},{text:'先建社区再做技术',risk:'wen',fx:{money:+40,luck:+15}}]},
+    {type:'xiong',title:'The DAO被黑',desc:'有人利用漏洞从The DAO中盗走了360万枚ETH。社区分裂了：要不要硬分叉回滚？这个决定将定义"去中心化"的含义。',
+      choices:[{text:'支持硬分叉回滚',risk:'xian',fx:{money:-30,know:+15,mind:-10}},{text:'坚持不可篡改原则',risk:'wen',fx:{money:-40,know:+20}}]},
+    {type:'qi',title:'捐出SHIB',desc:'有人给你的钱包空投了价值数十亿美元的SHIB。你把它全部捐给了印度新冠基金。推特上有人叫你圣人，有人说你傻。',
+      choices:[{text:'继续捐出更多',risk:'qi',fx:{money:-35,mind:+20,luck:+15}},{text:'保留部分做研究基金',risk:'wen',fx:{money:-15,know:+15}}]},
+    {type:'ji',title:'以太坊合并',desc:'The Merge完成了——以太坊从PoW转向PoS，能耗降低了99.95%。这是你5年来最大的赌注，今天它成功了。',
+      choices:[{text:'加速推进后续升级',risk:'xian',fx:{money:+90,know:+15}},{text:'稳步优化生态',risk:'wen',fx:{money:+50,mind:+15}}]},
+  ],
+  '中本聪':[
+    {type:'qi',title:'创世区块',desc:'2009年1月3日。你在创世区块里写下了一行字："The Times 03/Jan/2009 Chancellor on brink of second bailout for banks." 比特币，诞生了。',
+      choices:[{text:'公开身份推动发展',risk:'xian',fx:{money:+80,luck:-20}},{text:'保持匿名继续开发',risk:'wen',fx:{know:+20,luck:+20}}]},
+    {type:'qi',title:'一万枚BTC买披萨',desc:'有人用10,000枚比特币买了两个披萨。这是比特币第一次被用于实际交易。你在邮件里微微一笑——它正在按计划运行。',
+      choices:[{text:'参与社区讨论',risk:'qi',fx:{money:+70,luck:+10}},{text:'继续沉默观察',risk:'wen',fx:{know:+15,mind:+15}}]},
+    {type:'qi',title:'最后一封邮件',desc:'你发出了最后一封邮件："我已经转向做其他事了。"没有人知道你是谁，没有人知道你在哪。你关掉了电脑。',
+      choices:[{text:'彻底消失',risk:'qi',fx:{mind:+20,luck:+20,know:+15}},{text:'留下一个加密线索',risk:'xian',fx:{luck:+30,money:+60}}]},
+    {type:'qi',title:'遗产',desc:'比特币市值超过万亿美元。你的创世钱包里的100万枚BTC从未被动过。全世界都在猜你是谁，但你知道——比特币不需要创始人。',
+      choices:[{text:'让比特币自己生长',risk:'wen',fx:{money:+90,mind:+15,know:+15}},{text:'最后一次出手改变规则',risk:'xian',fx:{money:+100,luck:-20}}]},
+  ],
+};
+
 // ════════════════════════════════════════════════════
 // 游戏状态
 // ════════════════════════════════════════════════════
@@ -1952,28 +2106,29 @@ function prefetchAll(choices, histSnap){
 // ════════════════════════════════════════════════════
 // 奇遇
 // ════════════════════════════════════════════════════
-let recentEvts=[]; // 最近触发过的事件索引，避免重复
 const EVENT_TURNS = [6, 12, 18, 24]; // 固定在这些回合触发突发事件
 function tryEvent(cb){
   if(!G.alive) return cb();
-  // 只在固定回合触发
-  if(!EVENT_TURNS.includes(G.turn)){
-    // 徐明星特殊：每3回合额外触发
-    if(!(G.char?.id==='徐明星' && G.turn>0 && G.turn%3===0)) return cb();
+  const cid = G.char?.id;
+  // 角色专属事件：按固定回合顺序触发
+  if(cid && CHAR_EVENTS[cid]){
+    const evtIndex = EVENT_TURNS.indexOf(G.turn);
+    if(evtIndex >= 0 && CHAR_EVENTS[cid][evtIndex]){
+      showEv(CHAR_EVENTS[cid][evtIndex], cb);
+      return;
+    }
+    // 徐明星额外：非固定回合但每3回合也触发（从通用池随机）
+    if(cid==='徐明星' && G.turn>0 && G.turn%3===0 && !EVENT_TURNS.includes(G.turn)){
+      const pool = EVENTS;
+      showEv(pool[Math.floor(Math.random()*pool.length)], cb);
+      return;
+    }
+    return cb();
   }
-  // 排除最近触发过的事件
-  let pool=EVENTS.map((e,i)=>({e,i})).filter(({i})=>!recentEvts.includes(i));
-  if(!pool.length){recentEvts=[];pool=EVENTS.map((e,i)=>({e,i}));}
-  // 何一：利好类型出现概率翻倍（加权）
-  if(G.char?.id==='HeYi'){
-    const weighted=[];
-    pool.forEach(p=>{weighted.push(p);if(p.e.type==='ji')weighted.push(p);});
-    pool=weighted;
-  }
-  const {e:ev,i:idx}=pool[Math.floor(Math.random()*pool.length)];
-  lastEvIdx=idx;
-  recentEvts.push(idx);if(recentEvts.length>4)recentEvts.shift(); // 保留最近4次（不重复）
-  showEv(ev,cb);
+  // 散户：固定回合从通用池随机
+  if(!EVENT_TURNS.includes(G.turn)) return cb();
+  const pool = EVENTS;
+  showEv(pool[Math.floor(Math.random()*pool.length)], cb);
 }
 function showEv(ev,onClose){
   const badge=document.getElementById('ev-badge');
