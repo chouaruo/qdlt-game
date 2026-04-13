@@ -1642,9 +1642,19 @@ async function initGame(){
   document.getElementById('thinking').className='thinking show';
   document.getElementById('start-backend-status').textContent='推演中';
 
+  // 散户开场根据资产量级动态生成
+  function getRetailOpener(money){
+    const a = fmtAsset(money);
+    if(money<=0) return '你叫李狗蛋，信用卡欠了一屁股债，但朋友说币圈能翻身。你借了个手机，下载了交易所App。';
+    if(money<=5000) return `你叫李狗蛋，打工仔一个，攒了${a}准备进币圈搏一把。朋友说现在是底部，你信了。`;
+    if(money<=30000) return `你叫李狗蛋，上班族，存了${a}准备干点什么。朋友天天在群里晒收益，你终于忍不住开了个交易所账户。`;
+    if(money<=200000) return `你叫李狗蛋，手上有${a}，是这几年省吃俭用攒下的。辞了工作，全职炒币，老婆说你疯了，你觉得这是一辈子最清醒的决定。`;
+    if(money<=1000000) return `你叫李狗蛋，早年做生意赚了${a}，朋友圈的大佬们都在聊比特币。你决定把一半身家砸进去，毕竟你从来不是个安分的人。`;
+    return `你叫李狗蛋，别人叫你李总。${a}的身家，是上一轮牛市赚的。你已经不是散户了，但你还是喜欢自己盯盘。新的周期开始了。`;
+  }
+
   // 开篇 prompt 根据角色定制
   const charOpeners={
-    '散户':'你是一个刚被朋友安利进币圈的普通上班族，工资卡里有点积蓄，第一次打开交易所的那个夜晚开始了你的币圈之旅。',
     'CZ':'你是赵长鹏，在加拿大麦当劳收银台旁的折叠桌上盯着屏幕炒单，有个想法在你脑子里越来越清晰——为什么不自己做一个交易所呢？',
     'SBF':'你是山姆·班克曼-弗里德，MIT毕业，坐在豆袋椅上，手边是三台显示器，有效利他主义让你确信：赚到足够的钱，是为了做更多好事。',
     '宝二爷':'你是郭宏才，内蒙古来的煤老板，兜里装着这辈子花不完的钱，朋友给你讲了一个叫比特币的东西，你觉得这比挖煤有意思多了。',
@@ -1662,9 +1672,11 @@ async function initGame(){
     '中本聪':'你是中本聪。没有人知道你是谁。你发送了最后一封邮件，关掉了电脑。世界还不知道将会发生什么。',
   };
 
-  const opener = charOpeners[G.char?.id||'散户'] || charOpeners['散户'];
+  const charId = G.char?.id||'散户';
+  const opener = charId==='散户' ? getRetailOpener(G.money) : charOpeners[charId];
   const traitHint = G.traits.length ? `玩家开局词条：${G.traits.map(t=>t.name).join('、')}。` : '';
-  const prompt=`游戏开始。${opener} ${traitHint}请描述开场场景，给出三个走向各异的选择。`;
+  const assetHint = `玩家当前总资产：${fmtAsset(G.money)}，当前境界：${REALMS[G.realmIdx].name}。`;
+  const prompt=`游戏开始。${opener} ${assetHint}${traitHint}请描述开场场景，给出三个走向各异的选择。`;
 
   let result;
   try{result=await callAI(prompt,[]);}
