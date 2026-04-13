@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>问道链途 — UI Polish Preview</title>
+<style>
+  /* ═══ RESET & BASE ═══ */
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html { font-size: 16px; -webkit-text-size-adjust: 100%; }
+  body {
+    background: #f7f7f8;
+    color: #111111;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Sans SC', 'PingFang SC', 'Helvetica Neue', Arial, sans-serif;
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    justify-content: center;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    line-height: 1.5;
+  }
+
+  /* ═══ DESIGN TOKENS ═══ */
+  :root {
+    --bg: #f7f7f8;
+    --card: #ffffff;
+    --shadow-card: 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-header: 0 1px 3px rgba(0,0,0,0.06);
+    --shadow-btn: 0 2px 8px rgba(212,136,26,0.25);
+    --divider: #f0f0f0;
+    --text1: #111111;
+    --text2: #555555;
+    --text3: #999999;
+    --text4: #c0c0c0;
+    --gold: #d4881a;
+    --gold-hover: #c07a16;
+    --gold-light: rgba(212,136,26,0.08);
+    --green: #07c160;
+    --green-light: rgba(7,193,96,0.10);
+    --red: #fa5151;
+    --red-light: rgba(250,81,81,0.10);
+    --blue: #576b95;
+    --blue-light: rgba(87,107,149,0.10);
+    --purple: #8b5cf6;
+    --purple-light: rgba(139,92,246,0.10);
+    --orange: #e8860c;
+    --orange-light: rgba(232,134,12,0.08);
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 12px;
+  }
+
+  /* ═══ LAYOUT ═══ */
+  .container {
+    max-width: 480px;
+    width: 100%;
+    padding-bottom: env(safe-area-inset-bottom, 20px);
+  }
+
+  /* ═══ HEADER ═══ */
+  .header {
+    background: var(--card);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    padding: 0 16px;
+    box-shadow: var(--shadow-header);
+  }
+  .header-main {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 48px;
+  }
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .header-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--text1);
+    letter-spacing: 1.5px;
+  }
+  .header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: var(--gold-light);
+    color: var(--gold);
+    font-size: 12px;
+    font-weight: 500;
+    padding: 3px 10px;
+    border-radius: 20px;
+    letter-spacing: 0.5px;
+  }
+
+  /* Asset progress bar under header */
+  .asset-bar-wrap {
+    padding: 0 0 10px 0;
+  }
+  .asset-bar-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 6px;
+  }
+  .asset-bar-label span:first-child {
+    font-size: 12px;
+    color: var(--text3);
+  }
+  .asset-bar-label span:last-child {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--gold);
+    letter-spacing: 0.5px;
+  }
+  .asset-bar-track {
+    width: 100%;
+    height: 4px;
+    background: #f0ece6;
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .asset-bar-fill {
+    height: 100%;
+    width: 35%;
+    background: linear-gradient(90deg, var(--gold), #e6a23c);
+    border-radius: 2px;
+    transition: width 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  /* ═══ CONTENT AREA ═══ */
+  .content {
+    padding: 10px 16px 0;
+  }
+
+  /* ═══ CARD BASE ═══ */
+  .card {
+    background: var(--card);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+    margin-bottom: 10px;
+    overflow: hidden;
+  }
+
+  /* ═══ CHARACTER INFO ═══ */
+  .char-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px;
+  }
+  .char-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .char-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--gold-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+  .char-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text1);
+    line-height: 1.3;
+  }
+  .char-sub {
+    font-size: 12px;
+    color: var(--text3);
+    margin-top: 1px;
+  }
+  .char-realm {
+    font-size: 12px;
+    color: var(--gold);
+    font-weight: 500;
+    background: var(--gold-light);
+    padding: 4px 10px;
+    border-radius: 20px;
+  }
+
+  /* ═══ STATS ═══ */
+  .stat-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    border-top: 1px solid var(--divider);
+  }
+  .stat-row:first-child {
+    border-top: none;
+  }
+  .stat-label {
+    font-size: 13px;
+    color: var(--text2);
+    min-width: 36px;
+    flex-shrink: 0;
+  }
+  .stat-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+    justify-content: flex-end;
+  }
+  .stat-bar-track {
+    width: 120px;
+    height: 4px;
+    background: #f0f0f0;
+    border-radius: 2px;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  .stat-bar-fill {
+    height: 100%;
+    border-radius: 2px;
+    transition: width 0.5s ease;
+  }
+  .stat-bar-fill.money { background: var(--gold); }
+  .stat-bar-fill.mind { background: var(--green); }
+  .stat-bar-fill.know { background: var(--blue); }
+  .stat-bar-fill.luck { background: var(--purple); }
+  .stat-value {
+    font-size: 13px;
+    font-weight: 600;
+    min-width: 28px;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+  .stat-value.money { color: var(--gold); }
+  .stat-value.mind { color: var(--green); }
+  .stat-value.know { color: var(--blue); }
+  .stat-value.luck { color: var(--purple); }
+
+  /* ═══ TRAITS BAR ═══ */
+  .traits-wrap {
+    padding: 12px 16px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .trait-pill {
+    display: inline-flex;
+    align-items: center;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 4px 12px;
+    border-radius: var(--radius-sm);
+    line-height: 1.4;
+    letter-spacing: 0.3px;
+  }
+  .trait-pill.purple {
+    background: var(--purple-light);
+    color: #6d28d9;
+  }
+  .trait-pill.blue {
+    background: var(--blue-light);
+    color: #3d4f7c;
+  }
+  .trait-pill.green {
+    background: var(--green-light);
+    color: #059649;
+  }
+  .trait-pill.red {
+    background: var(--red-light);
+    color: #dc2626;
+  }
+  .trait-pill.orange {
+    background: var(--orange-light);
+    color: #b45309;
+  }
+
+  /* ═══ STORY CARD ═══ */
+  .story-card {
+    padding: 16px;
+  }
+  .story-text {
+    font-size: 15px;
+    line-height: 1.8;
+    color: #333333;
+    letter-spacing: 0.2px;
+  }
+  .story-cursor {
+    display: inline-block;
+    width: 2px;
+    height: 15px;
+    background: var(--gold);
+    margin-left: 2px;
+    vertical-align: text-bottom;
+    animation: blink 1s ease-in-out infinite;
+  }
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+
+  /* ═══ CHOICE BUTTONS ═══ */
+  .choices-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .choice-btn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    background: var(--gold);
+    color: #ffffff;
+    border: none;
+    border-radius: var(--radius-md);
+    padding: 14px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    font-family: inherit;
+    cursor: pointer;
+    letter-spacing: 0.5px;
+    transition: all 0.2s ease;
+    box-shadow: var(--shadow-btn);
+    line-height: 1.4;
+    text-align: left;
+  }
+  .choice-btn:hover {
+    background: var(--gold-hover);
+    box-shadow: 0 3px 12px rgba(212,136,26,0.35);
+    transform: translateY(-1px);
+  }
+  .choice-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 1px 4px rgba(212,136,26,0.20);
+  }
+  .choice-text {
+    flex: 1;
+  }
+  .choice-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 2px 8px;
+    border-radius: 20px;
+    background: rgba(255,255,255,0.20);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    white-space: nowrap;
+    margin-left: 10px;
+    flex-shrink: 0;
+  }
+
+  /* ═══ BOTTOM PANELS ═══ */
+  .bottom-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .bottom-card {
+    padding: 14px;
+  }
+  .bottom-title {
+    font-size: 12px;
+    color: var(--text3);
+    margin-bottom: 8px;
+    letter-spacing: 0.5px;
+    font-weight: 500;
+  }
+  .bottom-empty {
+    font-size: 13px;
+    color: var(--text4);
+  }
+  .log-item {
+    font-size: 12px;
+    color: var(--text2);
+    line-height: 1.7;
+    display: flex;
+    align-items: flex-start;
+    gap: 4px;
+  }
+  .log-item .log-arrow {
+    color: var(--gold);
+    flex-shrink: 0;
+    font-size: 11px;
+    line-height: 1.7;
+  }
+  .log-highlight {
+    color: var(--gold);
+    font-weight: 500;
+  }
+  .log-stat-up {
+    color: var(--green);
+  }
+
+  /* ═══ TOKEN INFO ═══ */
+  .token-info {
+    text-align: center;
+    padding: 8px 16px 16px;
+    font-size: 11px;
+    color: var(--text4);
+    letter-spacing: 0.3px;
+  }
+
+  /* ═══ ANNOTATION LABELS (for mockup only) ═══ */
+  .mockup-label {
+    display: block;
+    text-align: center;
+    font-size: 10px;
+    color: #bbb;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 16px 0 6px;
+  }
+  .mockup-label:first-child {
+    padding-top: 8px;
+  }
+
+  /* ═══ SMOOTH SCROLLING ═══ */
+  html { scroll-behavior: smooth; }
+  .container { overflow-y: auto; }
+
+  /* ═══ SAFE AREA ═══ */
+  @supports (padding-bottom: env(safe-area-inset-bottom)) {
+    .container {
+      padding-bottom: calc(env(safe-area-inset-bottom) + 16px);
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- ═══ HEADER ═══ -->
+  <header class="header">
+    <div class="header-main">
+      <div class="header-left">
+        <span class="header-title">问道链途</span>
+      </div>
+      <span class="header-badge">凡人 A0</span>
+    </div>
+    <div class="asset-bar-wrap">
+      <div class="asset-bar-label">
+        <span>本金资产</span>
+        <span>&yen;35</span>
+      </div>
+      <div class="asset-bar-track">
+        <div class="asset-bar-fill" style="width:3.5%"></div>
+      </div>
+    </div>
+  </header>
+
+  <div class="content">
+
+    <!-- ═══ CHARACTER + STATS CARD ═══ -->
+    <div class="card">
+      <div class="char-row">
+        <div class="char-left">
+          <div class="char-avatar">🐕</div>
+          <div>
+            <div class="char-name">散户李狗蛋</div>
+            <div class="char-sub">散户</div>
+          </div>
+        </div>
+        <div class="char-realm">凡人</div>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">本金</span>
+        <div class="stat-right">
+          <div class="stat-bar-track">
+            <div class="stat-bar-fill money" style="width:10%"></div>
+          </div>
+          <span class="stat-value money">10</span>
+        </div>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">心态</span>
+        <div class="stat-right">
+          <div class="stat-bar-track">
+            <div class="stat-bar-fill mind" style="width:85%"></div>
+          </div>
+          <span class="stat-value mind">85</span>
+        </div>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">认知</span>
+        <div class="stat-right">
+          <div class="stat-bar-track">
+            <div class="stat-bar-fill know" style="width:38%"></div>
+          </div>
+          <span class="stat-value know">38</span>
+        </div>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">气运</span>
+        <div class="stat-right">
+          <div class="stat-bar-track">
+            <div class="stat-bar-fill luck" style="width:5%"></div>
+          </div>
+          <span class="stat-value luck">5</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ TRAITS ═══ -->
+    <div class="card">
+      <div class="traits-wrap">
+        <span class="trait-pill purple">有效利他II</span>
+        <span class="trait-pill purple">熊市建仓派</span>
+        <span class="trait-pill blue">钻石手</span>
+      </div>
+    </div>
+
+    <!-- ═══ STORY ═══ -->
+    <div class="card story-card">
+      <p class="story-text">你决定相信"链圈老狐狸"的话，把手机放下了。接下来的三天里，你强行不看K线，去健身房跑步、看书、陪朋友吃饭。第四天早上打开APP一看，比特币反弹了7%！你的账户回血到4850块。虽然还没回本，但那种<span class="story-cursor"></span></p>
+    </div>
+
+    <!-- ═══ CHOICES ═══ -->
+    <div class="choices-wrap">
+      <button class="choice-btn">
+        <span class="choice-text">加仓趁低位继续买</span>
+        <span class="choice-tag">🔥 险</span>
+      </button>
+      <button class="choice-btn">
+        <span class="choice-text">设置提醒后继续冷静</span>
+        <span class="choice-tag">🛡 稳</span>
+      </button>
+      <button class="choice-btn">
+        <span class="choice-text">马上获利了结落袋为安</span>
+        <span class="choice-tag">✨ 奇</span>
+      </button>
+    </div>
+
+    <!-- ═══ BOTTOM PANELS ═══ -->
+    <div class="bottom-grid">
+      <div class="card bottom-card">
+        <div class="bottom-title">背包</div>
+        <div class="bottom-empty">空仓</div>
+      </div>
+      <div class="card bottom-card">
+        <div class="bottom-title">事件日志</div>
+        <div class="log-item">
+          <span class="log-arrow">▸</span>
+          <span><span class="log-highlight">境界突破！</span>晋入练气中期</span>
+        </div>
+        <div class="log-item">
+          <span class="log-arrow">▸</span>
+          <span><span class="log-stat-up">气运+5</span></span>
+        </div>
+        <div class="log-item">
+          <span class="log-arrow">▸</span>
+          <span><span class="log-stat-up">认知+8</span></span>
+        </div>
+        <div class="log-item">
+          <span class="log-arrow">▸</span>
+          <span><span class="log-stat-up">心态+12</span></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ TOKEN INFO ═══ -->
+    <div class="token-info">
+      Haiku 4.5 &middot; 缓存命中 &middot; 1.2k tokens
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>
