@@ -1928,18 +1928,22 @@ async function onChoice(choice){
     document.getElementById('pd-row').style.display='none';
     document.getElementById('thinking').className='thinking show';
     G.hist.push({role:'user',content:'我的选择：'+choice});
+    // 先尝试流式，失败则降级到普通调用
     try{
       result=await callAIStream('我的选择：'+choice,[...G.hist]);
-    }catch(_){
-      result={story:'网络信号断了，链上演算失败。',choices:['持仓等待','分析链上','联系律师'],effects:{}};
-      await typeText(result.story);
+    }catch(streamErr){
+      console.warn('流式失败，降级到普通调用:',streamErr);
+      try{
+        result=await callAI('我的选择：'+choice,[...G.hist]);
+      }catch(_){
+        result={story:'网络信号断了，链上演算失败。',choices:['持仓等待','分析链上','联系律师'],effects:{}};
+      }
     }
     document.getElementById('thinking').className='thinking';
     G.hist.push({role:'assistant',content:JSON.stringify(result)});
     if(G.hist.length>16)G.hist=G.hist.slice(-16);
-    // 流式结束后再预生成
     prefetchAll(result.choices,[...G.hist]);
-    // story 已在流式中显示，但需要替换占位符重新显示
+    // 确保story显示正确（流式已显示或降级后需要typeText）
     document.getElementById('story-text').textContent=fillStoryAmounts(result.story||'');
     currentStory=document.getElementById('story-text').textContent;
   }
@@ -2000,15 +2004,21 @@ async function initGame(){
     openingPromise = null;
   }
   if(!result || !result.story){
-    // 无预生成：流式输出
+    // 无预生成：先尝试流式，失败降级普通调用
     try{
       result=await callAIStream(prompt,[]);
       usedPregen = false;
-    }catch(e){
-      document.getElementById('api-err').textContent = e.message || '服务端连接失败';
-      document.getElementById('start-backend-status').textContent='推演失败';
-      result={story:'链上连接失败，请检查服务端环境变量后重试。',choices:[],effects:{}};
-      usedPregen = false;
+    }catch(streamErr){
+      console.warn('开场流式失败，降级:',streamErr);
+      try{
+        result=await callAI(prompt,[]);
+        usedPregen = true; // 普通调用拿到完整结果，用typeText显示
+      }catch(e){
+        document.getElementById('api-err').textContent = e.message || '服务端连接失败';
+        document.getElementById('start-backend-status').textContent='推演失败';
+        result={story:'链上连接失败，请检查服务端环境变量后重试。',choices:[],effects:{}};
+        usedPregen = false;
+      }
     }
   }
   document.getElementById('thinking').className='thinking';
