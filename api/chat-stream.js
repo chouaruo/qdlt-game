@@ -65,7 +65,7 @@ function buildSystemPrompt(state) {
   const m = state.money||0;
   const assetStr = m>1e12?'¥'+Math.round(m/1e12)+'万亿':m>1e8?'¥'+Math.round(m/1e8)+'亿':m>1e4?'¥'+Math.round(m/1e4)+'万':'¥'+m;
 
-  return `币圈文字冒险叙事引擎。修真=炒币，风格犀利幽默，币圈黑话+真实梗。
+  return `币圈文字冒险叙事引擎。修真=炒币，风格犀利幽默，币圈黑话+真实梗。请返回json格式。
 ${charCtx}${traitCtx?'\n'+traitCtx:''}
 境界：${realm.name}，资产：${assetStr}，心态${state.mind||0}/认知${state.know||0}/气运${state.luck||0}，回合${state.turn||0}/30
 持仓：${Array.isArray(state.inv)&&state.inv.length?state.inv.join('、'):'空仓'}${debuffCtx}${(state.turn||0)>=25?'\n【最后冲刺】还剩'+(30-(state.turn||0))+'回合，剧情应体现紧迫感和最终抉择的氛围':''}
