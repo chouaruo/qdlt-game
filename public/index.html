@@ -1069,9 +1069,19 @@ function applyFx(fx, prev) {
     log('本金'+sign+fmtAsset(Math.abs(delta)).replace('¥','')+'（'+sign+Math.round(pct)+'%）', delta>=0?'g':'b');
   }
 
-  // ── 其他属性：绝对值不变 ──
-  if(fx.mind!=null){G.mind=Math.max(0,Math.min(99,G.mind+fx.mind));log((fx.mind>=0?'心态+':'心态')+fx.mind,fx.mind>=0?'g':'b');}
-  if(fx.know!=null){G.know=Math.max(0,Math.min(99,G.know+fx.know));log((fx.know>=0?'认知+':'认知')+fx.know,fx.know>=0?'g':'b');}
+  // ── 其他属性：负值保底，单次扣减不能从>10直接打到0 ──
+  if(fx.mind!=null){
+    let dm=fx.mind;
+    if(dm<0&&G.mind>10) dm=Math.max(dm, -Math.floor(G.mind*0.6)); // 最多扣60%
+    G.mind=Math.max(0,Math.min(99,G.mind+dm));
+    log((dm>=0?'心态+':'心态')+dm,dm>=0?'g':'b');
+  }
+  if(fx.know!=null){
+    let dk=fx.know;
+    if(dk<0&&G.know>10) dk=Math.max(dk, -Math.floor(G.know*0.6));
+    G.know=Math.max(0,Math.min(99,G.know+dk));
+    log((dk>=0?'认知+':'认知')+dk,dk>=0?'g':'b');
+  }
   if(fx.luck!=null&&fx.luck!==0){G.luck=Math.max(0,Math.min(99,G.luck+fx.luck));log((fx.luck>=0?'气运+':'气运')+fx.luck,fx.luck>=0?'g':'b');}
   if(fx.item&&!G.inv.includes(fx.item)){G.inv.push(fx.item);log('获得：'+fx.item,'s');}
   if(fx.lose_item&&G.inv.includes(fx.lose_item)){G.inv=G.inv.filter(it=>it!==fx.lose_item);log('失去：'+fx.lose_item,'b');}
@@ -1101,8 +1111,12 @@ function checkRealm() {
 function checkDeath() {
   if(!G.alive)return;
   if(G.money<=0&&G.realmIdx>0){G.alive=false;showFull('本金归零，破产清算','所有持仓已被强制平仓\n「这次真的学到了」','red','重新入场');return;}
+  // 濒死预警：属性≤10时警告，≤0才真死
   if(G.mind<=0){G.alive=false;showFull('心态崩了，恐慌踩踏','在最低点全仓割肉离场\n「我再也不碰这个了」','red','重新入场');return;}
-  if(G.know<=0){G.alive=false;showFull('认知归零，永远被割','被同一个骗局骗了第三次\n「他们太坏了」','red','重新入场');}
+  if(G.know<=0){G.alive=false;showFull('认知归零，永远被割','被同一个骗局骗了第三次\n「他们太坏了」','red','重新入场');return;}
+  // 濒死预警提示
+  if(G.mind>0&&G.mind<=10) log('⚠ 心态濒危！再扛不住就要割肉离场了','b');
+  if(G.know>0&&G.know<=10) log('⚠ 认知告急！快要分不清真假项目了','b');
 }
 
 function showFull(big, sub, color, btn, mode='') {
