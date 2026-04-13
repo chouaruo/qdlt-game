@@ -513,6 +513,7 @@ body{
       <div class="ov-sub">从 8 张中选择 3 张 · 必含 1紫 1橙</div>
       <div class="pick-count">已选 <span id="pick-count">0</span> / 3</div>
     </div>
+    <div id="char-trait-hint" style="font-size:12px;color:var(--gold2);text-align:center;margin:-4px 0 4px;display:none;"></div>
     <div class="trait-grid-8" id="trait-grid"></div>
     <button class="btn-gold" id="trait-confirm" onclick="onTraitConfirm()" disabled>以此开局，进入币圈 →</button>
   </div>
@@ -1550,6 +1551,14 @@ function showTraitSelect(){
   selectedTraits=new Set();
   document.getElementById('pick-count').textContent='0';
   document.getElementById('trait-confirm').disabled=true;
+  // 显示角色专属词条提示
+  const hint=document.getElementById('char-trait-hint');
+  if(G.char?.baseTrait){
+    hint.textContent='角色专属词条「'+G.char.baseTrait.name+'」已自动装备';
+    hint.style.display='block';
+  } else {
+    hint.style.display='none';
+  }
   document.getElementById('ov-trait').className='ov ov-bg ov-scroll';
   renderTraitGrid();
 }
@@ -1558,7 +1567,9 @@ function drawTraits(){
   // 权重：green44 blue30 purple16 red8 orange2
   const weights={green:44,blue:30,purple:16,red:8,orange:2};
   const byTier={green:[],blue:[],purple:[],red:[],orange:[]};
-  TRAIT_POOL.forEach(t=>byTier[t.tier].push(t));
+  // 排除当前角色的baseTrait同名词条，避免和自动装备重复
+  const charTraitName = G.char?.baseTrait?.name;
+  TRAIT_POOL.filter(t=> !charTraitName || t.name !== charTraitName).forEach(t=>byTier[t.tier].push(t));
   // 加入上世轮回词条
   const rebornPool=[];
   if(G.prevChar){
