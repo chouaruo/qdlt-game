@@ -1717,7 +1717,7 @@ async function initGame(){
     result={story:'链上连接失败，请检查服务端环境变量后重试。',choices:[],effects:{}};
   }
   document.getElementById('thinking').className='thinking';
-  await typeText(result.story);
+  await typeText(fillStoryAmounts(result.story, G.money, result.effects));
   G.hist.push({role:'assistant',content:JSON.stringify(result)});
   updateStats(null);
   renderChoices(result.choices);
