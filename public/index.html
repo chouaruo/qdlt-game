@@ -1343,6 +1343,10 @@ function onAllocConfirm(){
     G.luck=Math.min(99,G.luck+(G.char.baseStats.luck||0));
   }
   document.getElementById('ov-alloc').className='ov ov-bg hidden';
+  // 投机性预生成：用户选词条期间后台开始生成开场（不含词条信息，{TOTAL}占位符前端替换）
+  const charId = G.char?.id||'散户';
+  const speculativePrompt = buildOpeningPrompt(charId, G.money, 0, []);
+  openingPromise = callAI(speculativePrompt, []).catch(()=>null);
   showTraitSelect();
 }
 
@@ -1542,6 +1546,68 @@ async function callAI(userMsg, histSnap){
   return result;
 }
 
+// 流式 AI 调用：边生成边显示 story
+async function callAIStream(userMsg, histSnap){
+  const el=document.getElementById('story-text');
+  const cur=document.getElementById('cursor');
+  el.textContent='';cur.style.display='inline-block';
+
+  const res=await fetch('/api/chat-stream',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({
+      userMsg, histSnap,
+      state:{realmIdx:G.realmIdx,money:G.money,mind:G.mind,know:G.know,luck:G.luck,turn:G.turn,inv:G.inv,char:G.char,traits:G.traits,rawAlloc:G.rawAlloc}
+    })
+  });
+  if(!res.ok) throw new Error('Stream error '+res.status);
+
+  const reader=res.body.getReader();
+  const decoder=new TextDecoder();
+  let buf='',storyShown='',finalResult=null;
+  // 显示队列：逐字追加，带节奏
+  let queue=[],draining=false;
+  async function drain(){
+    if(draining)return;draining=true;
+    while(queue.length){el.textContent+=queue.shift();if(el.textContent.length%4===0)await new Promise(r=>setTimeout(r,15));}
+    draining=false;
+  }
+
+  while(true){
+    const{done,value}=await reader.read();
+    if(done)break;
+    buf+=decoder.decode(value,{stream:true});
+    const lines=buf.split('\n');buf=lines.pop();
+    for(const line of lines){
+      if(!line.startsWith('data: '))continue;
+      let evt;try{evt=JSON.parse(line.slice(6));}catch(_){continue;}
+      if(evt.type==='delta'){
+        // 从累积 JSON 中提取 story 内容
+        storyShown+=evt.text;
+        const m=storyShown.match(/^\{"story":"((?:[^"\\]|\\.)*)"/);
+        if(m){
+          const decoded=m[1].replace(/\\n/g,'\n').replace(/\\"/g,'"').replace(/\\\\/g,'\\');
+          const newChars=decoded.slice(el.textContent.length);
+          if(newChars){queue.push(...newChars);drain();}
+        }
+      }
+      if(evt.type==='done'){
+        finalResult=evt.result;
+        if(evt.usage)updateTok(evt.usage.input_tokens||0,evt.usage.output_tokens||0);
+      }
+    }
+  }
+  // 等待显示队列排空
+  while(queue.length||draining)await new Promise(r=>setTimeout(r,20));
+  cur.style.display='none';
+  if(finalResult){
+    currentStory=finalResult.story||storyShown;
+    if(!finalResult.story)finalResult.story='天道蒙尘，市场休眠。';
+    if(!Array.isArray(finalResult.choices)||finalResult.choices.length<2)finalResult.choices=['持仓等待','分析链上','联系律师'];
+  }
+  return finalResult;
+}
+
 function prefetchAll(choices, histSnap){
   if(!choices?.length)return;
   cache={};pdCount=choices.length;setPD(true);
@@ -1645,79 +1711,112 @@ async function onChoice(choice){
   const cached=cache[choice];
   let result;
   if(cached&&typeof cached==='object'&&cached.story){
+    // 缓存命中：先更新历史再打字+预生成并行
     result=cached;
+    G.hist.push({role:'user',content:'我的选择：'+choice});
+    G.hist.push({role:'assistant',content:JSON.stringify(result)});
+    if(G.hist.length>16)G.hist=G.hist.slice(-16);
+    prefetchAll(result.choices,[...G.hist]);
+    await typeText(fillStoryAmounts(result.story, G.money, result.effects));
   }else{
+    // 缓存未命中：流式输出，边生成边显示
     document.getElementById('pd-row').style.display='none';
     document.getElementById('thinking').className='thinking show';
-    try{result=await callAI('我的选择：'+choice,[...G.hist]);}
-    catch(_){result={story:'网络信号断了，链上演算失败。',choices:['持仓等待','分析链上','联系律师'],effects:{}};}
+    G.hist.push({role:'user',content:'我的选择：'+choice});
+    try{
+      result=await callAIStream('我的选择：'+choice,[...G.hist]);
+    }catch(_){
+      result={story:'网络信号断了，链上演算失败。',choices:['持仓等待','分析链上','联系律师'],effects:{}};
+      await typeText(result.story);
+    }
     document.getElementById('thinking').className='thinking';
+    G.hist.push({role:'assistant',content:JSON.stringify(result)});
+    if(G.hist.length>16)G.hist=G.hist.slice(-16);
+    // 流式结束后再预生成
+    prefetchAll(result.choices,[...G.hist]);
+    // story 已在流式中显示，但需要替换占位符重新显示
+    document.getElementById('story-text').textContent=fillStoryAmounts(result.story||'', G.money, result.effects);
+    currentStory=document.getElementById('story-text').textContent;
   }
-  // 先更新历史，再并行：打字动画 + 预生成下一轮
-  G.hist.push({role:'user',content:'我的选择：'+choice});
-  G.hist.push({role:'assistant',content:JSON.stringify(result)});
-  if(G.hist.length>16)G.hist=G.hist.slice(-16);
-  // 立刻开始预生成（利用打字动画时间）
-  prefetchAll(result.choices,[...G.hist]);
-  await typeText(fillStoryAmounts(result.story, G.money, result.effects));
   const prev={money:G.money,mind:G.mind,know:G.know,luck:G.luck};
   applyFx(result.effects,prev);
   tryEvent(()=>{renderChoices(result.choices);setEnabled(true);});
 }
+
+// ═══ 开场文案（模块作用域，供预生成使用） ═══
+function getRetailOpener(money){
+  const a = fmtAsset(money);
+  if(money<=0) return '你叫李狗蛋，信用卡欠了一屁股债，但朋友说币圈能翻身。你借了个手机，下载了交易所App。';
+  if(money<=5000) return `你叫李狗蛋，打工仔一个，攒了${a}准备进币圈搏一把。朋友说现在是底部，你信了。`;
+  if(money<=30000) return `你叫李狗蛋，上班族，存了${a}准备干点什么。朋友天天在群里晒收益，你终于忍不住开了个交易所账户。`;
+  if(money<=200000) return `你叫李狗蛋，手上有${a}，是这几年省吃俭用攒下的。辞了工作，全职炒币，老婆说你疯了，你觉得这是一辈子最清醒的决定。`;
+  if(money<=1000000) return `你叫李狗蛋，早年做生意赚了${a}，朋友圈的大佬们都在聊比特币。你决定把一半身家砸进去，毕竟你从来不是个安分的人。`;
+  return `你叫李狗蛋，别人叫你李总。${a}的身家，是上一轮牛市赚的。你已经不是散户了，但你还是喜欢自己盯盘。新的周期开始了。`;
+}
+const CHAR_OPENERS={
+  'CZ':'你是赵长鹏，在加拿大麦当劳收银台旁的折叠桌上盯着屏幕炒单，有个想法在你脑子里越来越清晰——为什么不自己做一个交易所呢？',
+  'SBF':'你是山姆·班克曼-弗里德，MIT毕业，坐在豆袋椅上，手边是三台显示器，有效利他主义让你确信：赚到足够的钱，是为了做更多好事。',
+  '宝二爷':'你是郭宏才，内蒙古来的煤老板，兜里装着这辈子花不完的钱，朋友给你讲了一个叫比特币的东西，你觉得这比挖煤有意思多了。',
+  '徐明星':'你是徐明星，西安程序员，刚写完一个比特币交易所的代码，你盯着屏幕上的撮合引擎，心里有一个大胆的想法。',
+  '孙宇晨':'你是孙宇晨，马云的门徒，手里攥着一个叫波场的项目白皮书，你知道这个行业最重要的不是技术，是叙事。',
+  'DoKwon':'你是Do Kwon，斯坦福毕业，你有一个彻底解决稳定币问题的方案——算法稳定币。所有人都说这行不通，但你确信他们错了。',
+  '木头姐':'你是Cathie Wood，ARK基金的掌舵人，你看着比特币的价格，内心有一个数字从来没有改变过——100万美元。',
+  'ZachXBT':'你是ZachXBT，没有人知道你是谁，你的头像是一只土拨鼠，你的武器是链上数据和调查报告。又有一个项目开始了可疑的资金转移。',
+  'Brian':'你是Brian Armstrong，站在交易所后台和监管函之间，桌上一边是纳斯达克钟声，一边是上百种等待审核的新币，你知道入口意味着权力。',
+  'Arthur':'你是Arthur Hayes，深夜的交易界面像战场一样发亮，你刚写完一篇宏观长文，脑子里下一个念头不是休息，而是把仓位再拧大一点。',
+  'Saylor':'你是Michael Saylor，董事会正在看着你，你却已经把答案写在白板上了：现金会贬值，债会稀释，只有比特币配得上公司的未来。',
+  'HeYi':'你是何一，盯着后台数据、社区舆论和市场热词的波动，你知道真正的权力不只在撮合引擎里，也在用户情绪的入口上。',
+  '吴忌寒':'你是吴忌寒，矿场的风声和服务器的轰鸣混在一起，你知道真正的战争不在推特上，而在电价、芯片和算力迁徙的每一个拐点。',
+  'V神':'你是Vitalik Buterin，19岁，刚被比特币核心团队拒绝了你的提案。你打开一个新文档，开始写一个新的白皮书。',
+  '中本聪':'你是中本聪。没有人知道你是谁。你发送了最后一封邮件，关掉了电脑。世界还不知道将会发生什么。',
+};
+
+function buildOpeningPrompt(charId, money, realmIdx, traits){
+  const opener = charId==='散户' ? getRetailOpener(money) : (CHAR_OPENERS[charId]||CHAR_OPENERS['散户']);
+  const assetNum = fmtAsset(money);
+  const traitHint = traits?.length ? `开局词条：${traits.map(t=>t.name).join('、')}。` : '';
+  return `游戏开始。${opener}\n\n【重要】玩家总资产精确为${assetNum}（数字：${money}），境界：${REALMS[realmIdx||0].name}。${traitHint}请描述开场场景，给出三个走向各异的选择。`;
+}
+
+let openingPromise = null; // 投机性预生成
 
 async function initGame(){
   updateStats(null);
   document.getElementById('thinking').className='thinking show';
   document.getElementById('start-backend-status').textContent='推演中';
 
-  // 散户开场根据资产量级动态生成
-  function getRetailOpener(money){
-    const a = fmtAsset(money);
-    if(money<=0) return '你叫李狗蛋，信用卡欠了一屁股债，但朋友说币圈能翻身。你借了个手机，下载了交易所App。';
-    if(money<=5000) return `你叫李狗蛋，打工仔一个，攒了${a}准备进币圈搏一把。朋友说现在是底部，你信了。`;
-    if(money<=30000) return `你叫李狗蛋，上班族，存了${a}准备干点什么。朋友天天在群里晒收益，你终于忍不住开了个交易所账户。`;
-    if(money<=200000) return `你叫李狗蛋，手上有${a}，是这几年省吃俭用攒下的。辞了工作，全职炒币，老婆说你疯了，你觉得这是一辈子最清醒的决定。`;
-    if(money<=1000000) return `你叫李狗蛋，早年做生意赚了${a}，朋友圈的大佬们都在聊比特币。你决定把一半身家砸进去，毕竟你从来不是个安分的人。`;
-    return `你叫李狗蛋，别人叫你李总。${a}的身家，是上一轮牛市赚的。你已经不是散户了，但你还是喜欢自己盯盘。新的周期开始了。`;
-  }
-
-  // 开篇 prompt 根据角色定制
-  const charOpeners={
-    'CZ':'你是赵长鹏，在加拿大麦当劳收银台旁的折叠桌上盯着屏幕炒单，有个想法在你脑子里越来越清晰——为什么不自己做一个交易所呢？',
-    'SBF':'你是山姆·班克曼-弗里德，MIT毕业，坐在豆袋椅上，手边是三台显示器，有效利他主义让你确信：赚到足够的钱，是为了做更多好事。',
-    '宝二爷':'你是郭宏才，内蒙古来的煤老板，兜里装着这辈子花不完的钱，朋友给你讲了一个叫比特币的东西，你觉得这比挖煤有意思多了。',
-    '徐明星':'你是徐明星，西安程序员，刚写完一个比特币交易所的代码，你盯着屏幕上的撮合引擎，心里有一个大胆的想法。',
-    '孙宇晨':'你是孙宇晨，马云的门徒，手里攥着一个叫波场的项目白皮书，你知道这个行业最重要的不是技术，是叙事。',
-    'DoKwon':'你是Do Kwon，斯坦福毕业，你有一个彻底解决稳定币问题的方案——算法稳定币。所有人都说这行不通，但你确信他们错了。',
-    '木头姐':'你是Cathie Wood，ARK基金的掌舵人，你看着比特币的价格，内心有一个数字从来没有改变过——100万美元。',
-    'ZachXBT':'你是ZachXBT，没有人知道你是谁，你的头像是一只土拨鼠，你的武器是链上数据和调查报告。又有一个项目开始了可疑的资金转移。',
-    'Brian':'你是Brian Armstrong，站在交易所后台和监管函之间，桌上一边是纳斯达克钟声，一边是上百种等待审核的新币，你知道入口意味着权力。',
-    'Arthur':'你是Arthur Hayes，深夜的交易界面像战场一样发亮，你刚写完一篇宏观长文，脑子里下一个念头不是休息，而是把仓位再拧大一点。',
-    'Saylor':'你是Michael Saylor，董事会正在看着你，你却已经把答案写在白板上了：现金会贬值，债会稀释，只有比特币配得上公司的未来。',
-    'HeYi':'你是何一，盯着后台数据、社区舆论和市场热词的波动，你知道真正的权力不只在撮合引擎里，也在用户情绪的入口上。',
-    '吴忌寒':'你是吴忌寒，矿场的风声和服务器的轰鸣混在一起，你知道真正的战争不在推特上，而在电价、芯片和算力迁徙的每一个拐点。',
-    'V神':'你是Vitalik Buterin，19岁，刚被比特币核心团队拒绝了你的提案。你打开一个新文档，开始写一个新的白皮书。',
-    '中本聪':'你是中本聪。没有人知道你是谁。你发送了最后一封邮件，关掉了电脑。世界还不知道将会发生什么。',
-  };
-
-  const charId = G.char?.id||'散户';
-  const opener = charId==='散户' ? getRetailOpener(G.money) : charOpeners[charId];
-  const traitHint = G.traits.length ? `开局词条：${G.traits.map(t=>t.name).join('、')}。` : '';
-  const assetNum = fmtAsset(G.money);
-  const prompt=`游戏开始。${opener}\n\n【重要】玩家总资产精确为${assetNum}（数字：${G.money}），境界：${REALMS[G.realmIdx].name}。${traitHint}剧情中提到的任何金额必须与${assetNum}的总量级一致，不要编造其他数字。请描述开场场景，给出三个走向各异的选择。`;
+  const prompt = buildOpeningPrompt(G.char?.id||'散户', G.money, G.realmIdx, G.traits);
 
   let result;
-  try{result=await callAI(prompt,[]);}
-  catch(e){
-    document.getElementById('api-err').textContent = e.message || '服务端连接失败';
-    document.getElementById('start-backend-status').textContent='推演失败';
-    result={story:'链上连接失败，请检查服务端环境变量后重试。',choices:[],effects:{}};
+  let usedPregen = false;
+  // 优先使用预生成结果
+  if(openingPromise){
+    try{ result = await openingPromise; usedPregen = true; } catch(_){ result = null; }
+    openingPromise = null;
+  }
+  if(!result || !result.story){
+    // 无预生成：流式输出
+    try{
+      result=await callAIStream(prompt,[]);
+      usedPregen = false;
+    }catch(e){
+      document.getElementById('api-err').textContent = e.message || '服务端连接失败';
+      document.getElementById('start-backend-status').textContent='推演失败';
+      result={story:'链上连接失败，请检查服务端环境变量后重试。',choices:[],effects:{}};
+      usedPregen = false;
+    }
   }
   document.getElementById('thinking').className='thinking';
   G.hist.push({role:'assistant',content:JSON.stringify(result)});
-  // 打字动画和预生成并行
   prefetchAll(result.choices,[...G.hist]);
-  await typeText(fillStoryAmounts(result.story, G.money, result.effects));
+  if(usedPregen){
+    // 预生成结果：用打字动画显示
+    await typeText(fillStoryAmounts(result.story, G.money, result.effects));
+  } else {
+    // 流式已显示，替换占位符
+    document.getElementById('story-text').textContent=fillStoryAmounts(result.story||'', G.money, result.effects);
+    currentStory=document.getElementById('story-text').textContent;
+  }
   updateStats(null);
   renderChoices(result.choices);
   setEnabled(true);
