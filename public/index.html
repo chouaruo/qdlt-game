@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<title>问道链途</title>
+<title>币圈模拟器</title>
 <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=ZCOOL+XiaoWei&family=Noto+Serif+SC:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -442,19 +442,28 @@ body{
 
 <!-- ═══ START ═══ -->
 <div class="ov ov-bg" id="ov-api">
-  <div class="api-logo">问道链途</div>
+  <div class="api-logo">币圈模拟器</div>
   <div class="api-tagline">
-    币圈修真传 · AI 预生成驱动<br>
-    服务端代行天机推演，浏览器不再持有 API Key
+    一款 AI 驱动的币圈文字冒险游戏
+  </div>
+  <div class="start-panel" style="text-align:left;font-size:13px;color:#555;line-height:1.9;padding:18px 16px;">
+    <div style="font-size:14px;font-weight:600;color:#111;margin-bottom:6px;">玩法简介</div>
+    <div>选一个身份，带上你的本金和判断力，踏入一个由 AI 实时生成的币圈世界。每一个选择都可能让你翻倍，也可能让你归零。</div>
+    <div style="margin-top:8px;">
+      <span style="color:var(--gold2);font-weight:500;">本金</span> 起始资产
+      <span style="color:#4080d0;font-weight:500;">心态</span> 扛跌能力
+      <span style="color:#9060e0;font-weight:500;">认知</span> 识别风险
+      <span style="color:#28a060;font-weight:500;">气运</span> 奇遇概率
+    </div>
   </div>
   <div class="start-panel">
     <div class="start-row"><span class="start-k">历史最高</span><span class="start-v gold" id="start-best-realm">凡人</span></div>
-    <div class="start-row"><span class="start-k">当前局面</span><span class="start-v" id="start-run-status">无进行中的链途</span></div>
+    <div class="start-row"><span class="start-k">当前局面</span><span class="start-v" id="start-run-status">无进行中的游戏</span></div>
     <div class="start-row"><span class="start-k">服务端</span><span class="start-v" id="start-backend-status">等待开局</span></div>
   </div>
   <div class="start-actions">
-    <button class="btn-gold" id="start-btn" onclick="startFreshRun()">开启新轮回 →</button>
-    <button class="ghost-btn" id="continue-btn" onclick="resumeSavedRun()" disabled>继续上次链途</button>
+    <button class="btn-gold" id="start-btn" onclick="startFreshRun()">开始游戏 →</button>
+    <button class="ghost-btn" id="continue-btn" onclick="resumeSavedRun()" disabled>继续上次游戏</button>
     <div class="api-err" id="api-err"></div>
   </div>
 </div>
@@ -494,7 +503,7 @@ body{
       <div class="pick-count">已选 <span id="pick-count">0</span> / 3</div>
     </div>
     <div class="trait-grid-8" id="trait-grid"></div>
-    <button class="btn-gold" id="trait-confirm" onclick="onTraitConfirm()" disabled>以此开局，踏入链途 →</button>
+    <button class="btn-gold" id="trait-confirm" onclick="onTraitConfirm()" disabled>以此开局，进入币圈 →</button>
   </div>
 </div>
 
@@ -502,7 +511,7 @@ body{
 <div class="wrap">
   <header class="hdr">
     <div class="hdr-left">
-      <div class="hdr-title">问道链途</div>
+      <div class="hdr-title">币圈模拟器</div>
       <div class="hdr-char" id="hdr-char">币圈修真传</div>
     </div>
     <div style="text-align:right">
@@ -533,7 +542,7 @@ body{
   <div class="traits-bar" id="traits-bar"></div>
 
   <div class="story-wrap">
-    <span id="story-text">链途初开，等待命运...</span>
+    <span id="story-text">正在加载，等待命运...</span>
     <span class="cursor" id="cursor" style="display:none"></span>
   </div>
 
@@ -627,7 +636,7 @@ const CHARS = [
     id:'CZ',emoji:'🟡',
     name:'赵长鹏 CZ',reqRealm:3,
     twitter:'https://unavatar.io/twitter/cz_binance',
-    baseStats:{money:8,mind:3,know:5,luck:4}, baseTrait:{name:'SAFU护体',tier:'orange',attr:'money',desc:'「资产永远安全」——直到不安全的那天'},
+    baseStats:{money:1.8,mind:3,know:5,luck:4}, baseTrait:{name:'SAFU护体',tier:'orange',attr:'money',desc:'「资产永远安全」——直到不安全的那天'},
     desc:'加拿大华裔，麦当劳收银台旁边炒单起家，创立了全球最大交易所。',
     skill:'发一条推文，整个市场必动——利好利空各50%。专属事件：Funds are SAFU、「4」字推文。',
     ending:'迪拜隐居 / 认罪缓刑 / 重出江湖',
@@ -638,7 +647,7 @@ const CHARS = [
     id:'SBF',emoji:'🟦',
     name:'SBF',reqRealm:3,
     twitter:'https://unavatar.io/twitter/SBF_FTX',
-    baseStats:{money:5,mind:2,know:10,luck:3}, baseTrait:{name:'有效利他',tier:'orange',attr:'know',desc:'用极其复杂的理论让所有人相信你'},
+    baseStats:{money:1.3,mind:2,know:10,luck:3}, baseTrait:{name:'有效利他',tier:'orange',attr:'know',desc:'用极其复杂的理论让所有人相信你'},
     desc:'MIT高材生，豆袋椅，蓬乱头发，每天只睡4小时，有效利他主义信徒。',
     skill:'话术大师——用极其复杂的理论让所有人相信你，直到不信为止。专属事件：130亿窟窿、FTX崩盘。',
     ending:'联邦监狱25年 / 保释期翻盘',
@@ -649,7 +658,7 @@ const CHARS = [
     id:'宝二爷',emoji:'🟠',
     name:'宝二爷',reqRealm:3,
     twitter:'https://unavatar.io/twitter/ChandlerGuo',
-    baseStats:{money:6,mind:8,know:2,luck:4}, baseTrait:{name:'布道之力',tier:'orange',attr:'mind',desc:'信仰就是力量，永远高喊抄底'},
+    baseStats:{money:1.4,mind:8,know:2,luck:4}, baseTrait:{name:'布道之力',tier:'orange',attr:'mind',desc:'信仰就是力量，永远高喊抄底'},
     desc:'内蒙古煤老板，手里有大量现金不知道往哪投，自封比特币首席布道师。',
     skill:'无论市场怎么跌，永远在直播间高喊「抄底」——且每次都真的抄到了。',
     ending:'美国新生活 / 成为真正的比特币老人',
@@ -660,7 +669,7 @@ const CHARS = [
     id:'徐明星',emoji:'🔵',
     name:'徐明星',reqRealm:4,
     twitter:'https://unavatar.io/twitter/star_okx',
-    baseStats:{money:5,mind:4,know:5,luck:8}, baseTrait:{name:'重大公告',tier:'orange',attr:'luck',desc:'随时可触发「重磅消息」事件'},
+    baseStats:{money:1.3,mind:4,know:5,luck:8}, baseTrait:{name:'重大公告',tier:'orange',attr:'luck',desc:'随时可触发「重磅消息」事件'},
     desc:'西安程序员，做了个山寨比特币交易所，时常声称自己是中本聪。',
     skill:'随时发布「重大公告」，市场必动。专属事件：提币暂停风波、神秘失联。',
     ending:'重新出现 / 永久失联',
@@ -671,7 +680,7 @@ const CHARS = [
     id:'孙宇晨',emoji:'🌊',
     name:'孙宇晨',reqRealm:5,
     twitter:'https://unavatar.io/twitter/justinsuntron',
-    baseStats:{money:4,mind:5,know:3,luck:10}, baseTrait:{name:'画饼大师',tier:'orange',attr:'luck',desc:'只要你信就永远有新故事'},
+    baseStats:{money:1.2,mind:5,know:3,luck:10}, baseTrait:{name:'画饼大师',tier:'orange',attr:'luck',desc:'只要你信就永远有新故事'},
     desc:'马云门徒，百万美元午餐，波场创始人，格林纳达大使。',
     skill:'无限画饼，只要你信就永远有新故事。专属事件：吃火锅引发暴跌。',
     ending:'继续画饼 / 监管收网',
@@ -682,7 +691,7 @@ const CHARS = [
     id:'DoKwon',emoji:'🌑',
     name:'Do Kwon',reqRealm:6,
     twitter:'https://unavatar.io/twitter/stablekwon',
-    baseStats:{money:6,mind:3,know:10,luck:3}, baseTrait:{name:'算法信仰',tier:'orange',attr:'know',desc:'创建算法稳定币，信徒暴富直到归零'},
+    baseStats:{money:1.4,mind:3,know:10,luck:3}, baseTrait:{name:'算法信仰',tier:'orange',attr:'know',desc:'创建算法稳定币，信徒暴富直到归零'},
     desc:'斯坦福毕业，「稳定币永不脱钩」，创造了史上最大算法稳定币神话与崩盘。',
     skill:'创建算法稳定币，早期信徒全部暴富，直到系统崩溃归零。',
     ending:'黑山被捕 / 韩国受审',
@@ -693,7 +702,7 @@ const CHARS = [
     id:'木头姐',emoji:'🪵',
     name:'Cathie Wood',reqRealm:6,
     twitter:'https://unavatar.io/twitter/CathieDWood',
-    baseStats:{money:5,mind:6,know:8,luck:3}, baseTrait:{name:'百万预言',tier:'orange',attr:'know',desc:'「我的目标从未改变：100万美元」'},
+    baseStats:{money:1.3,mind:6,know:8,luck:3}, baseTrait:{name:'百万预言',tier:'orange',attr:'know',desc:'「我的目标从未改变：100万美元」'},
     desc:'ARK基金创始人，每年预测比特币涨到100万美元，预测从未改变。',
     skill:'预测永远是100万美元，时间无限延长。专属：「我的目标从未改变」。',
     ending:'终于对了一次 / 永远在等那一次',
@@ -704,7 +713,7 @@ const CHARS = [
     id:'ZachXBT',emoji:'🦫',
     name:'ZachXBT',reqRealm:7,
     twitter:'https://unavatar.io/twitter/zachxbt',
-    baseStats:{money:2,mind:5,know:12,luck:3}, baseTrait:{name:'链上记忆',tier:'orange',attr:'know',desc:'开局自动识破3种骗局类型'},
+    baseStats:{money:1.1,mind:5,know:12,luck:3}, baseTrait:{name:'链上记忆',tier:'orange',attr:'know',desc:'开局自动识破3种骗局类型'},
     desc:'匿名链上侦探，头像是土拨鼠，专门撰写链上调查报告揭露骗局。',
     skill:'追踪任意钱包，识破跑路地址。梗：「ser this is a rug」',
     ending:'永远匿名 / 意外被人肉',
@@ -715,7 +724,7 @@ const CHARS = [
     id:'Brian',emoji:'🏛️',
     name:'Brian Armstrong',reqRealm:7,
     twitter:'https://unavatar.io/twitter/brian_armstrong',
-    baseStats:{money:7,mind:5,know:7,luck:5}, baseTrait:{name:'合规护城河',tier:'orange',attr:'know',desc:'遇到监管事件时损失减半'},
+    baseStats:{money:1.6,mind:5,know:7,luck:5}, baseTrait:{name:'合规护城河',tier:'orange',attr:'know',desc:'遇到监管事件时损失减半'},
     desc:'Coinbase掌门人，擅长把最野的行业包装进最规矩的西装里，永远在合规与增长之间找平衡。',
     skill:'一纸公告就能让新币飞天或归零。专属事件：美国监管、上币委员会、机构入场。',
     ending:'继续敲钟 / 监管缠斗 / 成为华尔街入口',
@@ -726,7 +735,7 @@ const CHARS = [
     id:'Arthur',emoji:'⚔️',
     name:'Arthur Hayes',reqRealm:8,
     twitter:'https://unavatar.io/twitter/CryptoHayes',
-    baseStats:{money:6,mind:10,know:5,luck:3}, baseTrait:{name:'永续道心',tier:'orange',attr:'mind',desc:'极端波动时额外获得一次翻盘机会'},
+    baseStats:{money:1.4,mind:10,know:5,luck:3}, baseTrait:{name:'永续道心',tier:'orange',attr:'mind',desc:'极端波动时额外获得一次翻盘机会'},
     desc:'BitMEX灵魂人物，嘴上谈宏观、手上开高倍，市场越疯他越像回家。',
     skill:'一篇长文即可让全网开始猜顶部和底部。专属事件：永续合约、宏观转向、流动性踩踏。',
     ending:'写完宏观神文 / 再次押中周期 / 被市场教育',
@@ -737,7 +746,7 @@ const CHARS = [
     id:'Saylor',emoji:'₿',
     name:'Michael Saylor',reqRealm:9,
     twitter:'https://unavatar.io/twitter/saylor',
-    baseStats:{money:12,mind:6,know:3,luck:3}, baseTrait:{name:'比特币圣约',tier:'orange',attr:'money',desc:'持有BTC相关事件收益显著提升'},
+    baseStats:{money:2.5,mind:6,know:3,luck:3}, baseTrait:{name:'比特币圣约',tier:'orange',attr:'money',desc:'持有BTC相关事件收益显著提升'},
     desc:'把公司资产负债表改造成比特币圣杯的男人，任何问题都能回答成「买BTC」。',
     skill:'信仰型满仓，回撤只会让你更想加仓。专属事件：可转债、财报买币、激进布道。',
     ending:'账面封神 / 长期穿越 / 被迫解释波动',
@@ -748,7 +757,7 @@ const CHARS = [
     id:'HeYi',emoji:'🟨',
     name:'何一 He Yi',reqRealm:9,
     twitter:'https://unavatar.io/twitter/heyibinance',
-    baseStats:{money:5,mind:4,know:5,luck:10}, baseTrait:{name:'流量天枢',tier:'orange',attr:'luck',desc:'叙事型事件更容易变成实际收益'},
+    baseStats:{money:1.3,mind:4,know:5,luck:10}, baseTrait:{name:'流量天枢',tier:'orange',attr:'luck',desc:'叙事型事件更容易变成实际收益'},
     desc:'Binance 联合创始人，擅长用户增长、社区运营和平台节奏控制，是交易所叙事背后的关键推手。',
     skill:'一句话就能把市场情绪从观望推到 FOMO。专属事件：上币风向、社区运营、平台流量倾斜。',
     ending:'继续掌控流量入口 / 舆论反噬 / 把下一轮情绪推到极致',
@@ -759,7 +768,7 @@ const CHARS = [
     id:'吴忌寒',emoji:'⛏️',
     name:'吴忌寒',reqRealm:10,
     twitter:null,
-    baseStats:{money:10,mind:4,know:6,luck:4}, baseTrait:{name:'算力命门',tier:'orange',attr:'money',desc:'熊市回合额外积累资源'},
+    baseStats:{money:2.0,mind:4,know:6,luck:4}, baseTrait:{name:'算力命门',tier:'orange',attr:'money',desc:'熊市回合额外积累资源'},
     desc:'矿圈枭雄，懂芯片、懂矿机、懂算力，也懂如何在最冷的时候囤下下一轮的火种。',
     skill:'掌控矿机与算力周期，熊市里埋伏，牛市里收割。专属事件：矿机关停、算力迁徙、矿池大战。',
     ending:'矿海称王 / 周期再起 / 被成本线反噬',
@@ -770,7 +779,7 @@ const CHARS = [
     id:'V神',emoji:'💎',
     name:'V神 Vitalik',reqRealm:12,
     twitter:'https://unavatar.io/twitter/VitalikButerin',
-    baseStats:{money:2,mind:5,know:15,luck:4}, baseTrait:{name:'以太坊精神',tier:'orange',attr:'know',desc:'解锁「飞升」真结局线'},
+    baseStats:{money:1.1,mind:5,know:15,luck:4}, baseTrait:{name:'以太坊精神',tier:'orange',attr:'know',desc:'解锁「飞升」真结局线'},
     desc:'19岁俄裔加拿大少年，比特币周刊编辑，被拒后自建以太坊，改变了整个行业。',
     skill:'说一句话整个生态震动，但他只关心去中心化本身。专属：捐款SHIB、以太坊合并。',
     ending:'唯一纯正面结局（需放弃所有本金才能达到）',
@@ -781,7 +790,7 @@ const CHARS = [
     id:'中本聪',emoji:'∞',
     name:'中本聪',reqRealm:15,
     twitter:null,
-    baseStats:{money:10,mind:10,know:10,luck:10}, baseTrait:{name:'创世记忆',tier:'orange',attr:null,desc:'解锁全部隐藏内容，开局即触发传奇事件'},
+    baseStats:{money:2.0,mind:10,know:10,luck:10}, baseTrait:{name:'创世记忆',tier:'orange',attr:null,desc:'解锁全部隐藏内容，开局即触发传奇事件'},
     desc:'不知道是谁，不知道在哪，只有一封邮件和一个创世区块。每人都说自己是你。',
     skill:'创世区块、最后一封邮件、永久消失。没有人真的是你，但你改变了一切。',
     ending:'唯一结局：消失。留下改变世界的遗产。',
@@ -857,7 +866,7 @@ const STORAGE = {
   meta: 'qdlt_meta',
   run: 'qdlt_run'
 };
-const SAVE_VERSION = 2;
+const SAVE_VERSION = 3; // v3: money=实际资产, 属性上限99, baseStats.money=百分比
 
 const G = {
   realmIdx: 0,
@@ -865,6 +874,7 @@ const G = {
   inv: [], hist: [], turn: 0, alive: true,
   logs: ['进入市场'],
   char: null, traits: [],
+  rawAlloc: {money:0,mind:0,know:0,luck:0}, // 原始加点（用于惩罚判定）
   totalPts: 20, // 固定20点
   bestRealm: 0, // 历史最高境界
   prevChar: null, prevTraits: [], prevKey: null, // 轮回数据
@@ -873,7 +883,7 @@ const TOK = {i:0, o:0};
 let cache = {}, pdCount = 0, lastEvIdx = -1;
 let META = null;
 let RUN = null;
-let currentStory = '链途初开，等待命运...';
+let currentStory = '正在加载，等待命运...';
 let currentChoices = [];
 let selectedFullAction = null;
 
@@ -896,6 +906,13 @@ function saveMeta() {
 }
 function loadPersist() {
   META = readStore(STORAGE.meta) || readStore('qdlt_save');
+  // 旧版存档不兼容，直接清除
+  if (META && META.version && META.version < SAVE_VERSION) {
+    localStorage.removeItem(STORAGE.meta);
+    localStorage.removeItem(STORAGE.run);
+    localStorage.removeItem('qdlt_save');
+    META = null; RUN = null; return;
+  }
   RUN = readStore(STORAGE.run);
   if (!META) return;
   G.totalPts = 20; // 固定20点
@@ -994,9 +1011,7 @@ function updateStats(prev) {
   const pct = G.realmIdx >= REALMS.length-1 ? 100 :
     Math.min(100, Math.max(0, ((G.money - r.assetNum)/(nextR.assetNum - r.assetNum))*100));
   document.getElementById('asset-fill').style.width = pct + '%';
-  document.getElementById('asset-num').textContent = G.money > 1e12 ? '¥'+Math.round(G.money/1e12)+'万亿' :
-    G.money > 1e8 ? '¥'+Math.round(G.money/1e8)+'亿' :
-    G.money > 1e4 ? '¥'+Math.round(G.money/1e4)+'万' : '¥'+G.money;
+  document.getElementById('asset-num').textContent = fmtAsset(G.money);
   // 属性
   ['money','mind','know','luck'].forEach(k=>{
     if(prev && G[k]!==prev[k]){animNum('sv-'+k,prev[k],G[k]);pop('sc-'+k);}
@@ -1030,10 +1045,26 @@ function setPD(on) {
 
 function applyFx(fx, prev) {
   if(!fx)return;
-  if(fx.money!=null){G.money=Math.max(0,G.money+fx.money);log((fx.money>=0?'本金+':'本金')+fx.money,fx.money>=0?'g':'b');}
-  if(fx.mind!=null){G.mind=Math.max(0,Math.min(200,G.mind+fx.mind));log((fx.mind>=0?'心态+':'心态')+fx.mind,fx.mind>=0?'g':'b');}
-  if(fx.know!=null){G.know=Math.max(0,Math.min(200,G.know+fx.know));log((fx.know>=0?'认知+':'认知')+fx.know,fx.know>=0?'g':'b');}
-  if(fx.luck!=null&&fx.luck!==0){G.luck=Math.max(0,Math.min(200,G.luck+fx.luck));log((fx.luck>=0?'气运+':'气运')+fx.luck,fx.luck>=0?'g':'b');}
+  const raw = G.rawAlloc || {money:0,mind:5,know:5,luck:5};
+
+  // ── 本金：AI 返回的 money 视为百分比变化 ──
+  if(fx.money!=null&&fx.money!==0){
+    let pct = fx.money; // e.g. +30 = 涨30%, -50 = 跌50%
+    // 心态惩罚：心态低时亏损放大
+    if(pct<0){
+      if(raw.mind<DEBUFF_DANGER) pct*=2;       // 心态<2：亏损翻倍（恐慌性抛售）
+      else if(raw.mind<DEBUFF_WEAK) pct*=1.3;   // 心态<4：亏损×1.3
+    }
+    const delta = Math.round(G.money * pct / 100);
+    G.money = Math.max(0, G.money + delta);
+    const sign = delta>=0 ? '+' : '';
+    log('本金'+sign+fmtAsset(Math.abs(delta)).replace('¥','')+'（'+sign+Math.round(pct)+'%）', delta>=0?'g':'b');
+  }
+
+  // ── 其他属性：绝对值不变 ──
+  if(fx.mind!=null){G.mind=Math.max(0,Math.min(99,G.mind+fx.mind));log((fx.mind>=0?'心态+':'心态')+fx.mind,fx.mind>=0?'g':'b');}
+  if(fx.know!=null){G.know=Math.max(0,Math.min(99,G.know+fx.know));log((fx.know>=0?'认知+':'认知')+fx.know,fx.know>=0?'g':'b');}
+  if(fx.luck!=null&&fx.luck!==0){G.luck=Math.max(0,Math.min(99,G.luck+fx.luck));log((fx.luck>=0?'气运+':'气运')+fx.luck,fx.luck>=0?'g':'b');}
   if(fx.item&&!G.inv.includes(fx.item)){G.inv.push(fx.item);log('获得：'+fx.item,'s');}
   if(fx.lose_item&&G.inv.includes(fx.lose_item)){G.inv=G.inv.filter(it=>it!==fx.lose_item);log('失去：'+fx.lose_item,'b');}
   updateStats(prev);
@@ -1048,7 +1079,7 @@ function checkRealm() {
       if(i>G.realmIdx){
         G.realmIdx=i;
         log('境界突破！晋入'+REALMS[i].name,'s');
-        showFull('境界突破！',REALMS[i].name+' '+REALMS[i].code+'\n'+REALMS[i].sub,'gold','继续操盘','breakthrough');
+        showFull('境界突破！',REALMS[i].name+' '+REALMS[i].code+'\n'+REALMS[i].sub+'\n总资产 '+fmtAsset(G.money),'gold','继续操盘','breakthrough');
       }
       break;
     }
@@ -1096,7 +1127,7 @@ function updateStartOverlay() {
   document.getElementById('continue-btn').disabled = !RUN?.G;
   document.getElementById('start-run-status').textContent = RUN?.savedAt
     ? '已保存到 ' + new Date(RUN.savedAt).toLocaleString('zh-CN', { month:'2-digit', day:'2-digit', hour:'2-digit', minute:'2-digit' })
-    : '无进行中的链途';
+    : '无进行中的游戏';
   document.getElementById('start-backend-status').textContent = '等待开局';
 }
 window.addEventListener('load', ()=>{
@@ -1200,11 +1231,26 @@ function onCharConfirm(){
 // ════════════════════════════════════════════════════
 // 属性分配
 // ════════════════════════════════════════════════════
+// 本金加点 → 开局资产映射表
+const MONEY_MAP = [0, 1000, 5000, 10000, 30000, 100000, 200000, 500000, 1000000, 2000000, 5000000];
+// 格式化资产显示
+function fmtAsset(n){
+  if(n<=0) return '负债';
+  if(n>=1e12) return '¥'+Math.round(n/1e12)+'万亿';
+  if(n>=1e8)  return '¥'+Math.round(n/1e8)+'亿';
+  if(n>=1e4)  return '¥'+Math.round(n/1e4)+'万';
+  return '¥'+n.toLocaleString();
+}
+
+// 属性低值惩罚阈值
+const DEBUFF_DANGER = 2;  // < 2 严重惩罚
+const DEBUFF_WEAK   = 4;  // < 4 轻度惩罚
+
 const ATTR_DEFS=[
-  {key:'money',name:'本金',emoji:'💰',color:'#c8921a',desc:'资产规模，决定参与游戏的门票级别'},
-  {key:'mind', name:'心态',emoji:'🧠',color:'#4080d0',desc:'持仓心理承受力，扛跌不割肉的能力'},
-  {key:'know', name:'认知',emoji:'🔍',color:'#9060e0',desc:'看穿叙事、识别骗局、理解市场周期的能力'},
-  {key:'luck', name:'气运',emoji:'🎲',color:'#28a060',desc:'天命+消息面，奇遇触发与项目命中率'},
+  {key:'money',name:'本金',emoji:'💰',color:'#c8921a',desc:'开局资产规模，影响初始境界'},
+  {key:'mind', name:'心态',emoji:'🧠',color:'#4080d0',desc:'扛跌能力 · 低于2时亏损翻倍'},
+  {key:'know', name:'认知',emoji:'🔍',color:'#9060e0',desc:'识别骗局 · 低于2时陷阱无提示'},
+  {key:'luck', name:'气运',emoji:'🎲',color:'#28a060',desc:'奇遇概率 · 低于2时好事不来'},
 ];
 let pts=0, alloc={money:0,mind:0,know:0,luck:0};
 
@@ -1220,6 +1266,9 @@ function renderAllocCards(){
     const val=alloc[a.key];
     const pct=Math.round(val/10*100);
     const card=document.createElement('div');card.className='attr-card';
+    const extra = a.key==='money' ? `<div class="attr-asset-preview" id="asset-preview" style="font-size:11px;color:var(--gold2);margin-top:2px;font-weight:500">${fmtAsset(MONEY_MAP[val])}</div>` : '';
+    const warn = (a.key!=='money' && val>0 && val<DEBUFF_DANGER) ? `<div style="font-size:10px;color:var(--crimson2);margin-top:2px">⚠ 严重不足，亏损将翻倍</div>` :
+                 (a.key!=='money' && val>0 && val<DEBUFF_WEAK) ? `<div style="font-size:10px;color:#e08820;margin-top:2px">⚡ 偏低，有负面效果</div>` : '';
     card.innerHTML=`
       <div class="attr-icon" style="background:${a.color}22;border:1px solid ${a.color}33">${a.emoji}</div>
       <div class="attr-mid">
@@ -1228,6 +1277,7 @@ function renderAllocCards(){
           <span class="attr-val" id="av-${a.key}">+${val}</span>
         </div>
         <div class="attr-desc">${a.desc}</div>
+        ${extra}${warn}
         <div class="attr-track"><div class="attr-fill" id="af-${a.key}" style="width:${pct}%;background:${a.color}"></div></div>
       </div>
       <div class="attr-btns">
@@ -1258,14 +1308,19 @@ function syncAllocUI(){
   });
 }
 function onAllocConfirm(){
-  // 应用加点
-  G.money=alloc.money; G.mind=alloc.mind; G.know=alloc.know; G.luck=alloc.luck;
-  // 叠加角色自带属性
+  // 本金加点 → 实际开局资产（通过映射表）
+  G.money=MONEY_MAP[alloc.money]||0;
+  // 其他属性直接用加点值
+  G.mind=alloc.mind; G.know=alloc.know; G.luck=alloc.luck;
+  // 记录原始加点值（用于惩罚判断，词条加成不影响惩罚阈值）
+  G.rawAlloc={money:alloc.money,mind:alloc.mind,know:alloc.know,luck:alloc.luck};
+  // 叠加角色自带属性（不影响惩罚判定，惩罚只看玩家主动加点）
   if(G.char?.baseStats){
-    G.money+=G.char.baseStats.money||0;
-    G.mind+=G.char.baseStats.mind||0;
-    G.know+=G.char.baseStats.know||0;
-    G.luck+=G.char.baseStats.luck||0;
+    // money 是百分比加成（如 1.3 = +30%）
+    if(G.char.baseStats.money) G.money=Math.round(G.money*G.char.baseStats.money);
+    G.mind=Math.min(99,G.mind+(G.char.baseStats.mind||0));
+    G.know=Math.min(99,G.know+(G.char.baseStats.know||0));
+    G.luck=Math.min(99,G.luck+(G.char.baseStats.luck||0));
   }
   document.getElementById('ov-alloc').className='ov ov-bg hidden';
   showTraitSelect();
@@ -1382,32 +1437,37 @@ function applyTraitEffects(){
   G.traits.forEach(t=>{
     // 根据词条调整属性
     const fx={};
-    if(t.id==='t1')  fx.money=10;
-    if(t.id==='t2')  fx.money=20;
-    if(t.id==='t3')  {G.money*=2;}
-    if(t.id==='t4')  {G.money*=3;}
-    if(t.id==='t5')  {G.money*=5;}
+    // 本金词条：加成改为百分比（基于开局资产）
+    if(t.id==='t1')  {G.money=Math.round(G.money*1.1);}   // 工资定投 +10%
+    if(t.id==='t2')  {G.money=Math.round(G.money*1.3);}   // 空投猎人 +30%
+    if(t.id==='t3')  {G.money*=2;}                         // 杠杆战神 ×2
+    if(t.id==='t4')  {G.money*=3;}                         // 梭哈天才 ×3
+    if(t.id==='t5')  {G.money*=5;}                         // VC估值魔法 ×5
     if(t.id==='t6')  fx.mind=15;
     if(t.id==='t7')  fx.mind=25;
     if(t.id==='t8')  fx.mind=35;
     if(t.id==='t9')  fx.mind=45;
-    if(t.id==='t10') {fx.mind=100;fx.luck=-30;}
+    if(t.id==='t10') {G.mind=99;fx.luck=-30;}  // 禅定：心态满值
     if(t.id==='t11') fx.know=15;
     if(t.id==='t12') fx.know=25;
     if(t.id==='t13') {fx.know=38;fx.luck=15;}
     if(t.id==='t14') fx.know=48;
-    if(t.id==='t15') fx.know=100;
+    if(t.id==='t15') {G.know=99;}              // 中本聪遗稿：认知满值
     if(t.id==='t16') fx.luck=15;
     if(t.id==='t17') fx.luck=25;
     if(t.id==='t18') fx.luck=38;
     if(t.id==='t19') fx.luck=50;
-    if(t.id==='t20') fx.luck=100;
+    if(t.id==='t20') {G.luck=99;}              // 中本聪遗产：气运满值
     // 轮回词条
     if(t.isReborn&&t.attr){
-      const delta={money:25,mind:20,know:30,luck:20}[t.attr]||20;
-      fx[t.attr]=(fx[t.attr]||0)+delta;
+      if(t.attr==='money'){
+        G.money=Math.round(G.money*1.5); // 轮回本金 +50%
+      } else {
+        const delta={mind:20,know:30,luck:20}[t.attr]||20;
+        fx[t.attr]=(fx[t.attr]||0)+delta;
+      }
     }
-    if(fx.money)G.money=Math.max(0,G.money+fx.money);
+    // 本金已在上面通过乘法处理，这里只处理非本金属性
     if(fx.mind) G.mind=Math.max(0,G.mind+fx.mind);
     if(fx.know) G.know=Math.max(0,G.know+fx.know);
     if(fx.luck) G.luck=Math.max(0,G.luck+fx.luck);
@@ -1444,7 +1504,8 @@ async function callAI(userMsg, histSnap){
         turn: G.turn,
         inv: G.inv,
         char: G.char,
-        traits: G.traits
+        traits: G.traits,
+        rawAlloc: G.rawAlloc
       }
     })
   });
@@ -1471,7 +1532,11 @@ function prefetchAll(choices, histSnap){
 // 奇遇
 // ════════════════════════════════════════════════════
 function tryEvent(cb){
-  const chance=0.2+Math.min(G.luck*0.01,0.18);
+  const raw=G.rawAlloc||{luck:5};
+  let chance=0.2+Math.min(G.luck*0.01,0.18);
+  // 气运惩罚
+  if(raw.luck<DEBUFF_DANGER) chance*=0.3;      // 气运<2：奇遇概率大幅降低
+  else if(raw.luck<DEBUFF_WEAK) chance*=0.6;    // 气运<4：奇遇概率减半
   if(!G.alive||Math.random()>chance)return cb();
   const pool=EVENTS.map((e,i)=>({e,i})).filter(({i})=>i!==lastEvIdx);
   const {e:ev,i:idx}=pool[Math.floor(Math.random()*pool.length)];
@@ -1575,7 +1640,7 @@ async function initGame(){
 
   // 开篇 prompt 根据角色定制
   const charOpeners={
-    '散户':'你是一个刚被朋友安利进币圈的普通上班族，工资卡里有点积蓄，第一次打开交易所的那个夜晚开始了你的链途。',
+    '散户':'你是一个刚被朋友安利进币圈的普通上班族，工资卡里有点积蓄，第一次打开交易所的那个夜晚开始了你的币圈之旅。',
     'CZ':'你是赵长鹏，在加拿大麦当劳收银台旁的折叠桌上盯着屏幕炒单，有个想法在你脑子里越来越清晰——为什么不自己做一个交易所呢？',
     'SBF':'你是山姆·班克曼-弗里德，MIT毕业，坐在豆袋椅上，手边是三台显示器，有效利他主义让你确信：赚到足够的钱，是为了做更多好事。',
     '宝二爷':'你是郭宏才，内蒙古来的煤老板，兜里装着这辈子花不完的钱，朋友给你讲了一个叫比特币的东西，你觉得这比挖煤有意思多了。',
