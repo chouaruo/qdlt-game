@@ -1643,29 +1643,26 @@ async function onChoice(choice){
   persistRun();
 
   const cached=cache[choice];
+  let result;
   if(cached&&typeof cached==='object'&&cached.story){
-    await typeText(fillStoryAmounts(cached.story, G.money, cached.effects));
-    const prev={money:G.money,mind:G.mind,know:G.know,luck:G.luck};
-    G.hist.push({role:'user',content:'我的选择：'+choice});
-    G.hist.push({role:'assistant',content:JSON.stringify(cached)});
-    if(G.hist.length>16)G.hist=G.hist.slice(-16);
-    applyFx(cached.effects,prev);
-    tryEvent(()=>{renderChoices(cached.choices);setEnabled(true);prefetchAll(cached.choices,[...G.hist]);});
+    result=cached;
   }else{
     document.getElementById('pd-row').style.display='none';
     document.getElementById('thinking').className='thinking show';
-    let result;
     try{result=await callAI('我的选择：'+choice,[...G.hist]);}
     catch(_){result={story:'网络信号断了，链上演算失败。',choices:['持仓等待','分析链上','联系律师'],effects:{}};}
     document.getElementById('thinking').className='thinking';
-    await typeText(fillStoryAmounts(result.story, G.money, result.effects));
-    const prev={money:G.money,mind:G.mind,know:G.know,luck:G.luck};
-    G.hist.push({role:'user',content:'我的选择：'+choice});
-    G.hist.push({role:'assistant',content:JSON.stringify(result)});
-    if(G.hist.length>16)G.hist=G.hist.slice(-16);
-    applyFx(result.effects,prev);
-    tryEvent(()=>{renderChoices(result.choices);setEnabled(true);prefetchAll(result.choices,[...G.hist]);});
   }
+  // 先更新历史，再并行：打字动画 + 预生成下一轮
+  G.hist.push({role:'user',content:'我的选择：'+choice});
+  G.hist.push({role:'assistant',content:JSON.stringify(result)});
+  if(G.hist.length>16)G.hist=G.hist.slice(-16);
+  // 立刻开始预生成（利用打字动画时间）
+  prefetchAll(result.choices,[...G.hist]);
+  await typeText(fillStoryAmounts(result.story, G.money, result.effects));
+  const prev={money:G.money,mind:G.mind,know:G.know,luck:G.luck};
+  applyFx(result.effects,prev);
+  tryEvent(()=>{renderChoices(result.choices);setEnabled(true);});
 }
 
 async function initGame(){
@@ -1717,13 +1714,14 @@ async function initGame(){
     result={story:'链上连接失败，请检查服务端环境变量后重试。',choices:[],effects:{}};
   }
   document.getElementById('thinking').className='thinking';
-  await typeText(fillStoryAmounts(result.story, G.money, result.effects));
   G.hist.push({role:'assistant',content:JSON.stringify(result)});
+  // 打字动画和预生成并行
+  prefetchAll(result.choices,[...G.hist]);
+  await typeText(fillStoryAmounts(result.story, G.money, result.effects));
   updateStats(null);
   renderChoices(result.choices);
   setEnabled(true);
   document.getElementById('start-backend-status').textContent='在线';
-  prefetchAll(result.choices,[...G.hist]);
 }
 </script>
 </body>
