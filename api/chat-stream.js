@@ -1,6 +1,7 @@
 export const config = { runtime: 'edge' };
 
-const MODEL = 'claude-haiku-4-5-20251001';
+const MODEL = process.env.AI_MODEL || 'qwen3.5-plus';
+const API_BASE = process.env.AI_API_BASE || 'https://dashscope.aliyuncs.com/compatible-mode/v1';
 const FALLBACK_CHOICES = ['持仓等待', '分析链上', '联系律师'];
 
 const OUTPUT_SCHEMA = {
@@ -125,26 +126,31 @@ export default async function handler(req) {
   if (req.method === 'OPTIONS') return new Response(null, { status: 204, headers: corsHeaders() });
   if (req.method !== 'POST') return new Response(JSON.stringify({error:'Method not allowed'}), { status: 405, headers: corsHeaders() });
 
-  const apiKey = process.env.ANTHROPIC_API_KEY;
+  const apiKey = process.env.AI_API_KEY || process.env.ANTHROPIC_API_KEY;
   if (!apiKey) return new Response(JSON.stringify({error:'未配置API Key'}), { status: 500, headers: corsHeaders() });
 
   const { userMsg, histSnap, state } = await req.json();
 
-  const anthropicRes = await fetch('https://api.anthropic.com/v1/messages', {
+  const sysPrompt = buildSystemPrompt(state);
+  const messages = [
+    { role: 'system', content: sysPrompt },
+    ...formatHistory(histSnap),
+    { role: 'user', content: userMsg }
+  ];
+
+  const anthropicRes = await fetch(`${API_BASE}/chat/completions`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'x-api-key': apiKey,
-      'anthropic-version': '2023-06-01'
+      'Authorization': `Bearer ${apiKey}`
     },
     body: JSON.stringify({
       model: MODEL,
       max_tokens: 500,
       temperature: 0.5,
       stream: true,
-      system: buildSystemPrompt(state),
-      messages: [...formatHistory(histSnap), { role: 'user', content: userMsg }],
-      output_config: { format: { type: 'json_schema', schema: OUTPUT_SCHEMA } }
+      messages,
+      response_format: { type: 'json_object' }
     })
   });
 
@@ -177,15 +183,16 @@ export default async function handler(req) {
             let evt;
             try { evt = JSON.parse(raw); } catch(_) { continue; }
 
-            if (evt.type === 'content_block_delta' && evt.delta?.text) {
-              fullText += evt.delta.text;
-              controller.enqueue(encoder.encode(`data: ${JSON.stringify({type:'delta',text:evt.delta.text})}\n\n`));
+            // OpenAI 兼容格式：choices[0].delta.content
+            const delta = evt.choices?.[0]?.delta?.content;
+            if (delta) {
+              fullText += delta;
+              controller.enqueue(encoder.encode(`data: ${JSON.stringify({type:'delta',text:delta})}\n\n`));
             }
-            if (evt.type === 'message_delta' && evt.usage) {
-              usage.output_tokens = evt.usage.output_tokens || 0;
-            }
-            if (evt.type === 'message_start' && evt.message?.usage) {
-              usage.input_tokens = evt.message.usage.input_tokens || 0;
+            // usage 在最后一条消息中
+            if (evt.usage) {
+              usage.input_tokens = evt.usage.prompt_tokens || 0;
+              usage.output_tokens = evt.usage.completion_tokens || 0;
             }
           }
         }
