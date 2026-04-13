@@ -8,9 +8,8 @@
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body { background: #f5f5f5; font-family: -apple-system, 'PingFang SC', sans-serif; padding: 20px; }
   .container { max-width: 500px; margin: 0 auto; }
-  h2 { font-size: 14px; color: #999; margin: 24px 0 10px; font-weight: 400; }
+  h2 { font-size: 14px; color: #999; margin: 28px 0 10px; font-weight: 400; }
   h2:first-child { margin-top: 0; }
-  .label { font-size: 13px; color: #333; margin-bottom: 12px; font-weight: 600; }
 
   .choice {
     background: #d4881a; border: none; border-radius: 8px;
@@ -19,48 +18,79 @@
     margin-bottom: 8px; font-weight: 500; cursor: pointer;
   }
   .choice-text { flex: 1; text-align: center; }
+  .tag { flex-shrink: 0; margin-left: 8px; }
 
-  .tag { font-size: 10px; padding: 3px 8px; border-radius: 4px; font-weight: 600; flex-shrink: 0; margin-left: 8px; letter-spacing: 0.05em; }
+  /* D1：毛玻璃胶囊 */
+  .tagD1 {
+    background: rgba(255,255,255,.18); backdrop-filter: blur(4px);
+    border: 1px solid rgba(255,255,255,.3); border-radius: 12px;
+    padding: 3px 10px; font-size: 12px; color: #fff; font-weight: 500;
+  }
 
-  /* 方案A：白色半透明（当前） */
-  .tagA { background: rgba(255,255,255,.25); color: #fff; }
+  /* D2：纯 emoji 大号（无背景） */
+  .tagD2 {
+    font-size: 20px; line-height: 1; background: none; padding: 0;
+    filter: drop-shadow(0 1px 2px rgba(0,0,0,.3));
+  }
 
-  /* 方案B：深色实底标签 */
-  .tagB.xian { background: #c0392b; color: #fff; }
-  .tagB.wen  { background: #27ae60; color: #fff; }
-  .tagB.qi   { background: #2980b9; color: #fff; }
+  /* D3：白色胶囊 + emoji */
+  .tagD3 {
+    background: #fff; border-radius: 12px;
+    padding: 3px 10px; font-size: 12px; font-weight: 600;
+    box-shadow: 0 1px 3px rgba(0,0,0,.12);
+  }
+  .tagD3.xian { color: #dc2626; }
+  .tagD3.wen  { color: #16a34a; }
+  .tagD3.qi   { color: #2563eb; }
 
-  /* 方案C：白底彩色文字 */
-  .tagC.xian { background: #fff; color: #e74c3c; border: 1px solid rgba(255,255,255,.5); }
-  .tagC.wen  { background: #fff; color: #2ecc71; border: 1px solid rgba(255,255,255,.5); }
-  .tagC.qi   { background: #fff; color: #3498db; border: 1px solid rgba(255,255,255,.5); }
+  /* D4：渐变胶囊 */
+  .tagD4 {
+    border-radius: 12px; padding: 3px 10px;
+    font-size: 11px; color: #fff; font-weight: 600;
+    letter-spacing: 0.05em;
+  }
+  .tagD4.xian { background: linear-gradient(135deg, #ef4444, #dc2626); }
+  .tagD4.wen  { background: linear-gradient(135deg, #22c55e, #16a34a); }
+  .tagD4.qi   { background: linear-gradient(135deg, #60a5fa, #3b82f6); }
 
-  /* 方案D：深色圆形emoji + 白字 */
-  .tagD { background: rgba(0,0,0,.3); color: #fff; border-radius: 10px; padding: 2px 8px; font-size: 11px; }
+  /* D5：emoji + 竖线分隔白字 */
+  .tagD5 {
+    display: flex; align-items: center; gap: 5px;
+    font-size: 12px; color: rgba(255,255,255,.9); font-weight: 500;
+  }
+  .tagD5 .divider {
+    width: 1px; height: 14px; background: rgba(255,255,255,.35);
+  }
+  .tagD5 .emoji { font-size: 14px; }
 </style>
 </head>
 <body>
 <div class="container">
 
-  <h2>方案 A — 白色半透明（当前）</h2>
-  <div class="choice"><span class="choice-text">梭哈五万进场</span><span class="tag tagA">险</span></div>
-  <div class="choice"><span class="choice-text">先充一千试水</span><span class="tag tagA">稳</span></div>
-  <div class="choice"><span class="choice-text">关掉APP睡觉</span><span class="tag tagA">奇</span></div>
+  <h2>D1 — 毛玻璃胶囊</h2>
+  <div class="choice"><span class="choice-text">梭哈五万进场</span><span class="tag tagD1">🔥 险</span></div>
+  <div class="choice"><span class="choice-text">先充一千试水</span><span class="tag tagD1">🛡 稳</span></div>
+  <div class="choice"><span class="choice-text">关掉APP睡觉</span><span class="tag tagD1">✨ 奇</span></div>
 
-  <h2>方案 B — 深色实底（红/绿/蓝）</h2>
-  <div class="choice"><span class="choice-text">梭哈五万进场</span><span class="tag tagB xian">险</span></div>
-  <div class="choice"><span class="choice-text">先充一千试水</span><span class="tag tagB wen">稳</span></div>
-  <div class="choice"><span class="choice-text">关掉APP睡觉</span><span class="tag tagB qi">奇</span></div>
+  <h2>D2 — 纯 emoji（无背景）</h2>
+  <div class="choice"><span class="choice-text">梭哈五万进场</span><span class="tag tagD2">🔥</span></div>
+  <div class="choice"><span class="choice-text">先充一千试水</span><span class="tag tagD2">🛡️</span></div>
+  <div class="choice"><span class="choice-text">关掉APP睡觉</span><span class="tag tagD2">✨</span></div>
 
-  <h2>方案 C — 白底彩色字</h2>
-  <div class="choice"><span class="choice-text">梭哈五万进场</span><span class="tag tagC xian">险</span></div>
-  <div class="choice"><span class="choice-text">先充一千试水</span><span class="tag tagC wen">稳</span></div>
-  <div class="choice"><span class="choice-text">关掉APP睡觉</span><span class="tag tagC qi">奇</span></div>
+  <h2>D3 — 白色胶囊 + emoji</h2>
+  <div class="choice"><span class="choice-text">梭哈五万进场</span><span class="tag tagD3 xian">🔥 险</span></div>
+  <div class="choice"><span class="choice-text">先充一千试水</span><span class="tag tagD3 wen">🛡 稳</span></div>
+  <div class="choice"><span class="choice-text">关掉APP睡觉</span><span class="tag tagD3 qi">✨ 奇</span></div>
 
-  <h2>方案 D — 暗底圆角</h2>
-  <div class="choice"><span class="choice-text">梭哈五万进场</span><span class="tag tagD">🔥 险</span></div>
-  <div class="choice"><span class="choice-text">先充一千试水</span><span class="tag tagD">🛡 稳</span></div>
-  <div class="choice"><span class="choice-text">关掉APP睡觉</span><span class="tag tagD">✨ 奇</span></div>
+  <h2>D4 — 渐变彩色胶囊 + emoji</h2>
+  <div class="choice"><span class="choice-text">梭哈五万进场</span><span class="tag tagD4 xian">🔥 险</span></div>
+  <div class="choice"><span class="choice-text">先充一千试水</span><span class="tag tagD4 wen">🛡 稳</span></div>
+  <div class="choice"><span class="choice-text">关掉APP睡觉</span><span class="tag tagD4 qi">✨ 奇</span></div>
+
+  <h2>D5 — emoji + 竖线 + 白字（无底）</h2>
+  <div class="choice"><span class="choice-text">梭哈五万进场</span><span class="tag tagD5"><span class="emoji">🔥</span><span class="divider"></span>险</span></div>
+  <div class="choice"><span class="choice-text">先充一千试水</span><span class="tag tagD5"><span class="emoji">🛡️</span><span class="divider"></span>稳</span></div>
+  <div class="choice"><span class="choice-text">关掉APP睡觉</span><span class="tag tagD5"><span class="emoji">✨</span><span class="divider"></span>奇</span></div>
 
 </div>
 </body>
