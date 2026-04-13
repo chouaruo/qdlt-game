@@ -477,6 +477,27 @@ body{
     <button class="ghost-btn" id="continue-btn" onclick="resumeSavedRun()" disabled>继续上次游戏</button>
     <div class="api-err" id="api-err"></div>
   </div>
+  <div class="start-panel" style="padding:14px 16px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;cursor:pointer;" onclick="toggleByok()">
+      <span style="font-size:12px;color:var(--gray2);">⚡ 自带 API Key（实时 AI 剧情）</span>
+      <span id="byok-arrow" style="font-size:10px;color:var(--gray2);">▼</span>
+    </div>
+    <div id="byok-panel" style="display:none;margin-top:10px;">
+      <div style="font-size:11px;color:#999;margin-bottom:8px;line-height:1.6;">填入你自己的 API Key，游戏将使用实时 AI 生成剧情。支持 Anthropic / OpenAI / 通义千问等。Key 仅存在你的浏览器中，不会上传。</div>
+      <select id="byok-provider" style="width:100%;padding:8px;border:1px solid #e8e8e8;border-radius:6px;font-size:12px;margin-bottom:6px;font-family:inherit;">
+        <option value="anthropic">Anthropic (Claude)</option>
+        <option value="openai">OpenAI (GPT)</option>
+        <option value="qwen">通义千问 (Qwen)</option>
+        <option value="deepseek">DeepSeek</option>
+        <option value="custom">自定义 (OpenAI 兼容)</option>
+      </select>
+      <input id="byok-key" type="password" placeholder="API Key" style="width:100%;padding:8px;border:1px solid #e8e8e8;border-radius:6px;font-size:12px;margin-bottom:6px;font-family:inherit;">
+      <input id="byok-model" type="text" placeholder="模型名（可选，如 claude-haiku-4-5-20251001）" style="width:100%;padding:8px;border:1px solid #e8e8e8;border-radius:6px;font-size:12px;margin-bottom:6px;font-family:inherit;display:none;">
+      <input id="byok-base" type="text" placeholder="API Base URL（可选）" style="width:100%;padding:8px;border:1px solid #e8e8e8;border-radius:6px;font-size:12px;margin-bottom:6px;font-family:inherit;display:none;">
+      <button class="ghost-btn" style="width:100%;font-size:12px;padding:8px;" onclick="saveByok()">保存设置</button>
+      <div id="byok-status" style="font-size:11px;color:var(--jade);margin-top:4px;text-align:center;"></div>
+    </div>
+  </div>
 </div>
 
 <!-- ═══ 选择人物 ═══ -->
@@ -1026,6 +1047,52 @@ function onShareCopy(){
   });
 }
 // 首页加载时处理 ref 参数
+// ════════════════════════════════════════════════════
+// BYOK（自带 API Key）
+// ════════════════════════════════════════════════════
+const BYOK_PROVIDERS = {
+  anthropic: { base: 'https://api.anthropic.com', model: 'claude-haiku-4-5-20251001', provider: 'anthropic' },
+  openai: { base: 'https://api.openai.com/v1', model: 'gpt-4o-mini', provider: 'openai' },
+  qwen: { base: 'https://dashscope.aliyuncs.com/compatible-mode/v1', model: 'qwen-plus', provider: 'openai' },
+  deepseek: { base: 'https://api.deepseek.com/v1', model: 'deepseek-chat', provider: 'openai' },
+  custom: { base: '', model: '', provider: 'openai' },
+};
+function toggleByok(){
+  const p=document.getElementById('byok-panel');
+  const a=document.getElementById('byok-arrow');
+  if(p.style.display==='none'){p.style.display='block';a.textContent='▲';}
+  else{p.style.display='none';a.textContent='▼';}
+}
+function saveByok(){
+  const prov=document.getElementById('byok-provider').value;
+  const key=document.getElementById('byok-key').value.trim();
+  const model=document.getElementById('byok-model').value.trim();
+  const base=document.getElementById('byok-base').value.trim();
+  if(!key){document.getElementById('byok-status').textContent='请输入 API Key';return;}
+  const cfg = BYOK_PROVIDERS[prov]||BYOK_PROVIDERS.custom;
+  const data={provider:cfg.provider,key,model:model||cfg.model,base:base||cfg.base};
+  localStorage.setItem('qdlt_byok',JSON.stringify(data));
+  document.getElementById('byok-status').textContent='✓ 已保存，游戏将使用实时 AI';
+}
+function getByok(){
+  try{return JSON.parse(localStorage.getItem('qdlt_byok'));}catch(_){return null;}
+}
+function clearByok(){localStorage.removeItem('qdlt_byok');}
+// 切换 provider 时显示/隐藏自定义字段
+document.addEventListener('DOMContentLoaded',()=>{
+  const sel=document.getElementById('byok-provider');
+  if(sel) sel.onchange=()=>{
+    const isCustom=sel.value==='custom';
+    document.getElementById('byok-model').style.display=isCustom?'block':'none';
+    document.getElementById('byok-base').style.display=isCustom?'block':'none';
+  };
+  // 恢复已保存的设置
+  const saved=getByok();
+  if(saved){
+    document.getElementById('byok-status').textContent='✓ 已配置实时 AI 模式';
+  }
+});
+
 function handleRefParam(){
   const params=new URLSearchParams(location.search);
   const ref=params.get('ref');
@@ -1791,25 +1858,26 @@ function renderTraitsBar(){
 // AI 调用
 // ════════════════════════════════════════════════════
 async function callAI(userMsg, histSnap){
+  const byok = getByok();
+  const body = {
+    userMsg, histSnap,
+    state: {
+      realmIdx: G.realmIdx, money: G.money, mind: G.mind, know: G.know,
+      luck: G.luck, turn: G.turn, inv: G.inv, char: G.char,
+      traits: G.traits, rawAlloc: G.rawAlloc
+    }
+  };
+  // BYOK：传递玩家自己的 Key（通过服务端代理，Key 不暴露到浏览器网络请求以外）
+  if(byok?.key){
+    body.byokKey = byok.key;
+    body.byokProvider = byok.provider;
+    body.byokModel = byok.model;
+    body.byokBase = byok.base;
+  }
   const res=await fetch('/api/chat',{
     method:'POST',
     headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({
-      userMsg,
-      histSnap,
-      state: {
-        realmIdx: G.realmIdx,
-        money: G.money,
-        mind: G.mind,
-        know: G.know,
-        luck: G.luck,
-        turn: G.turn,
-        inv: G.inv,
-        char: G.char,
-        traits: G.traits,
-        rawAlloc: G.rawAlloc
-      }
-    })
+    body:JSON.stringify(body)
   });
   const data=await res.json();
   if(!res.ok) throw new Error(data.error||'API error');
