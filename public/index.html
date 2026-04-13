@@ -1621,6 +1621,17 @@ async function typeText(text){
   persistRun();
 }
 
+// 替换剧情中的金额占位符
+function fillStoryAmounts(story, curMoney, fx){
+  const pct = fx?.money || 0;
+  const delta = Math.round(curMoney * pct / 100);
+  const after = Math.max(0, curMoney + delta);
+  return story
+    .replace(/\{TOTAL\}/g, fmtAsset(curMoney))
+    .replace(/\{CHANGE\}/g, fmtAsset(Math.abs(delta)))
+    .replace(/\{AFTER\}/g, fmtAsset(after));
+}
+
 // ════════════════════════════════════════════════════
 // 主流程
 // ════════════════════════════════════════════════════
@@ -1633,7 +1644,7 @@ async function onChoice(choice){
 
   const cached=cache[choice];
   if(cached&&typeof cached==='object'&&cached.story){
-    await typeText(cached.story);
+    await typeText(fillStoryAmounts(cached.story, G.money, cached.effects));
     const prev={money:G.money,mind:G.mind,know:G.know,luck:G.luck};
     G.hist.push({role:'user',content:'我的选择：'+choice});
     G.hist.push({role:'assistant',content:JSON.stringify(cached)});
@@ -1647,7 +1658,7 @@ async function onChoice(choice){
     try{result=await callAI('我的选择：'+choice,[...G.hist]);}
     catch(_){result={story:'网络信号断了，链上演算失败。',choices:['持仓等待','分析链上','联系律师'],effects:{}};}
     document.getElementById('thinking').className='thinking';
-    await typeText(result.story);
+    await typeText(fillStoryAmounts(result.story, G.money, result.effects));
     const prev={money:G.money,mind:G.mind,know:G.know,luck:G.luck};
     G.hist.push({role:'user',content:'我的选择：'+choice});
     G.hist.push({role:'assistant',content:JSON.stringify(result)});
