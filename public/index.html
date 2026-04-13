@@ -1014,8 +1014,16 @@ function updateStats(prev) {
   document.getElementById('asset-num').textContent = fmtAsset(G.money);
   // 属性
   ['money','mind','know','luck'].forEach(k=>{
-    if(prev && G[k]!==prev[k]){animNum('sv-'+k,prev[k],G[k]);pop('sc-'+k);}
-    else{const el=document.getElementById('sv-'+k);if(el)el.textContent=G[k];}
+    const display = v => k==='money' ? fmtMoney(v) : v;
+    if(prev && G[k]!==prev[k]){
+      // 本金用格式化显示，不用数字动画（数值差太大动画无意义）
+      if(k==='money'){
+        const el=document.getElementById('sv-'+k);if(el)el.textContent=display(G[k]);pop('sc-'+k);
+      } else {
+        animNum('sv-'+k,prev[k],G[k]);pop('sc-'+k);
+      }
+    }
+    else{const el=document.getElementById('sv-'+k);if(el)el.textContent=display(G[k]);}
   });
   // 背包
   const inv = document.getElementById('inv'); inv.innerHTML='';
@@ -1240,10 +1248,18 @@ const MONEY_MAP = [0, 1000, 5000, 10000, 30000, 100000, 200000, 500000, 1000000,
 // 格式化资产显示
 function fmtAsset(n){
   if(n<=0) return '负债';
-  if(n>=1e12) return '¥'+Math.round(n/1e12)+'万亿';
-  if(n>=1e8)  return '¥'+Math.round(n/1e8)+'亿';
-  if(n>=1e4)  return '¥'+Math.round(n/1e4)+'万';
+  if(n>=1e12) return '¥'+(n/1e12).toFixed(1).replace(/\.0$/,'')+'万亿';
+  if(n>=1e8)  return '¥'+(n/1e8).toFixed(1).replace(/\.0$/,'')+'亿';
+  if(n>=1e4)  return '¥'+(n/1e4).toFixed(1).replace(/\.0$/,'')+'万';
   return '¥'+n.toLocaleString();
+}
+// 本金属性栏专用（不带¥前缀）
+function fmtMoney(n){
+  if(n<=0) return '0';
+  if(n>=1e12) return (n/1e12).toFixed(1).replace(/\.0$/,'')+'万亿';
+  if(n>=1e8)  return (n/1e8).toFixed(1).replace(/\.0$/,'')+'亿';
+  if(n>=1e4)  return (n/1e4).toFixed(1).replace(/\.0$/,'')+'万';
+  return n.toLocaleString();
 }
 
 // 属性低值惩罚阈值
