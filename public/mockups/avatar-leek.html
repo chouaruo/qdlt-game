@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>韭菜主题头像</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #f7f7f8; font-family: -apple-system, 'Noto Sans SC', sans-serif; padding: 20px; }
+  .container { max-width: 520px; margin: 0 auto; }
+  h1 { font-size: 18px; color: #111; margin-bottom: 6px; text-align: center; }
+  .sub { font-size: 12px; color: #999; text-align: center; margin-bottom: 20px; }
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .option {
+    background: #fff; border-radius: 12px; padding: 14px 10px; text-align: center;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06); cursor: pointer; transition: all .2s;
+  }
+  .option:hover { box-shadow: 0 4px 12px rgba(7,193,96,0.2); transform: translateY(-2px); }
+  .avatar {
+    width: 80px; height: 80px; border-radius: 50%; margin: 0 auto 10px;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden; position: relative;
+  }
+  .avatar svg { width: 100%; height: 100%; }
+  .label { font-size: 13px; color: #111; font-weight: 600; margin-bottom: 3px; }
+  .desc { font-size: 11px; color: #999; line-height: 1.5; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>🥬 韭菜主题头像</h1>
+  <div class="sub">李狗蛋专属 · 散户の宿命</div>
+  <div class="grid">
+
+    <!-- 1. 微笑韭菜 -->
+    <div class="option">
+      <div class="avatar">
+        <svg viewBox="0 0 100 100">
+          <circle cx="50" cy="50" r="48" fill="#e8f5e9"/>
+          <ellipse cx="50" cy="58" rx="22" ry="26" fill="#4caf50"/>
+          <path d="M50 10 Q45 30 42 50" stroke="#2e7d32" stroke-width="3" fill="none"/>
+          <path d="M50 10 Q55 30 58 50" stroke="#2e7d32" stroke-width="3" fill="none"/>
+          <path d="M50 10 Q50 30 50 50" stroke="#388e3c" stroke-width="3" fill="none"/>
+          <path d="M42 8 Q50 0 58 8" stroke="#2e7d32" stroke-width="2" fill="#4caf50"/>
+          <circle cx="42" cy="52" r="3" fill="#fff"/>
+          <circle cx="58" cy="52" r="3" fill="#fff"/>
+          <circle cx="42" cy="52" r="1.5" fill="#1b5e20"/>
+          <circle cx="58" cy="52" r="1.5" fill="#1b5e20"/>
+          <path d="M43 62 Q50 68 57 62" stroke="#1b5e20" stroke-width="2" fill="none" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="label">1. 微笑韭菜</div>
+      <div class="desc">笑着亏钱<br>"没事，还能涨回来"</div>
+    </div>
+
+    <!-- 2. 流泪韭菜 -->
+    <div class="option">
+      <div class="avatar">
+        <svg viewBox="0 0 100 100">
+          <circle cx="50" cy="50" r="48" fill="#e8f5e9"/>
+          <ellipse cx="50" cy="58" rx="22" ry="26" fill="#4caf50"/>
+          <path d="M50 10 Q45 30 42 50" stroke="#2e7d32" stroke-width="3" fill="none"/>
+          <path d="M50 10 Q55 30 58 50" stroke="#2e7d32" stroke-width="3" fill="none"/>
+          <path d="M50 10 Q50 30 50 50" stroke="#388e3c" stroke-width="3" fill="none"/>
+          <path d="M42 8 Q50 0 58 8" stroke="#2e7d32" stroke-width="2" fill="#4caf50"/>
+          <circle cx="42" cy="52" r="3" fill="#fff"/>
+          <circle cx="58" cy="52" r="3" fill="#fff"/>
+          <circle cx="42" cy="52" r="1.5" fill="#1b5e20"/>
+          <circle cx="58" cy="52" r="1.5" fill="#1b5e20"/>
+          <path d="M43 64 Q50 58 57 64" stroke="#1b5e20" stroke-width="2" fill="none" stroke-linecap="round"/>
+          <!-- 泪滴 -->
+          <path d="M44 56 Q45 62 44 66" stroke="#42a5f5" stroke-width="2" fill="none"/>
+          <circle cx="44" cy="67" r="2" fill="#42a5f5"/>
+          <path d="M60 56 Q61 62 60 66" stroke="#42a5f5" stroke-width="2" fill="none"/>
+          <circle cx="60" cy="67" r="2" fill="#42a5f5"/>
+        </svg>
+      </div>
+      <div class="label">2. 流泪韭菜</div>
+      <div class="desc">哭着看盘<br>"为什么又跌了"</div>
+    </div>
+
+    <!-- 3. 被割韭菜 -->
+    <div class="option">
+      <div class="avatar">
+        <svg viewBox="0 0 100 100">
+          <circle cx="50" cy="50" r="48" fill="#fce4ec"/>
+          <ellipse cx="50" cy="58" rx="22" ry="26" fill="#4caf50"/>
+          <!-- 被切割的顶部 -->
+          <line x1="35" y1="38" x2="65" y2="38" stroke="#f44336" stroke-width="3" stroke-dasharray="4,3"/>
+          <path d="M50 38 Q50 30 50 50" stroke="#388e3c" stroke-width="2" fill="none" opacity="0.4"/>
+          <!-- 剪刀 -->
+          <text x="68" y="34" font-size="20" transform="rotate(30,68,34)">✂️</text>
+          <circle cx="42" cy="52" r="3" fill="#fff"/>
+          <circle cx="58" cy="52" r="3" fill="#fff"/>
+          <circle cx="42" cy="53" r="1.5" fill="#1b5e20"/>
+          <circle cx="58" cy="53" r="1.5" fill="#1b5e20"/>
+          <ellipse cx="50" cy="65" rx="6" ry="4" fill="#1b5e20" opacity="0.8"/>
+          <!-- 创可贴 -->
+          <rect x="30" y="44" width="14" height="7" rx="2" fill="#ffe0b2" stroke="#ffab40" stroke-width="0.5"/>
+          <line x1="33" y1="47" x2="41" y2="47" stroke="#ffab40" stroke-width="0.5" stroke-dasharray="1,1"/>
+        </svg>
+      </div>
+      <div class="label">3. 被割韭菜</div>
+      <div class="desc">刀口鲜血淋漓<br>"割完我又长出来了"</div>
+    </div>
+
+    <!-- 4. 韭菜战士 -->
+    <div class="option">
+      <div class="avatar">
+        <svg viewBox="0 0 100 100">
+          <circle cx="50" cy="50" r="48" fill="#fff3e0"/>
+          <ellipse cx="50" cy="58" rx="22" ry="26" fill="#4caf50"/>
+          <path d="M50 10 Q45 30 42 50" stroke="#2e7d32" stroke-width="3" fill="none"/>
+          <path d="M50 10 Q55 30 58 50" stroke="#2e7d32" stroke-width="3" fill="none"/>
+          <path d="M50 10 Q50 30 50 50" stroke="#388e3c" stroke-width="3" fill="none"/>
+          <!-- 头盔 -->
+          <path d="M32 42 Q50 20 68 42" fill="#ffd54f" stroke="#f9a825" stroke-width="1.5"/>
+          <rect x="46" y="28" width="8" height="4" rx="1" fill="#f9a825"/>
+          <!-- 愤怒眼 -->
+          <line x1="38" y1="49" x2="46" y2="51" stroke="#1b5e20" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="54" y1="51" x2="62" y2="49" stroke="#1b5e20" stroke-width="2.5" stroke-linecap="round"/>
+          <circle cx="43" cy="54" r="2" fill="#1b5e20"/>
+          <circle cx="57" cy="54" r="2" fill="#1b5e20"/>
+          <path d="M44 64 L50 61 L56 64" stroke="#1b5e20" stroke-width="2" fill="none" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="label">4. 韭菜战士</div>
+      <div class="desc">戴头盔冲锋<br>"这次一定梭哈！"</div>
+    </div>
+
+    <!-- 5. 钻石韭菜 -->
+    <div class="option">
+      <div class="avatar">
+        <svg viewBox="0 0 100 100">
+          <circle cx="50" cy="50" r="48" fill="#e3f2fd"/>
+          <ellipse cx="50" cy="58" rx="22" ry="26" fill="#4caf50"/>
+          <path d="M50 10 Q45 30 42 50" stroke="#2e7d32" stroke-width="3" fill="none"/>
+          <path d="M50 10 Q55 30 58 50" stroke="#2e7d32" stroke-width="3" fill="none"/>
+          <path d="M50 10 Q50 30 50 50" stroke="#388e3c" stroke-width="3" fill="none"/>
+          <path d="M42 8 Q50 0 58 8" stroke="#2e7d32" stroke-width="2" fill="#4caf50"/>
+          <!-- 钻石眼 -->
+          <polygon points="38,52 42,48 46,52 42,56" fill="#42a5f5" stroke="#1565c0" stroke-width="0.5"/>
+          <polygon points="54,52 58,48 62,52 58,56" fill="#42a5f5" stroke="#1565c0" stroke-width="0.5"/>
+          <path d="M44 64 Q50 69 56 64" stroke="#1b5e20" stroke-width="2" fill="none" stroke-linecap="round"/>
+          <!-- 闪光 -->
+          <text x="62" y="20" font-size="14">✨</text>
+          <text x="28" y="38" font-size="10">💎</text>
+        </svg>
+      </div>
+      <div class="label">5. 钻石韭菜</div>
+      <div class="desc">Diamond Hands<br>"死也不卖！"</div>
+    </div>
+
+    <!-- 6. 躺平韭菜 -->
+    <div class="option">
+      <div class="avatar">
+        <svg viewBox="0 0 100 100">
+          <circle cx="50" cy="50" r="48" fill="#f3e5f5"/>
+          <ellipse cx="50" cy="55" rx="26" ry="20" fill="#4caf50" transform="rotate(-90, 50, 55)"/>
+          <path d="M50 30 Q52 20 50 15" stroke="#2e7d32" stroke-width="2.5" fill="none"/>
+          <path d="M50 30 Q46 22 48 15" stroke="#2e7d32" stroke-width="2" fill="none"/>
+          <!-- 闭眼 - 横躺 -->
+          <line x1="44" y1="50" x2="50" y2="50" stroke="#1b5e20" stroke-width="2" stroke-linecap="round"/>
+          <line x1="44" y1="58" x2="50" y2="58" stroke="#1b5e20" stroke-width="2" stroke-linecap="round"/>
+          <!-- zzz -->
+          <text x="58" y="42" font-size="12" fill="#9c27b0" font-weight="bold">z</text>
+          <text x="64" y="36" font-size="10" fill="#9c27b0" font-weight="bold">z</text>
+          <text x="68" y="30" font-size="8" fill="#9c27b0" font-weight="bold">z</text>
+        </svg>
+      </div>
+      <div class="label">6. 躺平韭菜</div>
+      <div class="desc">横着睡觉<br>"爱涨涨，爱跌跌"</div>
+    </div>
+
+    <!-- 7. 火箭韭菜 -->
+    <div class="option">
+      <div class="avatar">
+        <svg viewBox="0 0 100 100">
+          <circle cx="50" cy="50" r="48" fill="#e8f5e9"/>
+          <ellipse cx="50" cy="58" rx="22" ry="26" fill="#4caf50"/>
+          <path d="M50 10 Q45 30 42 50" stroke="#2e7d32" stroke-width="3" fill="none"/>
+          <path d="M50 10 Q55 30 58 50" stroke="#2e7d32" stroke-width="3" fill="none"/>
+          <path d="M50 10 Q50 30 50 50" stroke="#388e3c" stroke-width="3" fill="none"/>
+          <!-- 兴奋的星星眼 -->
+          <text x="36" y="57" font-size="12">⭐</text>
+          <text x="52" y="57" font-size="12">⭐</text>
+          <path d="M42 65 Q50 72 58 65" stroke="#1b5e20" stroke-width="2.5" fill="#81c784" stroke-linecap="round"/>
+          <!-- 火箭 -->
+          <text x="64" y="22" font-size="22" transform="rotate(-30,64,22)">🚀</text>
+        </svg>
+      </div>
+      <div class="label">7. 火箭韭菜</div>
+      <div class="desc">To the moon!<br>"起飞！冲冲冲！"</div>
+    </div>
+
+    <!-- 8. 墨镜韭菜 -->
+    <div class="option">
+      <div class="avatar">
+        <svg viewBox="0 0 100 100">
+          <circle cx="50" cy="50" r="48" fill="#e8f5e9"/>
+          <ellipse cx="50" cy="58" rx="22" ry="26" fill="#4caf50"/>
+          <path d="M50 10 Q45 30 42 50" stroke="#2e7d32" stroke-width="3" fill="none"/>
+          <path d="M50 10 Q55 30 58 50" stroke="#2e7d32" stroke-width="3" fill="none"/>
+          <path d="M50 10 Q50 30 50 50" stroke="#388e3c" stroke-width="3" fill="none"/>
+          <path d="M42 8 Q50 0 58 8" stroke="#2e7d32" stroke-width="2" fill="#4caf50"/>
+          <!-- 墨镜 -->
+          <rect x="34" y="48" width="14" height="10" rx="3" fill="#212121"/>
+          <rect x="52" y="48" width="14" height="10" rx="3" fill="#212121"/>
+          <line x1="48" y1="53" x2="52" y2="53" stroke="#212121" stroke-width="2"/>
+          <line x1="34" y1="53" x2="30" y2="51" stroke="#212121" stroke-width="1.5"/>
+          <line x1="66" y1="53" x2="70" y2="51" stroke="#212121" stroke-width="1.5"/>
+          <!-- 反光 -->
+          <line x1="37" y1="50" x2="40" y2="50" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="55" y1="50" x2="58" y2="50" stroke="rgba(255,255,255,0.4)" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M44 66 Q50 70 56 66" stroke="#1b5e20" stroke-width="2" fill="none" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="label">8. 墨镜韭菜</div>
+      <div class="desc">Deal with it<br>"格局打开了"</div>
+    </div>
+
+    <!-- 9. 小丑韭菜 -->
+    <div class="option">
+      <div class="avatar">
+        <svg viewBox="0 0 100 100">
+          <circle cx="50" cy="50" r="48" fill="#fff8e1"/>
+          <ellipse cx="50" cy="58" rx="22" ry="26" fill="#4caf50"/>
+          <path d="M50 10 Q45 30 42 50" stroke="#2e7d32" stroke-width="3" fill="none"/>
+          <path d="M50 10 Q55 30 58 50" stroke="#2e7d32" stroke-width="3" fill="none"/>
+          <path d="M50 10 Q50 30 50 50" stroke="#388e3c" stroke-width="3" fill="none"/>
+          <!-- 小丑鼻子 -->
+          <circle cx="50" cy="58" r="4" fill="#f44336"/>
+          <!-- 眼睛 -->
+          <circle cx="41" cy="51" r="3" fill="#fff"/>
+          <circle cx="59" cy="51" r="3" fill="#fff"/>
+          <circle cx="41" cy="51" r="1.5" fill="#1b5e20"/>
+          <circle cx="59" cy="51" r="1.5" fill="#1b5e20"/>
+          <!-- 小丑嘴 -->
+          <path d="M38 64 Q50 74 62 64" stroke="#f44336" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          <!-- 眉毛彩色 -->
+          <path d="M36 46 Q41 42 46 46" stroke="#ff9800" stroke-width="2" fill="none"/>
+          <path d="M54 46 Q59 42 64 46" stroke="#2196f3" stroke-width="2" fill="none"/>
+        </svg>
+      </div>
+      <div class="label">9. 小丑韭菜</div>
+      <div class="desc">🤡 接盘侠<br>"原来小丑是我自己"</div>
+    </div>
+
+  </div>
+</div>
+</body>
+</html>
