@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>选项标签方案对比</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #f5f5f5; font-family: -apple-system, 'PingFang SC', sans-serif; padding: 20px; }
+  .container { max-width: 500px; margin: 0 auto; }
+  h2 { font-size: 14px; color: #999; margin: 24px 0 10px; font-weight: 400; }
+  h2:first-child { margin-top: 0; }
+  .label { font-size: 13px; color: #333; margin-bottom: 12px; font-weight: 600; }
+
+  .choice {
+    background: #d4881a; border: none; border-radius: 8px;
+    padding: 14px 16px; font-size: 15px; color: #fff;
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 8px; font-weight: 500; cursor: pointer;
+  }
+  .choice-text { flex: 1; text-align: center; }
+
+  .tag { font-size: 10px; padding: 3px 8px; border-radius: 4px; font-weight: 600; flex-shrink: 0; margin-left: 8px; letter-spacing: 0.05em; }
+
+  /* 方案A：白色半透明（当前） */
+  .tagA { background: rgba(255,255,255,.25); color: #fff; }
+
+  /* 方案B：深色实底标签 */
+  .tagB.xian { background: #c0392b; color: #fff; }
+  .tagB.wen  { background: #27ae60; color: #fff; }
+  .tagB.qi   { background: #2980b9; color: #fff; }
+
+  /* 方案C：白底彩色文字 */
+  .tagC.xian { background: #fff; color: #e74c3c; border: 1px solid rgba(255,255,255,.5); }
+  .tagC.wen  { background: #fff; color: #2ecc71; border: 1px solid rgba(255,255,255,.5); }
+  .tagC.qi   { background: #fff; color: #3498db; border: 1px solid rgba(255,255,255,.5); }
+
+  /* 方案D：深色圆形emoji + 白字 */
+  .tagD { background: rgba(0,0,0,.3); color: #fff; border-radius: 10px; padding: 2px 8px; font-size: 11px; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <h2>方案 A — 白色半透明（当前）</h2>
+  <div class="choice"><span class="choice-text">梭哈五万进场</span><span class="tag tagA">险</span></div>
+  <div class="choice"><span class="choice-text">先充一千试水</span><span class="tag tagA">稳</span></div>
+  <div class="choice"><span class="choice-text">关掉APP睡觉</span><span class="tag tagA">奇</span></div>
+
+  <h2>方案 B — 深色实底（红/绿/蓝）</h2>
+  <div class="choice"><span class="choice-text">梭哈五万进场</span><span class="tag tagB xian">险</span></div>
+  <div class="choice"><span class="choice-text">先充一千试水</span><span class="tag tagB wen">稳</span></div>
+  <div class="choice"><span class="choice-text">关掉APP睡觉</span><span class="tag tagB qi">奇</span></div>
+
+  <h2>方案 C — 白底彩色字</h2>
+  <div class="choice"><span class="choice-text">梭哈五万进场</span><span class="tag tagC xian">险</span></div>
+  <div class="choice"><span class="choice-text">先充一千试水</span><span class="tag tagC wen">稳</span></div>
+  <div class="choice"><span class="choice-text">关掉APP睡觉</span><span class="tag tagC qi">奇</span></div>
+
+  <h2>方案 D — 暗底圆角</h2>
+  <div class="choice"><span class="choice-text">梭哈五万进场</span><span class="tag tagD">🔥 险</span></div>
+  <div class="choice"><span class="choice-text">先充一千试水</span><span class="tag tagD">🛡 稳</span></div>
+  <div class="choice"><span class="choice-text">关掉APP睡觉</span><span class="tag tagD">✨ 奇</span></div>
+
+</div>
+</body>
+</html>
