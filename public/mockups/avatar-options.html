@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>散户李狗蛋 头像方案</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #f7f7f8; font-family: -apple-system, 'Noto Sans SC', sans-serif; padding: 20px; }
+  .container { max-width: 520px; margin: 0 auto; }
+  h1 { font-size: 18px; color: #111; margin-bottom: 20px; text-align: center; }
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .option {
+    background: #fff; border-radius: 12px; padding: 16px; text-align: center;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06); cursor: pointer; transition: all .2s;
+  }
+  .option:hover { box-shadow: 0 4px 12px rgba(212,136,26,0.2); transform: translateY(-2px); }
+  .avatar {
+    width: 72px; height: 72px; border-radius: 50%; margin: 0 auto 10px;
+    overflow: hidden; display: flex; align-items: center; justify-content: center;
+    background: #f5f5f5;
+  }
+  .avatar img { width: 100%; height: 100%; object-fit: cover; }
+  .label { font-size: 13px; color: #111; font-weight: 600; margin-bottom: 4px; }
+  .desc { font-size: 11px; color: #999; line-height: 1.5; }
+
+  /* 纯CSS头像们 */
+  .css-avatar { position: relative; font-size: 36px; line-height: 72px; }
+
+  /* 像素风 */
+  .pixel-face {
+    width: 72px; height: 72px; background: #FFE0B2;
+    image-rendering: pixelated; position: relative; border-radius: 50%; overflow: hidden;
+  }
+  .pixel-face::before {
+    content: ''; position: absolute;
+    top: 22px; left: 18px; width: 8px; height: 8px; background: #333;
+    box-shadow: 28px 0 0 #333, 14px 18px 0 #333, 14px 20px 0 #333;
+  }
+  .pixel-face::after {
+    content: '📉'; position: absolute; top: -4px; right: -4px; font-size: 20px;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>散户李狗蛋 · 头像方案</h1>
+  <div class="grid">
+
+    <!-- DiceBear 像素风 -->
+    <div class="option">
+      <div class="avatar">
+        <img src="https://api.dicebear.com/9.x/pixel-art/svg?seed=ligoudan&backgroundColor=b6e3f4" alt="">
+      </div>
+      <div class="label">1. 像素小人</div>
+      <div class="desc">复古像素风<br>GameBoy 味道</div>
+    </div>
+
+    <!-- DiceBear 大头贴 -->
+    <div class="option">
+      <div class="avatar">
+        <img src="https://api.dicebear.com/9.x/adventurer/svg?seed=ligoudan2&backgroundColor=ffd5dc" alt="">
+      </div>
+      <div class="label">2. 冒险者</div>
+      <div class="desc">手绘大头贴<br>呆萌散户脸</div>
+    </div>
+
+    <!-- DiceBear bottts 机器人 -->
+    <div class="option">
+      <div class="avatar">
+        <img src="https://api.dicebear.com/9.x/bottts/svg?seed=ligoudan&backgroundColor=c0aede" alt="">
+      </div>
+      <div class="label">3. 交易机器人</div>
+      <div class="desc">Bot 风格<br>"量化交易大师"</div>
+    </div>
+
+    <!-- DiceBear thumbs -->
+    <div class="option">
+      <div class="avatar">
+        <img src="https://api.dicebear.com/9.x/thumbs/svg?seed=ligoudan&backgroundColor=ffd5dc" alt="">
+      </div>
+      <div class="label">4. 竖拇指</div>
+      <div class="desc">一切都很好<br>（账户-90%）</div>
+    </div>
+
+    <!-- DiceBear fun-emoji -->
+    <div class="option">
+      <div class="avatar">
+        <img src="https://api.dicebear.com/9.x/fun-emoji/svg?seed=散户3&backgroundColor=d1d4f9" alt="">
+      </div>
+      <div class="label">5. 搞怪表情</div>
+      <div class="desc">Meme 感十足<br>懵逼散户</div>
+    </div>
+
+    <!-- DiceBear lorelei -->
+    <div class="option">
+      <div class="avatar">
+        <img src="https://api.dicebear.com/9.x/lorelei/svg?seed=ligoudan&backgroundColor=c0aede" alt="">
+      </div>
+      <div class="label">6. 线条头像</div>
+      <div class="desc">极简线条<br>社恐散户</div>
+    </div>
+
+    <!-- DiceBear notionists -->
+    <div class="option">
+      <div class="avatar">
+        <img src="https://api.dicebear.com/9.x/notionists/svg?seed=ligoudan&backgroundColor=b6e3f4" alt="">
+      </div>
+      <div class="label">7. Notion 风</div>
+      <div class="desc">Notion 小人<br>打工人下班炒币</div>
+    </div>
+
+    <!-- DiceBear big-smile -->
+    <div class="option">
+      <div class="avatar">
+        <img src="https://api.dicebear.com/9.x/big-smile/svg?seed=goudan&backgroundColor=ffdfbf" alt="">
+      </div>
+      <div class="label">8. 傻笑脸</div>
+      <div class="desc">Big Smile<br>"这波稳了"</div>
+    </div>
+
+    <!-- DiceBear 像素风 变种 -->
+    <div class="option">
+      <div class="avatar">
+        <img src="https://api.dicebear.com/9.x/pixel-art/svg?seed=leek888&backgroundColor=c1f0c1" alt="">
+      </div>
+      <div class="label">9. 韭菜像素</div>
+      <div class="desc">绿色底=韭菜<br>"我又被割了"</div>
+    </div>
+
+    <!-- Robohash -->
+    <div class="option">
+      <div class="avatar">
+        <img src="https://robohash.org/ligoudan.png?set=set4&size=144x144" alt="">
+      </div>
+      <div class="label">10. 小猫</div>
+      <div class="desc">Robohash 猫<br>"买了个寂寞"</div>
+    </div>
+
+    <!-- DiceBear croodles -->
+    <div class="option">
+      <div class="avatar">
+        <img src="https://api.dicebear.com/9.x/croodles/svg?seed=ligoudan&backgroundColor=ffd5dc" alt="">
+      </div>
+      <div class="label">11. 涂鸦脸</div>
+      <div class="desc">手绘涂鸦<br>灵魂画手散户</div>
+    </div>
+
+    <!-- DiceBear personas -->
+    <div class="option">
+      <div class="avatar">
+        <img src="https://api.dicebear.com/9.x/personas/svg?seed=ligoudan2&backgroundColor=c0aede" alt="">
+      </div>
+      <div class="label">12. 扁平小人</div>
+      <div class="desc">扁平化设计<br>正经打工人</div>
+    </div>
+
+  </div>
+</div>
+</body>
+</html>
