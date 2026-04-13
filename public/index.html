@@ -1635,16 +1635,24 @@ function prefetchAll(choices, histSnap){
 // ════════════════════════════════════════════════════
 // 奇遇
 // ════════════════════════════════════════════════════
+let recentEvts=[]; // 最近触发过的事件索引，避免短期内重复
 function tryEvent(cb){
   const raw=G.rawAlloc||{luck:5};
-  let chance=0.2+Math.min(G.luck*0.01,0.18);
+  // 降低基础概率：12% + luck加成最高到25%，约每4-5回合一次
+  let chance=0.12+Math.min(G.luck*0.006,0.13);
   // 气运惩罚
-  if(raw.luck<DEBUFF_DANGER) chance*=0.3;      // 气运<2：奇遇概率大幅降低
-  else if(raw.luck<DEBUFF_WEAK) chance*=0.6;    // 气运<4：奇遇概率减半
+  if(raw.luck<DEBUFF_DANGER) chance*=0.3;
+  else if(raw.luck<DEBUFF_WEAK) chance*=0.6;
+  // 连续触发冷却：上回合刚触发过则概率减半
+  if(lastEvIdx>=0 && G.turn>1) chance*=0.5;
   if(!G.alive||Math.random()>chance)return cb();
-  const pool=EVENTS.map((e,i)=>({e,i})).filter(({i})=>i!==lastEvIdx);
+  // 排除最近3次触发过的事件
+  const pool=EVENTS.map((e,i)=>({e,i})).filter(({i})=>!recentEvts.includes(i));
+  if(!pool.length){recentEvts=[];return cb();} // 全部用完则重置
   const {e:ev,i:idx}=pool[Math.floor(Math.random()*pool.length)];
-  lastEvIdx=idx;showEv(ev,cb);
+  lastEvIdx=idx;
+  recentEvts.push(idx);if(recentEvts.length>3)recentEvts.shift(); // 保留最近3次
+  showEv(ev,cb);
 }
 function showEv(ev,onClose){
   const badge=document.getElementById('ev-badge');
