@@ -1426,6 +1426,10 @@ function onTraitConfirm(){
   }
   // 应用词条效果
   applyTraitEffects();
+  // 根据开局资产设置初始境界（不触发突破动画）
+  for(let i=REALMS.length-1;i>=0;i--){
+    if(G.money>=REALMS[i].assetNum){G.realmIdx=i;break;}
+  }
   document.getElementById('ov-trait').className='ov ov-bg hidden';
   // 展示已选词条
   renderTraitsBar();
