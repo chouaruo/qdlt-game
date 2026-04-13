@@ -529,6 +529,7 @@ body{
       <div class="realm-badge" id="realm-badge">凡人 A0</div>
       <div class="realm-asset" id="realm-asset">负债</div>
       <div class="hdr-meta">
+        <span class="save-pill" id="turn-pill" style="color:var(--gold2)">回合 0/30</span>
         <span class="save-pill" id="save-pill">未存档</span>
         <button class="mini-btn" onclick="restartRun()">新轮回</button>
       </div>
@@ -1129,6 +1130,13 @@ function updateStats(prev) {
     Math.min(100, Math.max(0, ((G.money - r.assetNum)/(nextR.assetNum - r.assetNum))*100));
   document.getElementById('asset-fill').style.width = pct + '%';
   document.getElementById('asset-num').textContent = fmtAsset(G.money);
+  // 回合计数
+  const tp=document.getElementById('turn-pill');
+  if(tp){
+    const left=MAX_TURNS-G.turn;
+    tp.textContent='回合 '+G.turn+'/'+MAX_TURNS;
+    tp.style.color=left<=5?'var(--crimson2)':left<=10?'#e08820':'var(--gold2)';
+  }
   // 属性
   ['money','mind','know','luck'].forEach(k=>{
     const display = v => k==='money' ? fmtMoney(v) : v;
@@ -1206,6 +1214,7 @@ function applyFx(fx, prev) {
   updateStats(prev);
   checkRealm();
   checkDeath();
+  checkEnding();
   persistRun();
 }
 
@@ -1236,6 +1245,33 @@ function checkDeath() {
   // 濒死预警提示
   if(G.mind>0&&G.mind<=10) log('⚠ 心态濒危！再扛不住就要割肉离场了','b');
   if(G.know>0&&G.know<=10) log('⚠ 认知告急！快要分不清真假项目了','b');
+}
+
+// ════════════════════════════════════════════════════
+// 30回合结算
+// ════════════════════════════════════════════════════
+const MAX_TURNS = 30;
+const ENDING_TIERS = [
+  {minRealm:13,tier:'传奇',color:'gold', title:'飞升成功，载入史册',sub:'你的名字将永远刻在区块链上\n「从此，江湖再无传说」'},
+  {minRealm:10,tier:'钻石',color:'purple',title:'行业大佬，呼风唤雨',sub:'你已经站在了食物链的顶端\n「一条推文就能让市场地震」'},
+  {minRealm:7, tier:'金',  color:'gold',  title:'财务自由，成功上岸',sub:'从此不用看老板脸色了\n「终于可以说，我曾经是个散户」'},
+  {minRealm:4, tier:'银',  color:'purple',title:'小有积蓄，但还是打工人',sub:'赚了一些，但离自由还远\n「至少比存银行强」'},
+  {minRealm:0, tier:'铜',  color:'red',   title:'韭菜本韭，下辈子别碰币',sub:'30回合过去了，你还在原地\n「我真的学到了...大概」'},
+];
+
+function checkEnding(){
+  if(!G.alive || G.turn < MAX_TURNS) return;
+  // 30回合到达，触发结算
+  G.alive = false;
+  const bestR = G.bestRunRealm || G.realmIdx;
+  const tier = ENDING_TIERS.find(t => bestR >= t.minRealm) || ENDING_TIERS[ENDING_TIERS.length-1];
+  const asset = fmtAsset(G.peakMoney||G.money);
+  showFull(
+    tier.title,
+    tier.sub+'\n\n最高境界：'+REALMS[bestR].name+' '+REALMS[bestR].code+'\n最高资产：'+asset+'\n结局品质：'+tier.tier,
+    tier.color,
+    '重新入场'
+  );
 }
 
 function showFull(big, sub, color, btn, mode='') {
