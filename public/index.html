@@ -1887,14 +1887,9 @@ async function typeText(text){
 }
 
 // 替换剧情中的金额占位符
-function fillStoryAmounts(story, curMoney, fx){
-  const pct = fx?.money || 0;
-  const delta = Math.round(curMoney * pct / 100);
-  const after = Math.max(0, curMoney + delta);
-  return story
-    .replace(/\{TOTAL\}/g, fmtAsset(curMoney))
-    .replace(/\{CHANGE\}/g, fmtAsset(Math.abs(delta)))
-    .replace(/\{AFTER\}/g, fmtAsset(after));
+function fillStoryAmounts(story){
+  // 清理残留占位符（AI偶尔还是会用）
+  return story.replace(/\{TOTAL\}|\{CHANGE\}|\{AFTER\}/g, '');
 }
 
 // ════════════════════════════════════════════════════
@@ -1916,7 +1911,7 @@ async function onChoice(choice){
     G.hist.push({role:'assistant',content:JSON.stringify(result)});
     if(G.hist.length>16)G.hist=G.hist.slice(-16);
     prefetchAll(result.choices,[...G.hist]);
-    await typeText(fillStoryAmounts(result.story, G.money, result.effects));
+    await typeText(fillStoryAmounts(result.story));
   }else{
     // 缓存未命中：流式输出，边生成边显示
     document.getElementById('pd-row').style.display='none';
@@ -1934,7 +1929,7 @@ async function onChoice(choice){
     // 流式结束后再预生成
     prefetchAll(result.choices,[...G.hist]);
     // story 已在流式中显示，但需要替换占位符重新显示
-    document.getElementById('story-text').textContent=fillStoryAmounts(result.story||'', G.money, result.effects);
+    document.getElementById('story-text').textContent=fillStoryAmounts(result.story||'');
     currentStory=document.getElementById('story-text').textContent;
   }
   const prev={money:G.money,mind:G.mind,know:G.know,luck:G.luck};
@@ -1974,7 +1969,7 @@ function buildOpeningPrompt(charId, money, realmIdx, traits){
   const opener = charId==='散户' ? getRetailOpener(money) : (CHAR_OPENERS[charId]||CHAR_OPENERS['散户']);
   const assetNum = fmtAsset(money);
   const traitHint = traits?.length ? `开局词条：${traits.map(t=>t.name).join('、')}。` : '';
-  return `游戏开始。${opener}\n\n【重要】玩家总资产精确为${assetNum}（数字：${money}），境界：${REALMS[realmIdx||0].name}。${traitHint}请描述开场场景，给出三个走向各异的选择。`;
+  return `游戏开始。${opener}\n\n境界：${REALMS[realmIdx||0].name}。${traitHint}请描述开场场景，给出三个走向各异的选择。剧情中不要写具体金额数字。`;
 }
 
 let openingPromise = null; // 投机性预生成
@@ -2010,10 +2005,10 @@ async function initGame(){
   prefetchAll(result.choices,[...G.hist]);
   if(usedPregen){
     // 预生成结果：用打字动画显示
-    await typeText(fillStoryAmounts(result.story, G.money, result.effects));
+    await typeText(fillStoryAmounts(result.story));
   } else {
     // 流式已显示，替换占位符
-    document.getElementById('story-text').textContent=fillStoryAmounts(result.story||'', G.money, result.effects);
+    document.getElementById('story-text').textContent=fillStoryAmounts(result.story||'');
     currentStory=document.getElementById('story-text').textContent;
   }
   updateStats(null);
