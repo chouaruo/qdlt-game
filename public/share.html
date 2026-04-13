@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>币圈模拟器 · 战绩</title>
+<link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--gold:#d4881a;--bg:#111;--card:#1a1a1a;--border:rgba(255,255,255,0.1);}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);min-height:100vh;display:flex;align-items:center;justify-content:center;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Noto Sans SC','PingFang SC',sans-serif;color:#fff;padding:1.5rem;}
+.container{width:100%;max-width:400px;display:flex;flex-direction:column;align-items:center;gap:1.2rem;}
+.logo{font-family:'Ma Shan Zheng',cursive;font-size:clamp(1.8rem,6vw,2.5rem);color:var(--gold);letter-spacing:0.15em;text-align:center;}
+.card{width:100%;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:24px 20px;display:flex;flex-direction:column;align-items:center;gap:16px;}
+.avatar{width:72px;height:72px;border-radius:50%;background:#222;border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;font-size:32px;overflow:hidden;}
+.avatar img{width:100%;height:100%;object-fit:cover;}
+.char-name{font-size:18px;font-weight:600;letter-spacing:0.05em;}
+.stats{width:100%;display:flex;flex-direction:column;gap:2px;}
+.stat-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:14px;}
+.stat-row:last-child{border-bottom:none;}
+.stat-label{color:rgba(255,255,255,0.5);}
+.stat-value{font-weight:600;}
+.stat-value.death{color:#ff6b6b;}
+.stat-value.realm{color:var(--gold);}
+.cta{width:100%;background:var(--gold);border:none;border-radius:10px;padding:15px;font-size:15px;color:#fff;cursor:pointer;font-family:inherit;letter-spacing:0.1em;font-weight:600;transition:all .2s;text-decoration:none;text-align:center;display:block;}
+.cta:hover{background:#c07a16;transform:translateY(-1px);}
+.footer{font-size:11px;color:rgba(255,255,255,0.3);text-align:center;line-height:1.6;}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="logo">币圈模拟器</div>
+  <div class="card">
+    <div class="avatar" id="avatar"></div>
+    <div class="char-name" id="char-name">-</div>
+    <div class="stats">
+      <div class="stat-row"><span class="stat-label">最高境界</span><span class="stat-value realm" id="s-realm">-</span></div>
+      <div class="stat-row"><span class="stat-label">最高资产</span><span class="stat-value" id="s-asset">-</span></div>
+      <div class="stat-row"><span class="stat-label">存活回合</span><span class="stat-value" id="s-turn">-</span></div>
+      <div class="stat-row"><span class="stat-label">结局</span><span class="stat-value death" id="s-death">-</span></div>
+    </div>
+  </div>
+  <a class="cta" id="cta-btn" href="/">我也来试试</a>
+  <div class="footer">一款 AI 驱动的币圈文字冒险游戏<br>每一个选择都可能让你翻倍，也可能让你归零</div>
+</div>
+<script>
+const REALMS = [
+  {code:'A0',name:'凡人'},{code:'A1',name:'练气初期'},{code:'A2',name:'练气中期'},
+  {code:'A3',name:'练气后期'},{code:'A4',name:'筑基初期'},{code:'A5',name:'筑基中期'},
+  {code:'A6',name:'筑基后期'},{code:'A7',name:'金丹初期'},{code:'A8',name:'金丹中期'},
+  {code:'A9',name:'金丹后期'},{code:'A10',name:'元婴初期'},{code:'A11',name:'元婴中期'},
+  {code:'A12',name:'元婴后期'},{code:'A13',name:'化神初期'},{code:'A14',name:'化神中期'},
+  {code:'A15',name:'化神后期'},
+];
+const CHARS = {
+  '散户':{name:'李狗蛋（散户）',emoji:'🧑‍💻',twitter:null},
+  'CZ':{name:'赵长鹏 CZ',emoji:'🟡',twitter:'cz_binance'},
+  'SBF':{name:'SBF',emoji:'🟦',twitter:'SBF_FTX'},
+  '宝二爷':{name:'宝二爷',emoji:'🟠',twitter:'ChandlerGuo'},
+  '徐明星':{name:'徐明星',emoji:'🔵',twitter:'star_okx'},
+  '孙宇晨':{name:'孙宇晨',emoji:'🌊',twitter:'justinsuntron'},
+  'DoKwon':{name:'Do Kwon',emoji:'🌑',twitter:'stablekwon'},
+  '木头姐':{name:'Cathie Wood',emoji:'🪵',twitter:'CathieDWood'},
+  'ZachXBT':{name:'ZachXBT',emoji:'🦫',twitter:'zachxbt'},
+  'Brian':{name:'Brian Armstrong',emoji:'🏛️',twitter:'brian_armstrong'},
+  'Arthur':{name:'Arthur Hayes',emoji:'⚔️',twitter:'CryptoHayes'},
+  'Saylor':{name:'Michael Saylor',emoji:'₿',twitter:'saylor'},
+  'HeYi':{name:'何一 He Yi',emoji:'🟨',twitter:'heyibinance'},
+  '吴忌寒':{name:'吴忌寒',emoji:'⛏️',twitter:null},
+  'V神':{name:'V神 Vitalik',emoji:'💎',twitter:'VitalikButerin'},
+  '中本聪':{name:'中本聪',emoji:'∞',twitter:null},
+};
+const DEATH_MAP = {money:'破产清算',mind:'心态崩溃',know:'认知归零'};
+
+function fmtAsset(n){
+  n=Number(n)||0;
+  if(n<=0)return '负债';
+  if(n>=1e12)return '¥'+(n/1e12).toFixed(1).replace(/\.0$/,'')+'万亿';
+  if(n>=1e8)return '¥'+(n/1e8).toFixed(1).replace(/\.0$/,'')+'亿';
+  if(n>=1e4)return '¥'+(n/1e4).toFixed(1).replace(/\.0$/,'')+'万';
+  return '¥'+n.toLocaleString();
+}
+
+const p = new URLSearchParams(location.search);
+const charId = p.get('c')||'散户';
+const realmIdx = parseInt(p.get('r'))||0;
+const turn = parseInt(p.get('t'))||0;
+const asset = parseInt(p.get('a'))||0;
+const death = p.get('d')||'money';
+const ref = p.get('ref')||'';
+
+const ch = CHARS[charId]||CHARS['散户'];
+const realm = REALMS[realmIdx]||REALMS[0];
+
+// 渲染
+document.getElementById('char-name').textContent = ch.name;
+const avatarEl = document.getElementById('avatar');
+if(ch.twitter){
+  const img = document.createElement('img');
+  img.src = 'https://unavatar.io/twitter/'+ch.twitter;
+  img.onerror = ()=>{ avatarEl.textContent = ch.emoji; img.remove(); };
+  avatarEl.appendChild(img);
+} else {
+  avatarEl.textContent = ch.emoji;
+}
+document.getElementById('s-realm').textContent = realm.name+' '+realm.code;
+document.getElementById('s-asset').textContent = fmtAsset(asset);
+document.getElementById('s-turn').textContent = turn+'回合';
+document.getElementById('s-death').textContent = DEATH_MAP[death]||'出局';
+
+// CTA 按钮带 ref
+if(ref){
+  document.getElementById('cta-btn').href = '/?ref='+encodeURIComponent(ref);
+}
+</script>
+</body>
+</html>

@@ -424,6 +424,17 @@ body{
 .full-act.gold{color:#f8d060}.full-act.gold:hover{background:#f8d060;color:#000;}
 .full-act.red{color:#ff6b6b}.full-act.red:hover{background:#ff6b6b;color:#fff;}
 .full-act.purple{color:#a78bfa}.full-act.purple:hover{background:#a78bfa;color:#fff;}
+/* 分享区域 */
+.share-section{display:none;width:100%;max-width:340px;text-align:center;position:relative;z-index:1;}
+.share-stats{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);border-radius:10px;padding:14px 16px;margin-bottom:12px;text-align:left;}
+.share-stats-title{font-size:11px;color:rgba(255,255,255,0.4);letter-spacing:0.15em;margin-bottom:8px;}
+.share-stat-row{display:flex;justify-content:space-between;font-size:13px;color:rgba(255,255,255,0.75);line-height:2;}
+.share-stat-row span:last-child{color:#fff;font-weight:500;}
+.share-btn{background:#d4881a;border:none;border-radius:8px;padding:12px 20px;font-size:13px;color:#fff;cursor:pointer;font-family:inherit;letter-spacing:0.08em;width:100%;font-weight:500;transition:all .2s;}
+.share-btn:hover{background:#c07a16;}
+.share-btn.copied{background:#07c160;}
+.share-hint{font-size:11px;color:rgba(255,255,255,0.4);margin-top:8px;line-height:1.6;}
+.share-pts{font-size:12px;color:#f8d060;margin-top:10px;letter-spacing:0.05em;}
 
 @media(min-width:600px){
   .ev-panel{bottom:auto;top:50%;left:50%;transform:translate(-50%,-50%);width:min(480px,92vw);border-radius:14px;max-height:80vh;animation:evin .25s ease;box-shadow:0 4px 24px rgba(0,0,0,0.1);}
@@ -591,6 +602,18 @@ body{
   <div class="full-realm" id="full-realm"></div>
   <div class="full-big" id="full-big"></div>
   <div class="full-sub" id="full-sub"></div>
+  <div class="share-section" id="share-section">
+    <div class="share-stats">
+      <div class="share-stats-title">本局战绩</div>
+      <div class="share-stat-row"><span>角色</span><span id="share-char">-</span></div>
+      <div class="share-stat-row"><span>最高境界</span><span id="share-realm">-</span></div>
+      <div class="share-stat-row"><span>存活回合</span><span id="share-turn">-</span></div>
+      <div class="share-stat-row"><span>最高资产</span><span id="share-asset">-</span></div>
+    </div>
+    <button class="share-btn" id="share-btn" onclick="onShareCopy()">复制分享链接到 X</button>
+    <div class="share-hint">分享可获得 10 积分 · 积分未来可能用于空投</div>
+    <div class="share-pts" id="share-pts"></div>
+  </div>
   <button class="full-act" id="full-act" onclick="onFullBtn()"></button>
 </div>
 
@@ -908,6 +931,8 @@ const G = {
   logs: ['进入市场'],
   char: null, traits: [],
   rawAlloc: {money:0,mind:0,know:0,luck:0}, // 原始加点（用于惩罚判定）
+  peakMoney: 0, // 本局最高资产
+  bestRunRealm: 0, // 本局最高境界
   totalPts: 20, // 固定20点
   bestRealm: 0, // 历史最高境界
   prevChar: null, prevTraits: [], prevKey: null, // 轮回数据
@@ -954,6 +979,65 @@ function loadPersist() {
   G.prevTraits = META.prevTraits || [];
   G.prevKey = META.prevKey || null;
 }
+// ════════════════════════════════════════════════════
+// 邀请码 & 积分
+// ════════════════════════════════════════════════════
+function getInviteData(){
+  try{return JSON.parse(localStorage.getItem('qdlt_invite'))||{code:null,points:0};}
+  catch(_){return {code:null,points:0};}
+}
+function ensureInviteCode(){
+  let inv=getInviteData();
+  if(!inv.code){
+    const chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+    inv.code='';for(let i=0;i<6;i++)inv.code+=chars[Math.floor(Math.random()*chars.length)];
+    inv.points=0;
+    localStorage.setItem('qdlt_invite',JSON.stringify(inv));
+  }
+  return inv;
+}
+function addInvitePoints(n){
+  const inv=ensureInviteCode();
+  inv.points+=n;
+  localStorage.setItem('qdlt_invite',JSON.stringify(inv));
+  return inv;
+}
+function onShareCopy(){
+  const inv=ensureInviteCode();
+  const sd=G._shareData||{c:'散户',r:0,t:0,a:0,d:'money'};
+  const realmName=REALMS[sd.r]?.name||'凡人';
+  const deathMap={money:'破产了',mind:'心态崩了',know:'被骗光了'};
+  const base=location.origin;
+  const url=`${base}/share.html?c=${encodeURIComponent(sd.c)}&r=${sd.r}&t=${sd.t}&a=${sd.a}&d=${sd.d}&ref=${inv.code}`;
+  const text=`币圈模拟器 | 我扮演${G.char?.name||'散户'}，最高冲到${realmName}(${fmtAsset(sd.a)})，第${sd.t}回合${deathMap[sd.d]||'出局了'}...\n你能比我撑得更久吗？\n${url}`;
+  navigator.clipboard.writeText(text).then(()=>{
+    const btn=document.getElementById('share-btn');
+    btn.textContent='已复制！去 X 粘贴发布吧';
+    btn.className='share-btn copied';
+    const inv2=addInvitePoints(10);
+    document.getElementById('share-pts').textContent='我的积分：'+inv2.points+' 分';
+  }).catch(()=>{
+    // fallback
+    const ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);
+    const btn=document.getElementById('share-btn');btn.textContent='已复制！';btn.className='share-btn copied';
+    addInvitePoints(10);
+  });
+}
+// 首页加载时处理 ref 参数
+function handleRefParam(){
+  const params=new URLSearchParams(location.search);
+  const ref=params.get('ref');
+  if(!ref)return;
+  // 防重复：同一个 ref 只计一次
+  const key='qdlt_referred_by';
+  if(localStorage.getItem(key))return;
+  localStorage.setItem(key,ref);
+  // 通知邀请人加分（异步，不阻塞）
+  fetch('/api/invite',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({ref})}).catch(()=>{});
+  // 清理 URL 参数
+  history.replaceState(null,'',location.pathname);
+}
+
 function updateSavePill(text='未存档') {
   const el = document.getElementById('save-pill');
   if (el) el.textContent = text;
@@ -1098,6 +1182,7 @@ function applyFx(fx, prev) {
     }
     const delta = Math.round(G.money * pct / 100);
     G.money = Math.max(0, G.money + delta);
+    if(G.money>G.peakMoney) G.peakMoney=G.money;
     const sign = delta>=0 ? '+' : '';
     log('本金'+sign+fmtAsset(Math.abs(delta)).replace('¥','')+'（'+sign+Math.round(pct)+'%）', delta>=0?'g':'b');
   }
@@ -1129,6 +1214,7 @@ function checkRealm() {
     if(G.money>=REALMS[i].assetNum){
       if(i>G.realmIdx){
         G.realmIdx=i;
+        if(i>G.bestRunRealm) G.bestRunRealm=i;
         log('境界突破！晋入'+REALMS[i].name,'s');
         showFull('境界突破！',REALMS[i].name+' '+REALMS[i].code+'\n'+REALMS[i].sub+'\n总资产 '+fmtAsset(G.money),'gold','继续操盘','breakthrough');
       } else if(i<G.realmIdx){
@@ -1159,6 +1245,26 @@ function showFull(big, sub, color, btn, mode='') {
   document.getElementById('full-realm').textContent = mode==='breakthrough' ? '灵压暴涨 · 天机震荡 · 道心凝成' : '';
   const b=document.getElementById('full-act');b.textContent=btn;b.className='full-act '+color;
   selectedFullAction = mode;
+  // 死亡时显示分享区域
+  const ss=document.getElementById('share-section');
+  if(!G.alive && mode!=='breakthrough'){
+    const deathMap={money:'破产清算',mind:'心态崩溃',know:'认知归零'};
+    const deathCause=G.money<=0?'money':G.mind<=0?'mind':'know';
+    document.getElementById('share-char').textContent=G.char?.name||'散户';
+    document.getElementById('share-realm').textContent=REALMS[G.bestRunRealm||G.realmIdx]?.name+' '+REALMS[G.bestRunRealm||G.realmIdx]?.code;
+    document.getElementById('share-turn').textContent=G.turn+'回合';
+    document.getElementById('share-asset').textContent=fmtAsset(G.peakMoney||G.money);
+    // 存分享数据
+    G._shareData={c:G.char?.id||'散户',r:G.bestRunRealm||G.realmIdx,t:G.turn,a:G.peakMoney||G.money,d:deathCause};
+    // 积分
+    const inv=getInviteData();
+    document.getElementById('share-pts').textContent=inv.points>0?'我的积分：'+inv.points+' 分':'';
+    ss.style.display='block';
+    document.getElementById('share-btn').textContent='复制分享链接到 X';
+    document.getElementById('share-btn').className='share-btn';
+  } else {
+    ss.style.display='none';
+  }
   document.getElementById('full-ov').className='full-ov show'+(mode==='breakthrough'?' breakthrough':'');
 }
 function onFullBtn() {
@@ -1190,6 +1296,7 @@ function updateStartOverlay() {
   document.getElementById('start-backend-status').textContent = '等待开局';
 }
 window.addEventListener('load', ()=>{
+  handleRefParam();
   loadPersist();
   updateStartOverlay();
   updateSavePill(RUN?.savedAt ? '可续档' : '未存档');
@@ -1499,8 +1606,9 @@ function onTraitConfirm(){
   applyTraitEffects();
   // 根据开局资产设置初始境界（不触发突破动画）
   for(let i=REALMS.length-1;i>=0;i--){
-    if(G.money>=REALMS[i].assetNum){G.realmIdx=i;break;}
+    if(G.money>=REALMS[i].assetNum){G.realmIdx=i;G.bestRunRealm=i;break;}
   }
+  G.peakMoney=G.money;
   document.getElementById('ov-trait').className='ov ov-bg hidden';
   // 展示已选词条
   renderTraitsBar();
