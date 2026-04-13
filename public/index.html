@@ -1080,10 +1080,14 @@ function checkRealm() {
         G.realmIdx=i;
         log('境界突破！晋入'+REALMS[i].name,'s');
         showFull('境界突破！',REALMS[i].name+' '+REALMS[i].code+'\n'+REALMS[i].sub+'\n总资产 '+fmtAsset(G.money),'gold','继续操盘','breakthrough');
+      } else if(i<G.realmIdx){
+        G.realmIdx=i;
+        log('境界跌落…退至'+REALMS[i].name,'b');
       }
       break;
     }
   }
+  updateStats(null);
 }
 
 function checkDeath() {
