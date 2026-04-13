@@ -550,6 +550,7 @@ body{
     <div style="text-align:right">
       <div class="realm-badge" id="realm-badge">凡人 A0</div>
       <div class="realm-asset" id="realm-asset">负债</div>
+      <div id="market-cycle" style="font-size:10px;margin-top:2px;letter-spacing:0.05em;">🐻 熊市底部</div>
       <div class="hdr-meta">
         <span class="save-pill" id="turn-pill" style="color:var(--gold2)">回合 0/30</span>
         <span class="save-pill" id="save-pill">未存档</span>
@@ -1236,6 +1237,77 @@ document.addEventListener('DOMContentLoaded',()=>{
   }
 });
 
+// ════════════════════════════════════════════════════
+// 成就系统
+// ════════════════════════════════════════════════════
+const ACHIEVEMENTS = [
+  {id:'diamond',  emoji:'💎', name:'钻石手',    desc:'连续10回合不卖出'},
+  {id:'paper',    emoji:'🧻', name:'纸手',      desc:'连续3次选择卖出/止损'},
+  {id:'degen',    emoji:'🎰', name:'赌狗之王',  desc:'连续5次选择险标签'},
+  {id:'ice',      emoji:'🧊', name:'冰冷理性',  desc:'全程只选稳标签通关'},
+  {id:'dip',      emoji:'📉', name:'抄底大师',  desc:'本金跌50%后翻盘到更高境界'},
+  {id:'moon',     emoji:'🚀', name:'To The Moon',desc:'达到元婴（A10+）'},
+  {id:'rekt3',    emoji:'💀', name:'三秒归零',  desc:'前3回合就死了'},
+  {id:'whale',    emoji:'🐋', name:'巨鲸',      desc:'最高资产超过1亿'},
+  {id:'leek',     emoji:'🤡', name:'韭菜本韭',  desc:'30回合结束比开局还穷'},
+  {id:'reborn',   emoji:'🔄', name:'轮回者',    desc:'完成3次轮回'},
+  {id:'allchar',  emoji:'👑', name:'全角色通关', desc:'每个角色各通关一次'},
+  {id:'legend',   emoji:'🥇', name:'传奇达成',  desc:'获得传奇结局评价'},
+];
+function loadAchievements(){
+  try{return JSON.parse(localStorage.getItem('qdlt_achievements'))||{};}catch(_){return {};}
+}
+function saveAchievements(a){localStorage.setItem('qdlt_achievements',JSON.stringify(a));}
+function unlockAchievement(id){
+  const a=loadAchievements();
+  if(a[id])return; // 已解锁
+  a[id]=Date.now();
+  saveAchievements(a);
+  const def=ACHIEVEMENTS.find(x=>x.id===id);
+  if(!def)return;
+  // Toast 提示
+  const toast=document.createElement('div');
+  toast.style.cssText='position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#111;color:#f8d060;padding:12px 20px;border-radius:10px;font-size:13px;z-index:9999;animation:fadein 0.3s;box-shadow:0 4px 20px rgba(0,0,0,0.3);';
+  toast.textContent='🏆 成就解锁：'+def.emoji+' '+def.name;
+  document.body.appendChild(toast);
+  setTimeout(()=>toast.remove(),3000);
+}
+function checkAchievements(){
+  // 巨鲸
+  if(G.peakMoney>=100000000) unlockAchievement('whale');
+  // To The Moon
+  if(G.bestRunRealm>=10) unlockAchievement('moon');
+  // 三秒归零
+  if(!G.alive&&G.turn<=3) unlockAchievement('rekt3');
+  // 传奇
+  if(G.bestRunRealm>=13) unlockAchievement('legend');
+}
+// 跟踪选择模式（在 onChoice 里调用）
+let _riskStreak={xian:0,wen:0,hold:0,sell:0};
+function trackChoicePattern(choice,choiceIndex){
+  // 险/稳 连续追踪
+  const risks=['xian','wen','qi'];
+  const risk=risks[choiceIndex%3];
+  if(risk==='xian'){_riskStreak.xian++;_riskStreak.wen=0;}
+  else if(risk==='wen'){_riskStreak.wen++;_riskStreak.xian=0;}
+  else{_riskStreak.xian=0;_riskStreak.wen=0;}
+  if(_riskStreak.xian>=5) unlockAchievement('degen');
+  // 卖出/持有 追踪
+  const sellWords=['卖','止损','离场','跑','撤','割'];
+  const isSell=sellWords.some(w=>choice.includes(w));
+  if(isSell){_riskStreak.sell++;_riskStreak.hold=0;}
+  else{_riskStreak.hold++;_riskStreak.sell=0;}
+  if(_riskStreak.sell>=3) unlockAchievement('paper');
+  if(_riskStreak.hold>=10) unlockAchievement('diamond');
+  // 全稳追踪
+  if(!G._allWen) G._allWen=true;
+  if(risk!=='wen') G._allWen=false;
+  // 抄底大师追踪
+  if(!G._wasDown50) G._wasDown50=false;
+  if(G.money < G._startMoney*0.5) G._wasDown50=true;
+  if(G._wasDown50 && G.realmIdx > G._startRealm) unlockAchievement('dip');
+}
+
 function handleRefParam(){
   const params=new URLSearchParams(location.search);
   const ref=params.get('ref');
@@ -1341,6 +1413,9 @@ function updateStats(prev) {
     Math.min(100, Math.max(0, ((G.money - r.assetNum)/(nextR.assetNum - r.assetNum))*100));
   document.getElementById('asset-fill').style.width = pct + '%';
   document.getElementById('asset-num').textContent = fmtAsset(G.money);
+  // 牛熊周期
+  const mc=document.getElementById('market-cycle');
+  if(mc){const cyc=getMarketCycle(G.turn);mc.textContent=cyc.name;}
   // 回合计数
   const tp=document.getElementById('turn-pill');
   if(tp){
@@ -1377,14 +1452,51 @@ function updateTok(i,o) {
   document.getElementById('tok-row').style.display='flex';
 }
 
+// 币圈名言
+const QUOTES = [
+  {text:'Funds are SAFU.', author:'CZ'},
+  {text:'我们的目标从未改变：100万美元。', author:'Cathie Wood'},
+  {text:'你们穷是有原因的。', author:'Do Kwon'},
+  {text:'我已经转向做其他事了。', author:'中本聪'},
+  {text:'不是赌博，是有效利他。', author:'SBF'},
+  {text:'抄底！抄底！抄底！', author:'宝二爷'},
+  {text:'Buy Bitcoin.', author:'Michael Saylor'},
+  {text:'别人恐惧我贪婪，别人贪婪我更贪婪。', author:'散户李狗蛋'},
+  {text:'In crypto we trust.', author:'所有入场的人'},
+  {text:'这不是泡沫，这是范式转移。', author:'每个牛市'},
+  {text:'我不是在赌博，我是在做研究。', author:'深夜盯盘的你'},
+  {text:'下次一定止损。', author:'每一个爆仓的人'},
+  {text:'这个项目方绝对不会跑路。', author:'跑路前一天'},
+  {text:'我就看看，不买。', author:'一小时后梭哈'},
+  {text:'四年一个周期，这次真的不一样。', author:'每个周期'},
+  {text:'HODL.', author:'一个打字失误改变了世界'},
+  {text:'Not your keys, not your coins.', author:'交易所暴雷后'},
+  {text:'We are so early.', author:'永远的早期'},
+  {text:'钱没了可以再赚，机会错过就没了。', author:'梭哈前的自我说服'},
+  {text:'历史不会重演，但总是押韵。', author:'马克·吐温'},
+];
+function randomQuote(){return QUOTES[Math.floor(Math.random()*QUOTES.length)];}
+
+// 牛熊周期系统
+const MARKET_CYCLES = [
+  {turns:[1,2,3,4,5],   name:'🐻 熊市底部', posMulti:0.6, negMulti:0.6},
+  {turns:[6,7,8,9,10,11], name:'🐂 牛市初期', posMulti:1.0, negMulti:1.0},
+  {turns:[12,13,14,15,16,17], name:'🔥 疯牛',  posMulti:1.5, negMulti:1.5},
+  {turns:[18,19,20,21,22,23], name:'📉 回调震荡', posMulti:0.8, negMulti:1.3},
+  {turns:[24,25,26,27,28,29,30], name:'❄️ 寒冬', posMulti:0.7, negMulti:1.5},
+];
+function getMarketCycle(turn){
+  return MARKET_CYCLES.find(c=>c.turns.includes(turn))||MARKET_CYCLES[0];
+}
+
 function setPD(on) {
-  // 预生成未完成时禁用选项，完成后启用
   if(on) setEnabled(false);
   else setEnabled(true);
   const row=document.getElementById('pd-row'),dot=document.getElementById('pd-dot'),lbl=document.getElementById('pd-lbl');
   row.style.display='flex';
   dot.className='pd-dot '+(on?'spin':'ok');
-  lbl.textContent=on?'天机演算中，请稍候...':'天机已备，点击选择';
+  if(on){const q=randomQuote();lbl.textContent='「'+q.text+'」— '+q.author;}
+  else{lbl.textContent='天机已备，点击选择';}
 }
 
 function applyFx(fx, prev) {
@@ -1393,7 +1505,10 @@ function applyFx(fx, prev) {
 
   // ── 本金：AI 返回的 money 视为百分比变化 ──
   if(fx.money!=null&&fx.money!==0){
-    let pct = fx.money; // e.g. +30 = 涨30%, -50 = 跌50%
+    let pct = fx.money;
+    // 牛熊周期乘数
+    const cycle = getMarketCycle(G.turn);
+    pct = pct >= 0 ? Math.round(pct * cycle.posMulti) : Math.round(pct * cycle.negMulti);
     // 心态惩罚：心态低时亏损放大
     if(pct<0){
       if(raw.mind<DEBUFF_DANGER) pct*=2;       // 心态<2：亏损翻倍（恐慌性抛售）
@@ -1402,6 +1517,8 @@ function applyFx(fx, prev) {
     const delta = Math.round(G.money * pct / 100);
     G.money = Math.max(0, G.money + delta);
     if(G.money>G.peakMoney) G.peakMoney=G.money;
+    if(delta<0) G._everLostMoney=true;
+    if(G.money < G._startMoney*0.1) G._wasDown90=true;
     const sign = delta>=0 ? '+' : '';
     log('本金'+sign+fmtAsset(Math.abs(delta)).replace('¥','')+'（'+sign+Math.round(pct)+'%）', delta>=0?'g':'b');
   }
@@ -1492,6 +1609,7 @@ function applyFx(fx, prev) {
   checkRealm();
   checkDeath();
   checkEnding();
+  checkAchievements();
   persistRun();
 }
 
@@ -1536,11 +1654,40 @@ const ENDING_TIERS = [
   {minRealm:0, tier:'铜',  color:'red',   title:'韭菜本韭，下辈子别碰币',sub:'30回合过去了，你还在原地\n「我真的学到了...大概」'},
 ];
 
+// 彩蛋结局
+function checkHiddenEnding(bestR){
+  // 永恒牛市：30回合资产从未下跌
+  if(!G._everLostMoney) return {title:'永恒牛市',sub:'30回合，资产从未下跌过一次\n「这是真的吗？你揉了揉眼睛」\n你创造了一个从未发生过的奇迹。'};
+  // 浴火重生：跌到10%以下又翻回金级
+  if(G._wasDown50 && G.money < G._startMoney*0.1 === false && bestR >= 7 && G._wasDown90)
+    return {title:'浴火重生',sub:'从濒临归零到财务自由\n「跌到谷底的那天，你没有放弃」\n真正的传奇，是从废墟中站起来的人。'};
+  // 全属性99
+  if(G.mind>=99 && G.know>=99 && G.luck>=99) return {title:'全属性满值',sub:'心态、认知、气运全部达到极限\n「你已经超越了这个游戏的设计」\n恭喜，你是完美的币圈玩家。'};
+  // 速通大师：10回合内达A10
+  if(G.turn<=10 && bestR>=10) return {title:'速通大师',sub:'仅用'+G.turn+'回合就冲到了元婴\n「别人还在筑基，你已经元婴了」\n这速度，连V神都要鼓掌。'};
+  return null;
+}
+
 function checkEnding(){
   if(!G.alive || G.turn < MAX_TURNS) return;
   // 30回合到达，触发结算
   G.alive = false;
+  // 结算成就
+  if(G.money < G._startMoney) unlockAchievement('leek');
+  if(G._allWen) unlockAchievement('ice');
+  // 轮回次数
+  const meta=readStore(STORAGE.meta);
+  const runs=(meta?._runCount||0)+1;
+  if(runs>=3) unlockAchievement('reborn');
   const bestR = G.bestRunRealm || G.realmIdx;
+
+  // ── 彩蛋结局检查（优先级高于普通结局）──
+  const hidden = checkHiddenEnding(bestR);
+  if(hidden){
+    showFull(hidden.title, hidden.sub+'\n\n🎲 隐藏结局解锁！', 'purple', '重新入场');
+    return;
+  }
+
   const tier = ENDING_TIERS.find(t => bestR >= t.minRealm) || ENDING_TIERS[ENDING_TIERS.length-1];
   const asset = fmtAsset(G.peakMoney||G.money);
   showFull(
@@ -1938,6 +2085,8 @@ function onTraitConfirm(){
     if(G.money>=REALMS[i].assetNum){G.realmIdx=i;G.bestRunRealm=i;break;}
   }
   G.peakMoney=G.money;
+  G._startMoney=G.money;
+  G._startRealm=G.realmIdx;
   document.getElementById('ov-trait').className='ov ov-bg hidden';
   // 展示已选词条
   renderTraitsBar();
