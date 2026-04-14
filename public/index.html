@@ -1938,14 +1938,22 @@ function updateStartOverlay() {
 }
 window.addEventListener('load', ()=>{
   handleRefParam();
-  loadStoryArcs(); // 预加载剧情池（异步，不阻塞）
+  loadStoryArcs(); // 预加载剧情池（异步开始，startFreshRun会等待完成）
   loadPersist();
   updateStartOverlay();
   updateSavePill(RUN?.savedAt ? '可续档' : '未存档');
 });
-function startFreshRun(){
+async function startFreshRun(){
   clearRunSave();
   document.getElementById('api-err').textContent='';
+  // 确保剧情池已加载（没有BYOK时必须等加载完）
+  if(!storyArcData && !getByok()?.key){
+    document.getElementById('start-btn').textContent='加载中...';
+    document.getElementById('start-btn').disabled=true;
+    await loadStoryArcs();
+    document.getElementById('start-btn').textContent='开始游戏 →';
+    document.getElementById('start-btn').disabled=false;
+  }
   document.getElementById('ov-api').className='ov ov-bg hidden';
   setTimeout(showCharSelect,120);
 }
