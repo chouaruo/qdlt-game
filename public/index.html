@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <title>币圈模拟器</title>
-<link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=ZCOOL+XiaoWei&family=Noto+Serif+SC:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=ZCOOL+XiaoWei&family=Noto+Serif+SC:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 :root{
   --ink:#ffffff;--ink2:#ffffff;--ink3:#f5f5f5;
@@ -48,7 +48,7 @@ body{
 /* ═══ START OVERLAY ═══ */
 #ov-api{flex-direction:column;gap:1.4rem;}
 .api-logo{
-  font-family:'Ma Shan Zheng',cursive;
+  font-family:'Noto Serif SC',serif;
   font-size:clamp(2.2rem,8vw,3.5rem);
   color:var(--gold2);letter-spacing:0.18em;text-align:center;
   text-shadow:none;
@@ -86,7 +86,7 @@ body{
 /* ═══ 人物选择 OVERLAY ═══ */
 #ov-char{flex-direction:column;gap:0;}
 .char-ov-inner{width:100%;max-width:680px;display:flex;flex-direction:column;gap:1.1rem;padding:1.5rem 0 2rem;}
-.ov-title{font-family:'Ma Shan Zheng',cursive;font-size:clamp(1.4rem,5vw,2rem);color:var(--gold2);letter-spacing:0.15em;text-align:center;text-shadow:none;}
+.ov-title{font-family:'Noto Serif SC',serif;font-size:clamp(1.4rem,5vw,2rem);color:var(--gold2);letter-spacing:0.15em;text-align:center;text-shadow:none;}
 .ov-sub{font-size:12px;color:var(--gray2);text-align:center;letter-spacing:0.08em;line-height:1.7;}
 
 /* 人物格子 */
@@ -131,7 +131,7 @@ body{
   margin-top:0.5rem;animation:fadein .2s ease;
   box-shadow:0 1px 3px rgba(0,0,0,0.06);
 }
-.char-detail-name{font-family:'Ma Shan Zheng',cursive;font-size:1.2rem;color:var(--gold2);margin-bottom:6px;}
+.char-detail-name{font-family:'Noto Serif SC',serif;font-size:1.2rem;color:var(--gold2);margin-bottom:6px;}
 .char-detail-body{font-size:12px;color:var(--paper2);line-height:1.8;margin-bottom:8px;}
 .char-detail-skill{font-size:11px;color:var(--gray2);border-top:1px solid rgba(200,146,26,0.1);padding-top:8px;line-height:1.7;}
 .char-detail-locked{font-size:13px;color:var(--crimson2);text-align:center;padding:8px 0;}
@@ -229,7 +229,7 @@ body{
 /* Header */
 .hdr{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:#fff;border-radius:10px;box-shadow:0 1px 3px rgba(0,0,0,0.06);}
 .hdr-left{display:flex;flex-direction:column;gap:3px;}
-.hdr-title{font-family:'Ma Shan Zheng',cursive;font-size:clamp(1.2rem,4vw,1.6rem);color:#111;letter-spacing:0.1em;text-shadow:none;}
+.hdr-title{font-family:'Noto Serif SC',serif;font-size:clamp(1.2rem,4vw,1.6rem);color:#111;letter-spacing:0.1em;text-shadow:none;}
 .hdr-char{font-size:11px;color:#999;letter-spacing:0.06em;font-family:inherit;}
 .realm-badge{
   background:#d4881a10;border:none;
@@ -367,7 +367,7 @@ body{
 .ev-badge.ji{background:#07c16012;color:#07c160;}
 .ev-badge.xiong{background:#fa515112;color:#fa5151;}
 .ev-badge.qi{background:#d4881a12;color:#d4881a;}
-.ev-title{font-family:'Ma Shan Zheng',cursive;font-size:1.2rem;color:#111;margin-bottom:8px;letter-spacing:0.08em;}
+.ev-title{font-family:'Noto Serif SC',serif;font-size:1.2rem;color:#111;margin-bottom:8px;letter-spacing:0.08em;}
 .ev-body{font-size:13px;color:#555;line-height:1.95;margin-bottom:1.1rem;font-weight:400;}
 .ev-choices-wrap{display:flex;flex-direction:column;gap:8px;}
 .ev-ch{
@@ -414,7 +414,7 @@ body{
 }
 .full-ov.breakthrough .full-realm{display:block;animation:realmpop .9s ease;}
 @keyframes realmpop{0%{opacity:0;transform:translateY(10px)}100%{opacity:1;transform:translateY(0)}}
-.full-big{font-family:'Ma Shan Zheng',cursive;font-size:clamp(2rem,9vw,4.5rem);text-align:center;letter-spacing:0.2em;animation:bigpop 1.2s ease;}
+.full-big{font-family:'Noto Serif SC',serif;font-size:clamp(2rem,9vw,4.5rem);text-align:center;letter-spacing:0.2em;animation:bigpop 1.2s ease;}
 @keyframes bigpop{0%{transform:scale(0.3);opacity:0}65%{transform:scale(1.1)}100%{transform:scale(1);opacity:1}}
 .full-big.gold{color:#f8d060;text-shadow:0 0 60px rgba(248,208,96,.8);}
 .full-big.red{color:#ff6b6b;text-shadow:0 0 60px rgba(255,107,107,.7);}
@@ -504,7 +504,7 @@ body{
 <div class="ov ov-bg ov-scroll hidden" id="ov-char">
   <div class="char-ov-inner">
     <div class="ov-title">选择你的人物</div>
-    <div class="ov-sub" id="char-pts-hint">历史最高境界：<span id="char-pts-show" style="color:var(--gold2)">凡人</span>　·　属性点：20</div>
+    <div class="ov-sub" id="char-pts-hint">历史最高等级：<span id="char-pts-show" style="color:var(--gold2)">凡人</span>　·　属性点：20</div>
     <div class="char-grid" id="char-grid"></div>
     <div class="char-detail hidden" id="char-detail"></div>
     <button class="btn-gold" id="char-confirm-btn" onclick="onCharConfirm()" disabled>确认人物，进入加点</button>
@@ -646,24 +646,24 @@ body{
 // 数据层
 // ════════════════════════════════════════════════════
 
-// 境界表 A0-A15
+// 等级表 LV0-LV15
 const REALMS = [
-  {code:'A0', name:'凡人',    sub:'入世凡尘',   asset:'负债',      assetNum:0},
-  {code:'A1', name:'练气初期',sub:'感应灵气',   asset:'¥1',        assetNum:1},
-  {code:'A2', name:'练气中期',sub:'吐纳灵气',   asset:'¥10',       assetNum:10},
-  {code:'A3', name:'练气后期',sub:'凝练灵气',   asset:'¥100',      assetNum:100},
-  {code:'A4', name:'筑基初期',sub:'夯实根基',   asset:'¥1,000',    assetNum:1000},
-  {code:'A5', name:'筑基中期',sub:'根基稳固',   asset:'¥1万',      assetNum:10000},
-  {code:'A6', name:'筑基后期',sub:'厚积待发',   asset:'¥10万',     assetNum:100000},
-  {code:'A7', name:'金丹初期',sub:'丹成一转',   asset:'¥100万',    assetNum:1000000},
-  {code:'A8', name:'金丹中期',sub:'丹成三转',   asset:'¥1,000万',  assetNum:10000000},
-  {code:'A9', name:'金丹后期',sub:'丹成九转',   asset:'¥1亿',      assetNum:100000000},
-  {code:'A10',name:'元婴初期',sub:'婴灵初现',   asset:'¥10亿',     assetNum:1000000000},
-  {code:'A11',name:'元婴中期',sub:'婴灵圆满',   asset:'¥100亿',    assetNum:10000000000},
-  {code:'A12',name:'元婴后期',sub:'婴灵化形',   asset:'¥1,000亿',  assetNum:100000000000},
-  {code:'A13',name:'化神初期',sub:'神意初显',   asset:'¥1万亿',    assetNum:1000000000000},
-  {code:'A14',name:'化神中期',sub:'神意贯通',   asset:'¥10万亿',   assetNum:10000000000000},
-  {code:'A15',name:'化神后期',sub:'神意圆满',   asset:'¥100万亿',  assetNum:100000000000000},
+  {code:'LV0', name:'负债韭菜',  sub:'欠债入场',   asset:'负债',      assetNum:0},
+  {code:'LV1', name:'注册新手',  sub:'刚开户',     asset:'¥1',        assetNum:1},
+  {code:'LV2', name:'小额玩家',  sub:'试试水',     asset:'¥10',       assetNum:10},
+  {code:'LV3', name:'入门散户',  sub:'开始学习',   asset:'¥100',      assetNum:100},
+  {code:'LV4', name:'普通散户',  sub:'有点经验',   asset:'¥1,000',    assetNum:1000},
+  {code:'LV5', name:'资深散户',  sub:'见过牛熊',   asset:'¥1万',      assetNum:10000},
+  {code:'LV6', name:'小额投资者',sub:'初具规模',   asset:'¥10万',     assetNum:100000},
+  {code:'LV7', name:'百万玩家',  sub:'财务起步',   asset:'¥100万',    assetNum:1000000},
+  {code:'LV8', name:'千万大户',  sub:'圈内有名',   asset:'¥1,000万',  assetNum:10000000},
+  {code:'LV9', name:'亿级巨鲸',  sub:'呼风唤雨',   asset:'¥1亿',      assetNum:100000000},
+  {code:'LV10',name:'十亿大佬',  sub:'机构级别',   asset:'¥10亿',     assetNum:1000000000},
+  {code:'LV11',name:'百亿巨擘',  sub:'行业领袖',   asset:'¥100亿',    assetNum:10000000000},
+  {code:'LV12',name:'千亿寡头',  sub:'富可敌国',   asset:'¥1,000亿',  assetNum:100000000000},
+  {code:'LV13',name:'万亿传说',  sub:'改变行业',   asset:'¥1万亿',    assetNum:1000000000000},
+  {code:'LV14',name:'十万亿神话',sub:'载入史册',   asset:'¥10万亿',   assetNum:10000000000000},
+  {code:'LV15',name:'百万亿创世',sub:'超越一切',   asset:'¥100万亿',  assetNum:100000000000000},
 ];
 
 // 人物数据
@@ -782,11 +782,11 @@ const CHARS = [
     id:'Arthur',emoji:'⚔️',
     name:'Arthur Hayes',reqRealm:8,
     twitter:'https://unavatar.io/twitter/CryptoHayes',
-    baseStats:{money:1.0,mind:15,know:0,luck:-5}, baseTrait:{name:'永续道心',tier:'orange',attr:'mind',desc:'市场越疯我越冷静 —— 心态+15，气运-5，本金跌超30%时自动减半亏损（每局限1次）'},
+    baseStats:{money:1.0,mind:15,know:0,luck:-5}, baseTrait:{name:'永续信念',tier:'orange',attr:'mind',desc:'市场越疯我越冷静 —— 心态+15，气运-5，本金跌超30%时自动减半亏损（每局限1次）'},
     desc:'BitMEX灵魂人物，嘴上谈宏观、手上开高倍，市场越疯他越像回家。',
     skill:'一篇长文即可让全网开始猜顶部和底部。专属事件：永续合约、宏观转向、流动性踩踏。',
     ending:'写完宏观神文 / 再次押中周期 / 被市场教育',
-    rebornTrait:{name:'永续道心',tier:'red',attr:'mind',desc:'心态+35，本金+15，极端波动时额外获得一次翻盘机会',isReborn:true},
+    rebornTrait:{name:'永续信念',tier:'red',attr:'mind',desc:'心态+35，本金+15，极端波动时额外获得一次翻盘机会',isReborn:true},
     aiTag:'Arthur Hayes，BitMEX联合创始人，宏观叙事与高杠杆交易代表人物',
   },
   {
@@ -826,7 +826,7 @@ const CHARS = [
     id:'V神',emoji:'💎',
     name:'V神 Vitalik',reqRealm:12,
     twitter:'https://unavatar.io/twitter/VitalikButerin',
-    baseStats:{money:0.8,mind:0,know:20,luck:0}, baseTrait:{name:'以太坊精神',tier:'orange',attr:'know',desc:'去中心化的信仰者 —— 认知+20，本金-20%，认知达80以上时解锁「飞升」隐藏结局'},
+    baseStats:{money:0.8,mind:0,know:20,luck:0}, baseTrait:{name:'以太坊精神',tier:'orange',attr:'know',desc:'去中心化的信仰者 —— 认知+20，本金-20%，认知达80以上时解锁「封神」隐藏结局'},
     desc:'19岁俄裔加拿大少年，比特币周刊编辑，被拒后自建以太坊，改变了整个行业。',
     skill:'说一句话整个生态震动，但他只关心去中心化本身。专属：捐款SHIB、以太坊合并。',
     ending:'唯一纯正面结局（需放弃所有本金才能达到）',
@@ -1101,7 +1101,7 @@ const G = {
   peakMoney: 0, // 本局最高资产
   bestRunRealm: 0, // 本局最高境界
   totalPts: 20, // 固定20点
-  bestRealm: 0, // 历史最高境界
+  bestRealm: 0, // 历史最高等级
   prevChar: null, prevTraits: [], prevKey: null, // 轮回数据
 };
 const TOK = {i:0, o:0};
@@ -1246,7 +1246,7 @@ const ACHIEVEMENTS = [
   {id:'degen',    emoji:'🎰', name:'赌狗之王',  desc:'连续5次选择险标签'},
   {id:'ice',      emoji:'🧊', name:'冰冷理性',  desc:'全程只选稳标签通关'},
   {id:'dip',      emoji:'📉', name:'抄底大师',  desc:'本金跌50%后翻盘到更高境界'},
-  {id:'moon',     emoji:'🚀', name:'To The Moon',desc:'达到元婴（A10+）'},
+  {id:'moon',     emoji:'🚀', name:'To The Moon',desc:'达到十亿大佬（LV10+）'},
   {id:'rekt3',    emoji:'💀', name:'三秒归零',  desc:'前3回合就死了'},
   {id:'whale',    emoji:'🐋', name:'巨鲸',      desc:'最高资产超过1亿'},
   {id:'leek',     emoji:'🤡', name:'韭菜本韭',  desc:'30回合结束比开局还穷'},
@@ -1496,7 +1496,7 @@ function setPD(on) {
   row.style.display='flex';
   dot.className='pd-dot '+(on?'spin':'ok');
   if(on){const q=randomQuote();lbl.textContent='「'+q.text+'」— '+q.author;}
-  else{lbl.textContent='天机已备，点击选择';}
+  else{lbl.textContent='已就绪，点击选择';}
 }
 
 function applyFx(fx, prev) {
@@ -1587,7 +1587,7 @@ function applyFx(fx, prev) {
     if(cid==='Arthur' && fx.money<=-30 && !G._hayesSaved){
       const restore=Math.round(Math.abs(prev.money-G.money)/2);
       G.money+=restore;G._hayesSaved=true;
-      log('【永续道心】极端波动触发止损，挽回'+fmtAsset(restore).replace('¥',''),'g');
+      log('【永续信念】极端波动触发止损，挽回'+fmtAsset(restore).replace('¥',''),'g');
     }
     // Saylor：盈利回合本金额外+10%
     if(cid==='Saylor' && fx.money>0){
@@ -1619,11 +1619,11 @@ function checkRealm() {
       if(i>G.realmIdx){
         G.realmIdx=i;
         if(i>G.bestRunRealm) G.bestRunRealm=i;
-        log('境界突破！晋入'+REALMS[i].name,'s');
-        showFull('境界突破！',REALMS[i].name+' '+REALMS[i].code+'\n'+REALMS[i].sub+'\n总资产 '+fmtAsset(G.money),'gold','继续操盘','breakthrough');
+        log('等级提升！晋升'+REALMS[i].name,'s');
+        showFull('等级提升！',REALMS[i].name+' '+REALMS[i].code+'\n'+REALMS[i].sub+'\n总资产 '+fmtAsset(G.money),'gold','继续操盘','breakthrough');
       } else if(i<G.realmIdx){
         G.realmIdx=i;
-        log('境界跌落…退至'+REALMS[i].name,'b');
+        log('等级下降…退至'+REALMS[i].name,'b');
       }
       break;
     }
@@ -1647,7 +1647,7 @@ function checkDeath() {
 // ════════════════════════════════════════════════════
 const MAX_TURNS = 30;
 const ENDING_TIERS = [
-  {minRealm:13,tier:'传奇',color:'gold', title:'飞升成功，载入史册',sub:'你的名字将永远刻在区块链上\n「从此，江湖再无传说」'},
+  {minRealm:13,tier:'传奇',color:'gold', title:'登顶封神，载入史册',sub:'你的名字将永远刻在区块链上\n「从此，江湖再无传说」'},
   {minRealm:10,tier:'钻石',color:'purple',title:'行业大佬，呼风唤雨',sub:'你已经站在了食物链的顶端\n「一条推文就能让市场地震」'},
   {minRealm:7, tier:'金',  color:'gold',  title:'财务自由，成功上岸',sub:'从此不用看老板脸色了\n「终于可以说，我曾经是个散户」'},
   {minRealm:4, tier:'银',  color:'purple',title:'小有积蓄，但还是打工人',sub:'赚了一些，但离自由还远\n「至少比存银行强」'},
@@ -1664,7 +1664,7 @@ function checkHiddenEnding(bestR){
   // 全属性99
   if(G.mind>=99 && G.know>=99 && G.luck>=99) return {title:'全属性满值',sub:'心态、认知、气运全部达到极限\n「你已经超越了这个游戏的设计」\n恭喜，你是完美的币圈玩家。'};
   // 速通大师：10回合内达A10
-  if(G.turn<=10 && bestR>=10) return {title:'速通大师',sub:'仅用'+G.turn+'回合就冲到了元婴\n「别人还在筑基，你已经元婴了」\n这速度，连V神都要鼓掌。'};
+  if(G.turn<=10 && bestR>=10) return {title:'速通大师',sub:'仅用'+G.turn+'回合就冲到了十亿大佬\n「别人还在散户，你已经大佬了」\n这速度，连V神都要鼓掌。'};
   return null;
 }
 
@@ -1692,7 +1692,7 @@ function checkEnding(){
   const asset = fmtAsset(G.peakMoney||G.money);
   showFull(
     tier.title,
-    tier.sub+'\n\n最高境界：'+REALMS[bestR].name+' '+REALMS[bestR].code+'\n最高资产：'+asset+'\n结局品质：'+tier.tier,
+    tier.sub+'\n\n最高等级：'+REALMS[bestR].name+' '+REALMS[bestR].code+'\n最高资产：'+asset+'\n结局品质：'+tier.tier,
     tier.color,
     '重新入场'
   );
@@ -1702,7 +1702,7 @@ function showFull(big, sub, color, btn, mode='') {
   document.getElementById('full-big').textContent=big;
   document.getElementById('full-big').className='full-big '+color;
   document.getElementById('full-sub').textContent=sub;
-  document.getElementById('full-realm').textContent = mode==='breakthrough' ? '灵压暴涨 · 天机震荡 · 道心凝成' : '';
+  document.getElementById('full-realm').textContent = mode==='breakthrough' ? '资产暴涨 · 市场震动 · 信念坚定' : '';
   const b=document.getElementById('full-act');b.textContent=btn;b.className='full-act '+color;
   selectedFullAction = mode;
   // 死亡时显示分享区域
