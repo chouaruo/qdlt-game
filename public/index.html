@@ -477,6 +477,14 @@ body{
     <button class="ghost-btn" id="continue-btn" onclick="resumeSavedRun()" disabled>继续上次游戏</button>
     <div class="api-err" id="api-err"></div>
   </div>
+  <a href="https://x.com/0xTimovo" target="_blank" style="display:flex;align-items:center;gap:10px;text-decoration:none;background:#fff;border-radius:10px;padding:12px 16px;box-shadow:0 1px 3px rgba(0,0,0,0.06);width:100%;max-width:380px;">
+    <img src="https://unavatar.io/twitter/0xTimovo" style="width:36px;height:36px;border-radius:50%;border:1.5px solid #e8e8e8;" onerror="this.style.display='none'">
+    <div style="flex:1;">
+      <div style="font-size:13px;color:#111;font-weight:500;">@0xTimovo</div>
+      <div style="font-size:11px;color:#999;">关注作者 · 这个游戏免费开放给所有人</div>
+    </div>
+    <span style="font-size:11px;color:#1d9bf0;font-weight:500;white-space:nowrap;">Follow ↗</span>
+  </a>
   <div class="start-panel" style="padding:14px 16px;">
     <div style="display:flex;justify-content:space-between;align-items:center;cursor:pointer;" onclick="toggleByok()">
       <span style="font-size:12px;color:var(--gray2);">⚡ 自带 API Key（实时 AI 剧情）</span>
@@ -640,6 +648,14 @@ body{
     <button class="share-btn" id="share-btn" onclick="onShareCopy()">复制分享链接</button>
     <div class="share-hint">分享可获得 10 积分 · 每局限领一次 · 积分未来可能用于空投</div>
     <div class="share-pts" id="share-pts"></div>
+    <a href="https://x.com/0xTimovo" target="_blank" style="display:flex;align-items:center;gap:8px;text-decoration:none;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);border-radius:8px;padding:10px 12px;margin-top:10px;">
+      <img src="https://unavatar.io/twitter/0xTimovo" style="width:28px;height:28px;border-radius:50%;" onerror="this.style.display='none'">
+      <div style="flex:1;">
+        <div style="font-size:12px;color:#fff;font-weight:500;">@0xTimovo</div>
+        <div style="font-size:10px;color:rgba(255,255,255,0.5);">关注作者 · 这个游戏免费开放给所有人</div>
+      </div>
+      <span style="font-size:11px;color:#1d9bf0;font-weight:500;">Follow ↗</span>
+    </a>
   </div>
   <button class="full-act" id="full-act" onclick="onFullBtn()"></button>
 </div>
@@ -1187,11 +1203,11 @@ function onShareCopy(){
       body:JSON.stringify({ref:inv.code,bscAddr,action:'save_addr'})}).catch(()=>{});
   }
 
-  // 防刷：每局只能领一次积分
-  const shareKey='qdlt_shared_'+(G.char?.id||'x')+'_'+Date.now().toString(36).slice(0,5);
-  const lastShare=localStorage.getItem('qdlt_last_share');
-  if(!lastShare || Date.now()-Number(lastShare)>60000){ // 至少间隔1分钟
-    localStorage.setItem('qdlt_last_share',String(Date.now()));
+  // 防刷：每局游戏只能领一次（用角色+回合+资产生成唯一key）
+  const gameHash = (G.char?.id||'x')+'_'+G.turn+'_'+G.realmIdx+'_'+Math.round(G.peakMoney/1000);
+  const shareKey = 'qdlt_shared_'+gameHash;
+  if(!localStorage.getItem(shareKey)){
+    localStorage.setItem(shareKey,'1');
     addInvitePoints(10);
   }
 
