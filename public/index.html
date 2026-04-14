@@ -2702,10 +2702,8 @@ function fillStoryAmounts(story, fx){
   } else {
     s = s.replace(/\{CHANGE\}|\{AFTER\}/g, total);
   }
-  // 将 AI 自编的 ¥/$ 金额替换为真实总资产
-  s = s.replace(/[¥$￥]\s*[\d,]+\.?\d*\s*[万亿]*/g, total);
-  // 将中文大写金额（十亿、百亿、千万等独立出现的）替换为真实值
-  s = s.replace(/(?<=[突破达到超过有了赚了亏了])[\s]*[零一二三四五六七八九十百千]+[万亿]+/g, total.replace('¥',''));
+  // 不再暴力替换所有金额——AI写的具体金额虽可能不准，但比全替换成总资产更合理
+  // 只清理残留占位符
   // 修复截断的句子
   const trimmed = s.trim();
   if(trimmed.length>10 && !/[。！？…」』)）\.~～]$/.test(trimmed) && !/[了的着过吧呢啊哦呀吗嘛]$/.test(trimmed)) s = trimmed+'。';
