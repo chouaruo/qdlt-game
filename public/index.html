@@ -1717,13 +1717,13 @@ function applyFx(fx, prev, turnOverride) {
   }
 
   // ── 其他属性：比例保护，单次扣减最多扣当前值50% ──
-  if(fx.mind!=null){
+  if(fx.mind!=null&&fx.mind!==0){
     let dm=fx.mind;
     if(dm<0) dm=Math.max(dm, -Math.max(1, Math.floor(G.mind*0.5))); // 最多扣50%，至少扣1
     G.mind=Math.max(0,Math.min(99,G.mind+dm));
     log((dm>=0?'心态+':'心态')+dm,dm>=0?'g':'b');
   }
-  if(fx.know!=null){
+  if(fx.know!=null&&fx.know!==0){
     let dk=fx.know;
     if(dk<0) dk=Math.max(dk, -Math.max(1, Math.floor(G.know*0.5)));
     G.know=Math.max(0,Math.min(99,G.know+dk));
