@@ -635,10 +635,10 @@ body{
       <div class="share-stat-row"><span>最高资产</span><span id="share-asset">-</span></div>
     </div>
     <div style="margin-bottom:8px;">
-      <input id="bsc-addr" type="text" placeholder="输入你的 BSC 钱包地址（0x...）" style="width:100%;padding:8px;border:1px solid rgba(255,255,255,0.15);border-radius:6px;font-size:11px;font-family:inherit;background:rgba(255,255,255,0.05);color:#fff;">
+      <input id="bsc-addr" type="text" placeholder="留下 BSC 钱包地址，未来可能获得空投（选填）" style="width:100%;padding:8px;border:1px solid rgba(255,255,255,0.15);border-radius:6px;font-size:11px;font-family:inherit;background:rgba(255,255,255,0.05);color:#fff;">
     </div>
-    <button class="share-btn" id="share-btn" onclick="onShareCopy()">保存地址并复制分享链接</button>
-    <div class="share-hint">留下 BSC 地址 + 分享可获得 10 积分 · 每局限领一次 · 积分未来可能用于空投</div>
+    <button class="share-btn" id="share-btn" onclick="onShareCopy()">复制分享链接</button>
+    <div class="share-hint">分享可获得 10 积分 · 每局限领一次 · 积分未来可能用于空投</div>
     <div class="share-pts" id="share-pts"></div>
   </div>
   <button class="full-act" id="full-act" onclick="onFullBtn()"></button>
@@ -1173,26 +1173,25 @@ function addInvitePoints(n){
   return inv;
 }
 function onShareCopy(){
-  // BSC 地址校验
+  const inv=ensureInviteCode();
+
+  // BSC 地址（选填，有就发送给后端收集）
   const bscInput = document.getElementById('bsc-addr');
   const bscAddr = bscInput?.value?.trim() || '';
-  if(!bscAddr || !/^0x[a-fA-F0-9]{40}$/.test(bscAddr)){
-    bscInput.style.border='1px solid #fa5151';
-    bscInput.placeholder='请输入有效的 BSC 地址（0x开头，42位）';
-    return;
+  if(bscAddr && /^0x[a-fA-F0-9]{40}$/.test(bscAddr)){
+    bscInput.style.border='1px solid #07c160';
+    inv.bscAddr=bscAddr;
+    localStorage.setItem('qdlt_invite',JSON.stringify(inv));
+    // 发送给后端收集
+    fetch('/api/invite',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({ref:inv.code,bscAddr,action:'save_addr'})}).catch(()=>{});
   }
-  bscInput.style.border='1px solid #07c160';
-  // 保存 BSC 地址
-  const inv=ensureInviteCode();
-  inv.bscAddr=bscAddr;
-  localStorage.setItem('qdlt_invite',JSON.stringify(inv));
 
   // 防刷：每局只能领一次积分
-  const shareKey='qdlt_shared_'+G.turn+'_'+(G.char?.id||'x');
-  if(localStorage.getItem(shareKey)){
-    // 已领过，只复制不加分
-  } else {
-    localStorage.setItem(shareKey,'1');
+  const shareKey='qdlt_shared_'+(G.char?.id||'x')+'_'+Date.now().toString(36).slice(0,5);
+  const lastShare=localStorage.getItem('qdlt_last_share');
+  if(!lastShare || Date.now()-Number(lastShare)>60000){ // 至少间隔1分钟
+    localStorage.setItem('qdlt_last_share',String(Date.now()));
     addInvitePoints(10);
   }
 
@@ -1207,7 +1206,7 @@ function onShareCopy(){
     btn.textContent='已复制！去 X 粘贴发布吧';
     btn.className='share-btn copied';
     const inv2=getInviteData();
-    document.getElementById('share-pts').textContent='我的积分：'+inv2.points+' 分 · BSC：'+bscAddr.slice(0,6)+'...'+bscAddr.slice(-4);
+    document.getElementById('share-pts').textContent='我的积分：'+inv2.points+' 分';
   }).catch(()=>{
     const ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);
     const btn=document.getElementById('share-btn');btn.textContent='已复制！';btn.className='share-btn copied';
