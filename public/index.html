@@ -1757,6 +1757,7 @@ function updateStartOverlay() {
 }
 window.addEventListener('load', ()=>{
   handleRefParam();
+  loadStoryArcs(); // 预加载剧情池（异步，不阻塞）
   loadPersist();
   updateStartOverlay();
   updateSavePill(RUN?.savedAt ? '可续档' : '未存档');
@@ -2147,6 +2148,81 @@ function renderTraitsBar(){
 }
 
 // ════════════════════════════════════════════════════
+// ════════════════════════════════════════════════════
+// 剧情池引擎（免费模式）
+// ════════════════════════════════════════════════════
+let storyArcData = null;
+let usedPoolIds = new Set();
+let prevTags = [];
+let currentStoryData = null; // 当前回合的完整故事数据（含 effects 数组）
+
+async function loadStoryArcs() {
+  try {
+    const res = await fetch('/data/story-arcs.json');
+    if (res.ok) storyArcData = await res.json();
+  } catch(_) { storyArcData = null; }
+}
+
+function turnToPhase(turn) {
+  if (turn <= 5) return 'early';
+  if (turn <= 11) return 'growth';
+  if (turn <= 17) return 'boom';
+  if (turn <= 23) return 'climax';
+  return 'final';
+}
+
+function isPoolMode() {
+  return storyArcData && !getByok()?.key;
+}
+
+function pickStory(charId, turn) {
+  if (!storyArcData) return null;
+  const arc = storyArcData.characters?.[charId];
+  if (!arc) return null;
+
+  // 回合1：opener
+  if (turn === 1 && arc.opener) return arc.opener;
+
+  // 固定关键帧：6/12/18/24/30
+  const fixedKey = String(turn);
+  if (arc.fixedBeats?.[fixedKey]) return arc.fixedBeats[fixedKey];
+
+  // 阶段池
+  const phase = turnToPhase(turn);
+  const pool = arc.phases?.[phase]?.stories || [];
+  const available = pool.filter(s => !usedPoolIds.has(s.id));
+  if (available.length === 0) return pool.length ? pool[Math.floor(Math.random() * pool.length)] : null;
+
+  // tag 相似度排序（轻量连贯性）
+  let picked;
+  if (prevTags.length > 0) {
+    const scored = available.map(s => ({
+      s,
+      score: (s.tags || []).filter(t => prevTags.includes(t)).length
+    }));
+    scored.sort((a, b) => b.score - a.score);
+    const topScore = scored[0].score;
+    const candidates = scored.filter(x => x.score >= topScore - 1);
+    picked = candidates[Math.floor(Math.random() * candidates.length)].s;
+  } else {
+    picked = available[Math.floor(Math.random() * available.length)];
+  }
+
+  usedPoolIds.add(picked.id);
+  prevTags = picked.tags || [];
+  return picked;
+}
+
+// 从 effects 数组中按选项索引取效果
+function getEffectsForChoice(result, choiceIndex) {
+  if (Array.isArray(result.effects) && result.effects[0] && typeof result.effects[0] === 'object' && 'money' in result.effects[0]) {
+    // 数组模式（剧情池）：effects[choiceIndex]
+    return result.effects[choiceIndex] || result.effects[0];
+  }
+  // 单对象模式（AI）：直接返回
+  return result.effects;
+}
+
 // AI 调用
 // ════════════════════════════════════════════════════
 async function callAI(userMsg, histSnap){
@@ -2346,47 +2422,67 @@ function fillStoryAmounts(story){
 async function onChoice(choice){
   if(!G.alive)return;
   setEnabled(false);document.getElementById('choices').innerHTML='';
+
+  // 先应用上一回合选择的效果（剧情池模式：effects按选项索引）
+  if(currentStoryData){
+    const choiceIndex = currentChoices.indexOf(choice);
+    const prev={money:G.money,mind:G.mind,know:G.know,luck:G.luck};
+    const fx = getEffectsForChoice(currentStoryData, choiceIndex >= 0 ? choiceIndex : 0);
+    if(choiceIndex>=0) trackChoicePattern(choice, choiceIndex);
+    applyFx(fx, prev);
+  }
+
   currentChoices = [];
   G.turn++;
   persistRun();
 
-  const cached=cache[choice];
   let result;
-  if(cached&&typeof cached==='object'&&cached.story){
-    // 缓存命中：先更新历史再打字+预生成并行
-    result=cached;
-    G.hist.push({role:'user',content:'我的选择：'+choice});
-    G.hist.push({role:'assistant',content:JSON.stringify(result)});
-    if(G.hist.length>16)G.hist=G.hist.slice(-16);
-    prefetchAll(result.choices,[...G.hist]);
-    await typeText(fillStoryAmounts(result.story));
-  }else{
-    // 缓存未命中：流式输出，边生成边显示
-    document.getElementById('pd-row').style.display='none';
-    document.getElementById('thinking').className='thinking show';
-    G.hist.push({role:'user',content:'我的选择：'+choice});
-    // 先尝试流式，失败则降级到普通调用
-    try{
-      result=await callAIStream('我的选择：'+choice,[...G.hist]);
-    }catch(streamErr){
-      console.warn('流式失败，降级到普通调用:',streamErr);
-      try{
-        result=await callAI('我的选择：'+choice,[...G.hist]);
-      }catch(_){
-        result={story:'网络信号断了，链上演算失败。',choices:['持仓等待','分析链上','联系律师'],effects:{}};
-      }
+
+  if(isPoolMode()){
+    // ═══ 剧情池模式：瞬间响应 ═══
+    result = pickStory(G.char?.id || '散户', G.turn);
+    if(!result) result = {story:'市场陷入沉寂，你在等待下一个信号。',choices:['继续观望','分析数据','休息一下'],
+      effects:[{money:0,mind:5,know:5,luck:0,item:null,lose_item:null,breakthrough:false},{money:0,mind:0,know:10,luck:0,item:null,lose_item:null,breakthrough:false},{money:0,mind:10,know:0,luck:5,item:null,lose_item:null,breakthrough:false}]};
+    // 显示事件badge（固定关键帧）
+    if(result.badge){
+      log('【'+result.title+'】'+(result.badge==='利好'?'':'')+(result.badge==='暴雷'?'':''), result.badge==='暴雷'?'b':'s');
     }
-    document.getElementById('thinking').className='thinking';
-    G.hist.push({role:'assistant',content:JSON.stringify(result)});
-    if(G.hist.length>16)G.hist=G.hist.slice(-16);
-    prefetchAll(result.choices,[...G.hist]);
-    // 确保story显示正确（流式已显示或降级后需要typeText）
-    document.getElementById('story-text').textContent=fillStoryAmounts(result.story||'');
-    currentStory=document.getElementById('story-text').textContent;
+    await typeText(fillStoryAmounts(result.story));
+    currentStoryData = result;
+    document.getElementById('pd-row').style.display='none';
+    renderChoices(result.choices);setEnabled(true);
+  } else {
+    // ═══ BYOK 模式：AI 实时生成 ═══
+    const cached=cache[choice];
+    if(cached&&typeof cached==='object'&&cached.story){
+      result=cached;
+      G.hist.push({role:'user',content:'我的选择：'+choice});
+      G.hist.push({role:'assistant',content:JSON.stringify(result)});
+      if(G.hist.length>16)G.hist=G.hist.slice(-16);
+      prefetchAll(result.choices,[...G.hist]);
+      await typeText(fillStoryAmounts(result.story));
+    }else{
+      document.getElementById('pd-row').style.display='none';
+      document.getElementById('thinking').className='thinking show';
+      G.hist.push({role:'user',content:'我的选择：'+choice});
+      try{
+        result=await callAIStream('我的选择：'+choice,[...G.hist]);
+      }catch(streamErr){
+        try{result=await callAI('我的选择：'+choice,[...G.hist]);}
+        catch(_){result={story:'网络信号断了，链上演算失败。',choices:['持仓等待','分析链上','联系律师'],effects:{}};}
+      }
+      document.getElementById('thinking').className='thinking';
+      G.hist.push({role:'assistant',content:JSON.stringify(result)});
+      if(G.hist.length>16)G.hist=G.hist.slice(-16);
+      prefetchAll(result.choices,[...G.hist]);
+      document.getElementById('story-text').textContent=fillStoryAmounts(result.story||'');
+      currentStory=document.getElementById('story-text').textContent;
+    }
+    currentStoryData = result;
+    // BYOK 模式：效果在下一回合 onChoice 开头应用（和池模式统一）
+    // 但为了兼容，这里也直接 applyFx
+    tryEvent(()=>{renderChoices(result.choices);setEnabled(true);});
   }
-  const prev={money:G.money,mind:G.mind,know:G.know,luck:G.luck};
-  applyFx(result.effects,prev);
-  tryEvent(()=>{renderChoices(result.choices);setEnabled(true);});
 }
 
 // ═══ 开场文案（模块作用域，供预生成使用） ═══
@@ -2428,51 +2524,75 @@ let openingPromise = null; // 投机性预生成
 
 async function initGame(){
   updateStats(null);
-  document.getElementById('thinking').className='thinking show';
-  document.getElementById('start-backend-status').textContent='推演中';
+  usedPoolIds = new Set();
+  prevTags = [];
+  currentStoryData = null;
+  G._everLostMoney = false;
+  G._wasDown90 = false;
+  G._allWen = true;
+  _riskStreak = {xian:0,wen:0,hold:0,sell:0};
 
-  const prompt = buildOpeningPrompt(G.char?.id||'散户', G.money, G.realmIdx, G.traits);
+  if(isPoolMode()){
+    // ═══ 剧情池模式：瞬间开局 ═══
+    document.getElementById('start-backend-status').textContent='就绪';
+    G.turn = 1;
+    let result = pickStory(G.char?.id || '散户', 1);
+    if(!result){
+      // 池里没有opener，用硬编码的charOpeners
+      const charId = G.char?.id||'散户';
+      const openerText = charId==='散户' ? getRetailOpener(G.money) : (CHAR_OPENERS[charId]||'你踏入了币圈的世界。');
+      result = {story: openerText, choices:['开始交易','研究项目','观望等待'],
+        effects:[{money:10,mind:0,know:5,luck:0,item:null,lose_item:null,breakthrough:false},{money:0,mind:5,know:10,luck:0,item:null,lose_item:null,breakthrough:false},{money:0,mind:10,know:5,luck:5,item:null,lose_item:null,breakthrough:false}]};
+    }
+    await typeText(fillStoryAmounts(result.story));
+    currentStoryData = result;
+    updateStats(null);
+    renderChoices(result.choices);
+    setEnabled(true);
+    document.getElementById('start-backend-status').textContent='在线';
+  } else {
+    // ═══ BYOK 模式：AI 生成开局 ═══
+    document.getElementById('thinking').className='thinking show';
+    document.getElementById('start-backend-status').textContent='推演中';
+    const prompt = buildOpeningPrompt(G.char?.id||'散户', G.money, G.realmIdx, G.traits);
 
-  let result;
-  let usedPregen = false;
-  // 优先使用预生成结果
-  if(openingPromise){
-    try{ result = await openingPromise; usedPregen = true; } catch(_){ result = null; }
-    openingPromise = null;
-  }
-  if(!result || !result.story){
-    // 无预生成：先尝试流式，失败降级普通调用
-    try{
-      result=await callAIStream(prompt,[]);
-      usedPregen = false;
-    }catch(streamErr){
-      console.warn('开场流式失败，降级:',streamErr);
+    let result;
+    let usedPregen = false;
+    if(openingPromise){
+      try{ result = await openingPromise; usedPregen = true; } catch(_){ result = null; }
+      openingPromise = null;
+    }
+    if(!result || !result.story){
       try{
-        result=await callAI(prompt,[]);
-        usedPregen = true; // 普通调用拿到完整结果，用typeText显示
-      }catch(e){
-        document.getElementById('api-err').textContent = e.message || '服务端连接失败';
-        document.getElementById('start-backend-status').textContent='推演失败';
-        result={story:'链上连接失败，请检查服务端环境变量后重试。',choices:[],effects:{}};
+        result=await callAIStream(prompt,[]);
         usedPregen = false;
+      }catch(streamErr){
+        try{
+          result=await callAI(prompt,[]);
+          usedPregen = true;
+        }catch(e){
+          document.getElementById('api-err').textContent = e.message || '服务端连接失败';
+          document.getElementById('start-backend-status').textContent='推演失败';
+          result={story:'链上连接失败，请检查服务端环境变量后重试。',choices:[],effects:{}};
+          usedPregen = false;
+        }
       }
     }
+    document.getElementById('thinking').className='thinking';
+    G.hist.push({role:'assistant',content:JSON.stringify(result)});
+    prefetchAll(result.choices,[...G.hist]);
+    if(usedPregen){
+      await typeText(fillStoryAmounts(result.story));
+    } else {
+      document.getElementById('story-text').textContent=fillStoryAmounts(result.story||'');
+      currentStory=document.getElementById('story-text').textContent;
+    }
+    currentStoryData = result;
+    updateStats(null);
+    renderChoices(result.choices);
+    setEnabled(true);
+    document.getElementById('start-backend-status').textContent='在线';
   }
-  document.getElementById('thinking').className='thinking';
-  G.hist.push({role:'assistant',content:JSON.stringify(result)});
-  prefetchAll(result.choices,[...G.hist]);
-  if(usedPregen){
-    // 预生成结果：用打字动画显示
-    await typeText(fillStoryAmounts(result.story));
-  } else {
-    // 流式已显示，替换占位符
-    document.getElementById('story-text').textContent=fillStoryAmounts(result.story||'');
-    currentStory=document.getElementById('story-text').textContent;
-  }
-  updateStats(null);
-  renderChoices(result.choices);
-  setEnabled(true);
-  document.getElementById('start-backend-status').textContent='在线';
 }
 </script>
 </body>
