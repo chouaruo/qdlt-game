@@ -2412,8 +2412,10 @@ async function typeText(text){
 
 // 替换剧情中的金额占位符
 function fillStoryAmounts(story){
-  // 清理残留占位符（AI偶尔还是会用）
-  return story.replace(/\{TOTAL\}|\{CHANGE\}|\{AFTER\}/g, '');
+  let s = story.replace(/\{TOTAL\}|\{CHANGE\}|\{AFTER\}/g, '');
+  // 修复截断的句子：结尾不是中文标点则补省略号
+  if(s.length>10 && !/[。！？…」』)）\.]$/.test(s.trim())) s = s.trim()+'……';
+  return s;
 }
 
 // ════════════════════════════════════════════════════

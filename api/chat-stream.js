@@ -146,7 +146,7 @@ export default async function handler(req) {
     },
     body: JSON.stringify({
       model: MODEL,
-      max_tokens: 500,
+      max_tokens: 800,
       temperature: 0.5,
       stream: true,
       messages,
