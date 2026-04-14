@@ -1278,6 +1278,7 @@ function saveMeta() {
     prevTraits: G.prevTraits,
     prevKey: G.prevKey,
     _runCount: (META?._runCount || 0) + 1,
+    _clearedChars: [...new Set([...(META?._clearedChars||[]), G.char?.id].filter(Boolean))],
   }));
 }
 function loadPersist() {
@@ -1668,7 +1669,7 @@ function setPD(on) {
   else{lbl.textContent='已就绪，点击选择';}
 }
 
-function applyFx(fx, prev) {
+function applyFx(fx, prev, turnOverride) {
   if(!fx)return;
   const raw = G.rawAlloc || {money:0,mind:5,know:5,luck:5};
 
@@ -1676,7 +1677,7 @@ function applyFx(fx, prev) {
   if(fx.money!=null&&fx.money!==0){
     let pct = fx.money;
     // 牛熊周期乘数
-    const cycle = getMarketCycle(G.turn);
+    const cycle = getMarketCycle(turnOverride || G.turn);
     pct = pct >= 0 ? Math.round(pct * cycle.posMulti) : Math.round(pct * cycle.negMulti);
     // 心态惩罚：心态低时亏损放大
     if(pct<0){
@@ -1726,8 +1727,8 @@ function applyFx(fx, prev) {
       log('【脱锚】算法稳定币崩盘，本金-40%','b');
     }
     // Do Kwon：本金增速+30%（盈利时额外加成）
-    if(cid==='DoKwon' && fx.money>0){
-      const bonus=Math.round(G.money*0.3*fx.money/100);
+    if(cid==='DoKwon' && fx.money>0 && prev){
+      const bonus=Math.round(prev.money*0.3*fx.money/100);
       G.money+=bonus;
       if(bonus>0) log('【算法加速】额外+'+fmtAsset(bonus).replace('¥',''),'g');
     }
@@ -1738,21 +1739,27 @@ function applyFx(fx, prev) {
       if(restored>0){G.mind=Math.min(99,G.mind+restored);log('【布道之力】信仰护体，心态恢复+'+restored,'g');}
     }
     // 孙宇晨：盈利事件收益额外+20%
-    if(cid==='孙宇晨' && fx.money>0){
-      const bonus=Math.round(G.money*0.04); // 额外20%的盈利
+    if(cid==='孙宇晨' && fx.money>0 && prev){
+      const bonus=Math.round(prev.money*0.04); // 额外20%的盈利
       G.money+=bonus;
       if(bonus>0) log('【画饼加成】叙事变现+'+fmtAsset(bonus).replace('¥',''),'g');
     }
     // Cathie Wood：连续3回合不亏损，下回合盈利翻倍
     if(cid==='木头姐'){
       if(!G._noLossStreak) G._noLossStreak=0;
-      if(fx.money>=0) G._noLossStreak++;
-      else G._noLossStreak=0;
-      if(G._noLossStreak>=3 && fx.money>0){
+      // 上回合标记了翻倍，本回合盈利翻倍
+      if(G._nextDoubleProfit && fx.money>0){
         const bonus=Math.round(G.money*fx.money/100);
         G.money+=bonus;
+        G._nextDoubleProfit=false;
+        log('【百万预言】预言兑现，本回合盈利翻倍！','g');
+      }
+      if(fx.money>=0) G._noLossStreak++;
+      else {G._noLossStreak=0;G._nextDoubleProfit=false;}
+      if(G._noLossStreak>=3){
+        G._nextDoubleProfit=true; // 下一回合盈利翻倍
         G._noLossStreak=0;
-        log('【百万预言】连续稳健，本回合盈利翻倍！','g');
+        log('【百万预言】连续3回合未亏损，下一回合盈利将翻倍！','s');
       }
     }
     // Arthur Hayes：本金跌超30%时减半亏损（每局限1次）
@@ -1762,8 +1769,8 @@ function applyFx(fx, prev) {
       log('【永续信念】极端波动触发止损，挽回'+fmtAsset(restore).replace('¥',''),'g');
     }
     // Saylor：盈利回合本金额外+10%
-    if(cid==='Saylor' && fx.money>0){
-      const bonus=Math.round(G.money*0.1);
+    if(cid==='Saylor' && fx.money>0 && prev){
+      const bonus=Math.round(prev.money*0.1);
       G.money+=bonus;
       if(bonus>0) log('【圣约加持】永不卖出，额外+'+fmtAsset(bonus).replace('¥',''),'g');
     }
@@ -1847,6 +1854,9 @@ function checkEnding(){
   const meta=readStore(STORAGE.meta);
   const runs=(meta?._runCount||0)+1;
   if(runs>=3) unlockAchievement('reborn');
+  // 全角色通关
+  const clearedChars = [...new Set([...(meta?._clearedChars||[]), G.char?.id].filter(Boolean))];
+  if(clearedChars.length>=16) unlockAchievement('allchar');
   const bestR = G.bestRunRealm || G.realmIdx;
 
   // ── 彩蛋结局检查（优先级高于普通结局）──
@@ -2349,16 +2359,14 @@ function isPoolMode() {
 function pickStory(charId, turn) {
   if (!storyArcData) return null;
   const arc = storyArcData.characters?.[charId];
-  if (!arc) return null;
+  if (!arc) {
+    // 角色不在剧情池中，尝试通用散户池
+    const fallbackArc = storyArcData.characters?.['散户'];
+    if (!fallbackArc) return null;
+    return pickStory('散户', turn);
+  }
 
-  // 回合1：opener
-  if (turn === 1 && arc.opener) return arc.opener;
-
-  // 固定关键帧：6/12/18/24/30
-  const fixedKey = String(turn);
-  if (arc.fixedBeats?.[fixedKey]) return arc.fixedBeats[fixedKey];
-
-  // 阶段池
+  // 阶段池（opener 和 fixedBeats 由 CHAR_OPENERS 和 CHAR_EVENTS 处理）
   const phase = turnToPhase(turn);
   const pool = arc.phases?.[phase]?.stories || [];
   const available = pool.filter(s => !usedPoolIds.has(s.id));
@@ -2493,7 +2501,7 @@ function prefetchAll(choices, histSnap){
   if(!choices?.length || isPoolMode()) return; // 剧情池模式不预生成
   cache={};
   // 只预生成第一个选项（减少 API 调用，避免撞频率限制）
-  const first = choices[0];
+  const first = choices[1] || choices[0]; // 预生成"稳"选项（index 1），多数玩家倾向选稳
   pdCount=1;setPD(true);
   (async()=>{
     try{cache[first]=await callAI('我的选择：'+first,histSnap);}
@@ -2612,19 +2620,20 @@ async function onChoice(choice){
   const choiceIndex = currentChoices.indexOf(choice);
   if(choiceIndex>=0) trackChoicePattern(choice, choiceIndex);
 
-  // 检查上一回合的效果是否导致死亡或结算
-  // （延迟检查，让玩家先看完剧情再弹结算）
-  if(G.money<=0&&G.turn>1){G.alive=false;showFull('本金归零，破产清算','所有持仓已被强制平仓\n「这次真的学到了」','red','重新入场');return;}
-  if(G.mind<=0){G.alive=false;showFull('心态崩了，恐慌踩踏','在最低点全仓割肉离场\n「我再也不碰这个了」','red','重新入场');return;}
-  if(G.know<=0){G.alive=false;showFull('认知归零，永远被割','被同一个骗局骗了第三次\n「他们太坏了」','red','重新入场');return;}
-
-  // 第30回合的选择后触发结算
+  // 第30回合优先触发正常结算（不因属性归零变成死亡结局）
   if(G.turn >= MAX_TURNS){
     checkEnding();
     return;
   }
 
+  // 检查上一回合的效果是否导致死亡
+  // （延迟检查，让玩家先看完剧情再弹结算）
+  if(G.money<=0&&G.turn>1){G.alive=false;showFull('本金归零，破产清算','所有持仓已被强制平仓\n「这次真的学到了」','red','重新入场');return;}
+  if(G.mind<=0){G.alive=false;showFull('心态崩了，恐慌踩踏','在最低点全仓割肉离场\n「我再也不碰这个了」','red','重新入场');return;}
+  if(G.know<=0){G.alive=false;showFull('认知归零，永远被割','被同一个骗局骗了第三次\n「他们太坏了」','red','重新入场');return;}
+
   currentChoices = [];
+  const effectTurn = G.turn; // 记录效果产生时的回合（用于市场周期）
   G.turn++;
   persistRun();
 
@@ -2632,11 +2641,11 @@ async function onChoice(choice){
 
   if(isPoolMode()){
     // ═══ 剧情池模式 ═══
-    // 先应用上一回合选择的效果
+    // 先应用上一回合选择的效果（用 effectTurn 的市场周期）
     if(currentStoryData){
       const prev={money:G.money,mind:G.mind,know:G.know,luck:G.luck};
       const fx = getEffectsForChoice(currentStoryData, choiceIndex >= 0 ? choiceIndex : 0);
-      applyFx(fx, prev);
+      applyFx(fx, prev, effectTurn);
     }
     // 取下一段剧情
     result = pickStory(G.char?.id || '散户', G.turn);
