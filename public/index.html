@@ -607,6 +607,7 @@ body{
   <div class="start-panel">
     <div class="start-row"><span class="start-k">历史最高</span><span class="start-v gold" id="start-best-realm">凡人</span></div>
     <div class="start-row"><span class="start-k">当前局面</span><span class="start-v" id="start-run-status">无进行中的游戏</span></div>
+    <div class="start-row"><span class="start-k">游戏模式</span><span class="start-v" id="start-mode" style="color:var(--jade)">剧情池（免费）</span></div>
     <div class="start-row"><span class="start-k">服务端</span><span class="start-v" id="start-backend-status">等待开局</span></div>
   </div>
   <div class="start-actions">
@@ -650,6 +651,7 @@ body{
       <input id="byok-base" type="text" placeholder="API Base URL（可选）" style="width:100%;padding:10px;border:1px solid #e8e8e8;border-radius:6px;font-size:16px;margin-bottom:6px;font-family:inherit;display:none;">
       <button class="ghost-btn" style="width:100%;font-size:12px;padding:8px;" onclick="saveByok()">保存设置</button>
       <div id="byok-status" style="font-size:11px;color:var(--jade);margin-top:4px;text-align:center;"></div>
+      <button class="ghost-btn" id="byok-clear-btn" style="width:100%;font-size:11px;padding:6px;margin-top:6px;color:#fa5151;display:none;" onclick="clearByok();document.getElementById('byok-status').textContent='已清除，将使用免费剧情池模式';document.getElementById('byok-clear-btn').style.display='none';document.getElementById('byok-key').value='';">清除 API Key（切换到免费剧情池模式）</button>
     </div>
   </div>
 </div>
@@ -1423,7 +1425,8 @@ document.addEventListener('DOMContentLoaded',()=>{
   // 恢复已保存的设置
   const saved=getByok();
   if(saved){
-    document.getElementById('byok-status').textContent='✓ 已配置实时 AI 模式';
+    document.getElementById('byok-status').textContent='✓ 已配置实时 AI 模式（有延迟）';
+    document.getElementById('byok-clear-btn').style.display='block';
   }
 });
 
@@ -1980,6 +1983,17 @@ function updateStartOverlay() {
     ? '已保存到 ' + new Date(RUN.savedAt).toLocaleString('zh-CN', { month:'2-digit', day:'2-digit', hour:'2-digit', minute:'2-digit' })
     : '无进行中的游戏';
   document.getElementById('start-backend-status').textContent = '等待开局';
+  // 显示当前游戏模式
+  const modeEl=document.getElementById('start-mode');
+  if(modeEl){
+    if(getByok()?.key){
+      modeEl.textContent='实时 AI（BYOK）';
+      modeEl.style.color='var(--gold2)';
+    } else {
+      modeEl.textContent='剧情池（免费·零延迟）';
+      modeEl.style.color='var(--jade)';
+    }
+  }
   // 渲染成就墙
   renderAchievementWall();
 }
