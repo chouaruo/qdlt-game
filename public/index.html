@@ -1277,6 +1277,7 @@ function saveMeta() {
     prevChar: G.prevChar,
     prevTraits: G.prevTraits,
     prevKey: G.prevKey,
+    _runCount: (META?._runCount || 0) + 1,
   }));
 }
 function loadPersist() {
@@ -1469,11 +1470,10 @@ function trackChoicePattern(choice,choiceIndex){
   if(_riskStreak.sell>=3) unlockAchievement('paper');
   if(_riskStreak.hold>=10) unlockAchievement('diamond');
   // 全稳追踪
-  if(!G._allWen) G._allWen=true;
+  // _allWen 在 initGame 初始化为 true，一旦选非稳就永远 false
   if(risk!=='wen') G._allWen=false;
   // 抄底大师追踪
-  if(!G._wasDown50) G._wasDown50=false;
-  if(G.money < G._startMoney*0.5) G._wasDown50=true;
+  // 抄底大师：_wasDown50 在 applyFx 中追踪
   if(G._wasDown50 && G.realmIdx > G._startRealm) unlockAchievement('dip');
 }
 
@@ -1687,6 +1687,7 @@ function applyFx(fx, prev) {
     G.money = Math.max(0, G.money + delta);
     if(G.money>G.peakMoney) G.peakMoney=G.money;
     if(delta<0) G._everLostMoney=true;
+    if(G.money < G._startMoney*0.5) G._wasDown50=true;
     if(G.money < G._startMoney*0.1) G._wasDown90=true;
     const sign = delta>=0 ? '+' : '';
     log('本金'+sign+fmtAsset(Math.abs(delta)).replace('¥','')+'（'+sign+Math.round(pct)+'%）', delta>=0?'g':'b');
@@ -1732,7 +1733,8 @@ function applyFx(fx, prev) {
     }
     // 宝二爷：亏损时心态扣减减半（在applyFx的mind处理之后修正）
     if(cid==='宝二爷' && fx.mind<0 && prev){
-      const restored=Math.floor(Math.abs(fx.mind)/2);
+      const actualLoss=prev.mind-G.mind; // 用实际扣减值而非原始值
+      const restored=Math.floor(actualLoss/2);
       if(restored>0){G.mind=Math.min(99,G.mind+restored);log('【布道之力】信仰护体，心态恢复+'+restored,'g');}
     }
     // 孙宇晨：盈利事件收益额外+20%
@@ -1825,7 +1827,7 @@ function checkHiddenEnding(bestR){
   // 永恒牛市：30回合资产从未下跌
   if(!G._everLostMoney) return {title:'永恒牛市',sub:'30回合，资产从未下跌过一次\n「这是真的吗？你揉了揉眼睛」\n你创造了一个从未发生过的奇迹。'};
   // 浴火重生：跌到10%以下又翻回金级
-  if(G._wasDown50 && G._wasDown90 && G.money >= G._startMoney*0.1 && bestR >= 7)
+  if(G._wasDown90 && G.money >= G._startMoney && bestR >= 7)
     return {title:'浴火重生',sub:'从濒临归零到财务自由\n「跌到谷底的那天，你没有放弃」\n真正的传奇，是从废墟中站起来的人。'};
   // 全属性99
   if(G.mind>=99 && G.know>=99 && G.luck>=99) return {title:'全属性满值',sub:'心态、认知、气运全部达到极限\n「你已经超越了这个游戏的设计」\n恭喜，你是完美的币圈玩家。'};
@@ -2612,7 +2614,7 @@ async function onChoice(choice){
 
   // 检查上一回合的效果是否导致死亡或结算
   // （延迟检查，让玩家先看完剧情再弹结算）
-  if(G.money<=0&&G.realmIdx>0){G.alive=false;showFull('本金归零，破产清算','所有持仓已被强制平仓\n「这次真的学到了」','red','重新入场');return;}
+  if(G.money<=0&&G.turn>1){G.alive=false;showFull('本金归零，破产清算','所有持仓已被强制平仓\n「这次真的学到了」','red','重新入场');return;}
   if(G.mind<=0){G.alive=false;showFull('心态崩了，恐慌踩踏','在最低点全仓割肉离场\n「我再也不碰这个了」','red','重新入场');return;}
   if(G.know<=0){G.alive=false;showFull('认知归零，永远被割','被同一个骗局骗了第三次\n「他们太坏了」','red','重新入场');return;}
 
