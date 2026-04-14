@@ -1608,7 +1608,7 @@ function applyFx(fx, prev) {
   updateStats(prev);
   checkRealm();
   checkDeath();
-  checkEnding();
+  // checkEnding 不在 applyFx 里调用，改为在 onChoice 里处理
   checkAchievements();
   persistRun();
 }
@@ -2413,7 +2413,9 @@ async function typeText(text){
 // 替换剧情中的金额占位符
 function fillStoryAmounts(story){
   let s = story.replace(/\{TOTAL\}|\{CHANGE\}|\{AFTER\}/g, '');
-  // 修复截断的句子：结尾不是中文标点则补省略号
+  // 清理 AI 自编的具体金额（"十亿""百万""一千万"等中文数字+单位）
+  s = s.replace(/[零一二三四五六七八九十百千万亿]+[万亿元块]+/g, '一大笔钱');
+  // 修复截断的句子
   if(s.length>10 && !/[。！？…」』)）\.]$/.test(s.trim())) s = s.trim()+'……';
   return s;
 }
@@ -2426,6 +2428,19 @@ async function onChoice(choice){
   setEnabled(false);document.getElementById('choices').innerHTML='';
   const choiceIndex = currentChoices.indexOf(choice);
   if(choiceIndex>=0) trackChoicePattern(choice, choiceIndex);
+
+  // 第30回合的选择后触发结算（玩家已看完最后一段故事）
+  if(G.turn >= MAX_TURNS){
+    // 先应用最后一次选择的效果
+    if(currentStoryData){
+      const prev={money:G.money,mind:G.mind,know:G.know,luck:G.luck};
+      const fx = getEffectsForChoice(currentStoryData, choiceIndex >= 0 ? choiceIndex : 0);
+      applyFx(fx, prev);
+    }
+    checkEnding();
+    return;
+  }
+
   currentChoices = [];
   G.turn++;
   persistRun();
