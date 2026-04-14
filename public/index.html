@@ -25,6 +25,7 @@
   --orange-card-bg:#fff7ed;--orange-card-bd:#d4881a;--orange-card-tx:#7c3a06;
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+button,a,.char-card,.tcard,.ev-ch{touch-action:manipulation;}
 html{font-size:16px;}
 body{
   background:#f7f7f8;min-height:100vh;min-height:100dvh;
@@ -172,7 +173,7 @@ body{
   border:none;background:#f7f7f8;
   color:#d4881a;font-size:20px;cursor:pointer;box-shadow:0 1px 2px rgba(0,0,0,0.04);
   display:flex;align-items:center;justify-content:center;
-  transition:all .15s;user-select:none;line-height:1;
+  transition:all .15s;user-select:none;line-height:1;touch-action:manipulation;
 }
 .abt:hover:not(:disabled){background:#fff8f0;border-color:#d4881a;}
 .abt:active:not(:disabled){transform:scale(0.93);}
