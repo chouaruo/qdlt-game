@@ -1630,8 +1630,8 @@ function applyFx(fx, prev) {
   if(G.money>G.peakMoney) G.peakMoney=G.money;
   updateStats(prev);
   checkRealm();
-  checkDeath();
-  // checkEnding 不在 applyFx 里调用，改为在 onChoice 里处理
+  // 死亡/结算延迟到下一次 onChoice，让玩家先看完当前剧情
+  checkDeathWarnings();
   checkAchievements();
   persistRun();
 }
@@ -1654,13 +1654,9 @@ function checkRealm() {
   updateStats(null);
 }
 
-function checkDeath() {
+// 濒死预警（死亡判定已移至 onChoice 开头延迟检查）
+function checkDeathWarnings() {
   if(!G.alive)return;
-  if(G.money<=0&&G.realmIdx>0){G.alive=false;showFull('本金归零，破产清算','所有持仓已被强制平仓\n「这次真的学到了」','red','重新入场');return;}
-  // 濒死预警：属性≤10时警告，≤0才真死
-  if(G.mind<=0){G.alive=false;showFull('心态崩了，恐慌踩踏','在最低点全仓割肉离场\n「我再也不碰这个了」','red','重新入场');return;}
-  if(G.know<=0){G.alive=false;showFull('认知归零，永远被割','被同一个骗局骗了第三次\n「他们太坏了」','red','重新入场');return;}
-  // 濒死预警提示
   if(G.mind>0&&G.mind<=10) log('⚠ 心态濒危！再扛不住就要割肉离场了','b');
   if(G.know>0&&G.know<=10) log('⚠ 认知告急！快要分不清真假项目了','b');
 }
@@ -2455,14 +2451,14 @@ async function onChoice(choice){
   const choiceIndex = currentChoices.indexOf(choice);
   if(choiceIndex>=0) trackChoicePattern(choice, choiceIndex);
 
-  // 第30回合的选择后触发结算（玩家已看完最后一段故事）
+  // 检查上一回合的效果是否导致死亡或结算
+  // （延迟检查，让玩家先看完剧情再弹结算）
+  if(G.money<=0&&G.realmIdx>0){G.alive=false;showFull('本金归零，破产清算','所有持仓已被强制平仓\n「这次真的学到了」','red','重新入场');return;}
+  if(G.mind<=0){G.alive=false;showFull('心态崩了，恐慌踩踏','在最低点全仓割肉离场\n「我再也不碰这个了」','red','重新入场');return;}
+  if(G.know<=0){G.alive=false;showFull('认知归零，永远被割','被同一个骗局骗了第三次\n「他们太坏了」','red','重新入场');return;}
+
+  // 第30回合的选择后触发结算
   if(G.turn >= MAX_TURNS){
-    // 先应用最后一次选择的效果
-    if(currentStoryData){
-      const prev={money:G.money,mind:G.mind,know:G.know,luck:G.luck};
-      const fx = getEffectsForChoice(currentStoryData, choiceIndex >= 0 ? choiceIndex : 0);
-      applyFx(fx, prev);
-    }
     checkEnding();
     return;
   }
