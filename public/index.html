@@ -2526,67 +2526,7 @@ async function callAI(userMsg, histSnap){
   return result;
 }
 
-// 流式 AI 调用：边生成边显示 story
-async function callAIStream(userMsg, histSnap){
-  const el=document.getElementById('story-text');
-  const cur=document.getElementById('cursor');
-  el.textContent='';cur.style.display='inline-block';
 
-  const res=await fetch('/api/chat-stream',{
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({
-      userMsg, histSnap,
-      state:{realmIdx:G.realmIdx,money:G.money,mind:G.mind,know:G.know,luck:G.luck,turn:G.turn,inv:G.inv,char:G.char,traits:G.traits,rawAlloc:G.rawAlloc}
-    })
-  });
-  if(!res.ok) throw new Error('Stream error '+res.status);
-
-  const reader=res.body.getReader();
-  const decoder=new TextDecoder();
-  let buf='',storyShown='',finalResult=null;
-  // 显示队列：逐字追加，带节奏
-  let queue=[],draining=false;
-  async function drain(){
-    if(draining)return;draining=true;
-    while(queue.length){el.textContent+=queue.shift();if(el.textContent.length%4===0)await new Promise(r=>setTimeout(r,15));}
-    draining=false;
-  }
-
-  while(true){
-    const{done,value}=await reader.read();
-    if(done)break;
-    buf+=decoder.decode(value,{stream:true});
-    const lines=buf.split('\n');buf=lines.pop();
-    for(const line of lines){
-      if(!line.startsWith('data: '))continue;
-      let evt;try{evt=JSON.parse(line.slice(6));}catch(_){continue;}
-      if(evt.type==='delta'){
-        // 从累积 JSON 中提取 story 内容
-        storyShown+=evt.text;
-        const m=storyShown.match(/^\{"story":"((?:[^"\\]|\\.)*)"/);
-        if(m){
-          const decoded=m[1].replace(/\\n/g,'\n').replace(/\\"/g,'"').replace(/\\\\/g,'\\');
-          const newChars=decoded.slice(el.textContent.length);
-          if(newChars){queue.push(...newChars);drain();}
-        }
-      }
-      if(evt.type==='done'){
-        finalResult=evt.result;
-        if(evt.usage)updateTok(evt.usage.input_tokens||0,evt.usage.output_tokens||0);
-      }
-    }
-  }
-  // 等待显示队列排空
-  while(queue.length||draining)await new Promise(r=>setTimeout(r,20));
-  cur.style.display='none';
-  if(finalResult){
-    currentStory=finalResult.story||storyShown;
-    if(!finalResult.story)finalResult.story='天道蒙尘，市场休眠。';
-    if(!Array.isArray(finalResult.choices)||finalResult.choices.length<2)finalResult.choices=['持仓等待','分析链上','联系律师'];
-  }
-  return finalResult;
-}
 
 function prefetchAll(choices, histSnap){
   if(!choices?.length || isPoolMode()) return; // 剧情池模式不预生成
@@ -2719,8 +2659,14 @@ async function onChoice(choice){
   const choiceIndex = currentChoices.indexOf(choice);
   if(choiceIndex>=0) trackChoicePattern(choice, choiceIndex);
 
-  // 第30回合优先触发正常结算（不因属性归零变成死亡结局）
+  // 第30回合优先触发正常结算
   if(G.turn >= MAX_TURNS){
+    // 应用最后一次选择的效果
+    if(currentStoryData && isPoolMode()){
+      const prev={money:G.money,mind:G.mind,know:G.know,luck:G.luck};
+      const fx=getEffectsForChoice(currentStoryData, choiceIndex>=0?choiceIndex:0);
+      applyFx(fx,prev);
+    }
     checkEnding();
     return;
   }
@@ -2771,10 +2717,9 @@ async function onChoice(choice){
       document.getElementById('thinking').className='thinking show';
       G.hist.push({role:'user',content:'我的选择：'+choice});
       try{
-        result=await callAIStream('我的选择：'+choice,[...G.hist]);
-      }catch(streamErr){
-        try{result=await callAI('我的选择：'+choice,[...G.hist]);}
-        catch(_){result={story:'网络信号断了，链上演算失败。',choices:['持仓等待','分析链上','联系律师'],effects:{}};}
+        result=await callAI('我的选择：'+choice,[...G.hist]);
+      }catch(_){
+        result={story:'网络信号断了，链上演算失败。',choices:['持仓等待','分析链上','联系律师'],effects:{}};
       }
       document.getElementById('thinking').className='thinking';
       G.hist.push({role:'assistant',content:JSON.stringify(result)});
@@ -2875,13 +2820,9 @@ async function initGame(){
     }
     if(!result || !result.story){
       try{
-        result=await callAIStream(prompt,[]);
-        usedPregen = false;
-      }catch(streamErr){
-        try{
-          result=await callAI(prompt,[]);
-          usedPregen = true;
-        }catch(e){
+        result=await callAI(prompt,[]);
+        usedPregen = true;
+      }catch(e){
           // BYOK 失败，自动切回剧情池模式
           console.warn('BYOK失败，切回剧情池:', e.message);
           clearByok();
@@ -2904,7 +2845,6 @@ async function initGame(){
           result={story:'连接失败，请刷新重试。',choices:[],effects:{}};
           usedPregen = false;
         }
-      }
     }
     document.getElementById('thinking').className='thinking';
     G.hist.push({role:'assistant',content:JSON.stringify(result)});

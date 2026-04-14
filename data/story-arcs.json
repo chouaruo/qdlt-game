@@ -1727,6 +1727,430 @@
               ]
             }
           ]
+        },
+        "final": {
+          "stories": [
+            {
+              "id": "散户_final_00",
+              "tags": [
+                "交易",
+                "熊市"
+              ],
+              "story": "经历了这么多轮牛熊，你终于明白了一个道理：活着比赚钱重要。你开始把大部分仓位转成稳定币，只留一小部分继续交易。",
+              "choices": [
+                "全部转稳定币",
+                "保留核心持仓",
+                "最后搏一把"
+              ],
+              "effects": [
+                {
+                  "money": -10,
+                  "mind": 15,
+                  "know": 10,
+                  "luck": 0,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 5,
+                  "mind": 10,
+                  "know": 5,
+                  "luck": 0,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 30,
+                  "mind": -10,
+                  "know": 0,
+                  "luck": 5,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                }
+              ]
+            },
+            {
+              "id": "散户_final_01",
+              "tags": [
+                "社交",
+                "投资"
+              ],
+              "story": "有人在群里问你：新手该怎么入圈？你想了想，打了一段很长的文字。写完之后删掉了，只回了四个字：别来。",
+              "choices": [
+                "发出去警告他",
+                "还是帮帮新人",
+                "沉默退群"
+              ],
+              "effects": [
+                {
+                  "money": 0,
+                  "mind": 10,
+                  "know": 10,
+                  "luck": 0,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 0,
+                  "mind": 5,
+                  "know": 15,
+                  "luck": 5,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 0,
+                  "mind": 15,
+                  "know": 0,
+                  "luck": 0,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                }
+              ]
+            },
+            {
+              "id": "散户_final_02",
+              "tags": [
+                "交易",
+                "牛市"
+              ],
+              "story": "最后一波行情来了。你的老朋友们都在喊\"这次真的不一样\"，你听了无数遍这句话。但你的仓位已经很轻了，你只是在旁边看着。",
+              "choices": [
+                "忍不住加仓",
+                "继续观望",
+                "开始逐步套现"
+              ],
+              "effects": [
+                {
+                  "money": 40,
+                  "mind": -15,
+                  "know": 0,
+                  "luck": 5,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 0,
+                  "mind": 10,
+                  "know": 10,
+                  "luck": 0,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": -15,
+                  "mind": 15,
+                  "know": 5,
+                  "luck": 0,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                }
+              ]
+            },
+            {
+              "id": "散户_final_03",
+              "tags": [
+                "社交",
+                "熊市"
+              ],
+              "story": "你翻了翻当初入圈时记的笔记。上面写着\"BTC会涨到一百万\"。你笑了笑，把笔记本合上了。窗外的夕阳很好看。",
+              "choices": [
+                "继续坚持信仰",
+                "理性重新评估",
+                "把笔记烧了"
+              ],
+              "effects": [
+                {
+                  "money": 0,
+                  "mind": 10,
+                  "know": 5,
+                  "luck": 5,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 0,
+                  "mind": 5,
+                  "know": 15,
+                  "luck": 0,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 0,
+                  "mind": 15,
+                  "know": 0,
+                  "luck": 0,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                }
+              ]
+            },
+            {
+              "id": "散户_final_04",
+              "tags": [
+                "投资",
+                "震荡"
+              ],
+              "story": "你算了一笔账：这些年在币圈花的时间，如果拿去做别的事，能赚多少？答案让你沉默了很久。但你不后悔。",
+              "choices": [
+                "下定决心退出",
+                "给自己放个假",
+                "制定新的计划"
+              ],
+              "effects": [
+                {
+                  "money": -5,
+                  "mind": 15,
+                  "know": 10,
+                  "luck": 0,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 0,
+                  "mind": 15,
+                  "know": 0,
+                  "luck": 5,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 10,
+                  "mind": 5,
+                  "know": 10,
+                  "luck": 0,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                }
+              ]
+            },
+            {
+              "id": "散户_final_05",
+              "tags": [
+                "交易",
+                "牛市"
+              ],
+              "story": "交易所发来了年度总结：今年你一共进行了三千多次交易，胜率百分之四十七。你盯着这个数字看了很久。",
+              "choices": [
+                "减少交易频率",
+                "继续高频操作",
+                "转向长期持有"
+              ],
+              "effects": [
+                {
+                  "money": 0,
+                  "mind": 5,
+                  "know": 15,
+                  "luck": 0,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 20,
+                  "mind": -10,
+                  "know": 0,
+                  "luck": 5,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 10,
+                  "mind": 10,
+                  "know": 5,
+                  "luck": 0,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                }
+              ]
+            },
+            {
+              "id": "散户_final_06",
+              "tags": [
+                "社交",
+                "KOL"
+              ],
+              "story": "你发现自己不知不觉已经成了群里的\"老人\"。新来的人叫你\"大佬\"，但你知道自己不过是个幸存者。",
+              "choices": [
+                "低调分享经验",
+                "摆摆手不说了",
+                "写一篇总结"
+              ],
+              "effects": [
+                {
+                  "money": 0,
+                  "mind": 10,
+                  "know": 5,
+                  "luck": 10,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 0,
+                  "mind": 15,
+                  "know": 0,
+                  "luck": 0,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 5,
+                  "mind": 5,
+                  "know": 15,
+                  "luck": 0,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                }
+              ]
+            },
+            {
+              "id": "散户_final_07",
+              "tags": [
+                "交易",
+                "震荡"
+              ],
+              "story": "又一个深夜，你盯着K线图。突然想起第一次开交易所账户时的兴奋感。那种感觉已经很久没有了。取而代之的是一种平静。",
+              "choices": [
+                "关掉电脑休息",
+                "最后看一眼盘",
+                "给自己倒杯酒"
+              ],
+              "effects": [
+                {
+                  "money": 0,
+                  "mind": 15,
+                  "know": 0,
+                  "luck": 0,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 5,
+                  "mind": 5,
+                  "know": 5,
+                  "luck": 0,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 0,
+                  "mind": 10,
+                  "know": 0,
+                  "luck": 5,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                }
+              ]
+            },
+            {
+              "id": "散户_final_08",
+              "tags": [
+                "投资",
+                "机构"
+              ],
+              "story": "你把一部分利润取出来，在现实世界里做了第一笔投资——帮表弟开了个奶茶店。他不懂为什么你笑得那么开心。",
+              "choices": [
+                "多投一点现实",
+                "保留币圈仓位",
+                "两边都投"
+              ],
+              "effects": [
+                {
+                  "money": -20,
+                  "mind": 15,
+                  "know": 5,
+                  "luck": 0,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 10,
+                  "mind": 5,
+                  "know": 0,
+                  "luck": 5,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": -5,
+                  "mind": 10,
+                  "know": 5,
+                  "luck": 5,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                }
+              ]
+            },
+            {
+              "id": "散户_final_09",
+              "tags": [
+                "交易",
+                "牛市"
+              ],
+              "story": "最后一天了。你看着账户余额，不管是赚是赔，这段旅程教会了你很多。你深吸一口气，准备做最后一个决定。",
+              "choices": [
+                "全部套现离场",
+                "继续持有到底",
+                "留一半带走"
+              ],
+              "effects": [
+                {
+                  "money": -10,
+                  "mind": 15,
+                  "know": 10,
+                  "luck": 0,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 20,
+                  "mind": 5,
+                  "know": 0,
+                  "luck": 5,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 5,
+                  "mind": 10,
+                  "know": 5,
+                  "luck": 5,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                }
+              ]
+            }
+          ]
         }
       }
     },
