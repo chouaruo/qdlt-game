@@ -46,7 +46,7 @@ body{
 .ov-scroll{overflow-y:auto;-webkit-overflow-scrolling:touch;align-items:flex-start;padding:1.5rem 1rem;}
 
 /* ═══ START OVERLAY ═══ */
-#ov-api{flex-direction:column;gap:1.4rem;}
+#ov-api{flex-direction:column;gap:1.4rem;align-items:center;padding:2rem 1rem calc(env(safe-area-inset-bottom,0px) + 2rem);}
 .api-logo{
   font-family:'Noto Serif SC',serif;
   font-size:clamp(2.2rem,8vw,3.5rem);
@@ -578,7 +578,7 @@ body{
 <div class="bg-fx"></div>
 
 <!-- ═══ START ═══ -->
-<div class="ov ov-bg" id="ov-api">
+<div class="ov ov-bg ov-scroll" id="ov-api">
   <div class="api-logo">币圈模拟器</div>
   <div class="api-tagline">
     一款 AI 驱动的币圈文字冒险游戏
