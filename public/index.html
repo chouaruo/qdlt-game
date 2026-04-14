@@ -2234,10 +2234,12 @@ function onAllocConfirm(){
     G.luck=Math.min(99,G.luck+(G.char.baseStats.luck||0));
   }
   document.getElementById('ov-alloc').className='ov ov-bg hidden';
-  // 投机性预生成：用户选词条期间后台开始生成开场（不含词条信息，{TOTAL}占位符前端替换）
-  const charId = G.char?.id||'散户';
-  const speculativePrompt = buildOpeningPrompt(charId, G.money, 0, []);
-  openingPromise = callAI(speculativePrompt, []).catch(()=>null);
+  // 投机性预生成：仅 BYOK 模式下预生成开场（池模式不需要）
+  if(getByok()?.key){
+    const charId = G.char?.id||'散户';
+    const speculativePrompt = buildOpeningPrompt(charId, G.money, 0, []);
+    openingPromise = callAI(speculativePrompt, []).catch(()=>null);
+  }
   showTraitSelect();
 }
 
@@ -2830,6 +2832,10 @@ function buildOpeningPrompt(charId, money, realmIdx, traits){
 let openingPromise = null; // 投机性预生成
 
 async function initGame(){
+  // 确保剧情池已加载
+  if(!storyArcData && !getByok()?.key){
+    await loadStoryArcs();
+  }
   updateStats(null);
   usedPoolIds = new Set();
   prevTags = [];
