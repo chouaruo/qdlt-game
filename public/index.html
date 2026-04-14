@@ -2752,7 +2752,6 @@ async function onChoice(choice){
       G.hist.push({role:'assistant',content:JSON.stringify(result)});
       if(G.hist.length>16)G.hist=G.hist.slice(-16);
       prefetchAll(result.choices,[...G.hist]);
-      await typeText(fillStoryAmounts(result.story));
     }else{
       document.getElementById('pd-row').style.display='none';
       document.getElementById('thinking').className='thinking show';
@@ -2767,13 +2766,14 @@ async function onChoice(choice){
       G.hist.push({role:'assistant',content:JSON.stringify(result)});
       if(G.hist.length>16)G.hist=G.hist.slice(-16);
       prefetchAll(result.choices,[...G.hist]);
-      document.getElementById('story-text').textContent=fillStoryAmounts(result.story||'');
-      currentStory=document.getElementById('story-text').textContent;
     }
     currentStoryData = result;
-    // AI 模式：AI 返回的 effects 直接应用（单对象）
+    // AI 模式：先应用 effects，再显示 story（确保金额用最新 G.money）
     const prev={money:G.money,mind:G.mind,know:G.know,luck:G.luck};
     applyFx(result.effects, prev);
+    // 效果应用后再显示 story，金额替换用的是最新的 G.money
+    await typeText(fillStoryAmounts(result.story||''));
+    currentStory=document.getElementById('story-text').textContent;
     tryEvent(()=>{renderChoices(result.choices);setEnabled(true);});
   }
 }
