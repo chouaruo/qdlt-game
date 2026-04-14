@@ -2422,16 +2422,8 @@ function fillStoryAmounts(story){
 async function onChoice(choice){
   if(!G.alive)return;
   setEnabled(false);document.getElementById('choices').innerHTML='';
-
-  // 先应用上一回合选择的效果（剧情池模式：effects按选项索引）
-  if(currentStoryData){
-    const choiceIndex = currentChoices.indexOf(choice);
-    const prev={money:G.money,mind:G.mind,know:G.know,luck:G.luck};
-    const fx = getEffectsForChoice(currentStoryData, choiceIndex >= 0 ? choiceIndex : 0);
-    if(choiceIndex>=0) trackChoicePattern(choice, choiceIndex);
-    applyFx(fx, prev);
-  }
-
+  const choiceIndex = currentChoices.indexOf(choice);
+  if(choiceIndex>=0) trackChoicePattern(choice, choiceIndex);
   currentChoices = [];
   G.turn++;
   persistRun();
@@ -2439,20 +2431,26 @@ async function onChoice(choice){
   let result;
 
   if(isPoolMode()){
-    // ═══ 剧情池模式：瞬间响应 ═══
+    // ═══ 剧情池模式 ═══
+    // 先应用上一回合选择的效果
+    if(currentStoryData){
+      const prev={money:G.money,mind:G.mind,know:G.know,luck:G.luck};
+      const fx = getEffectsForChoice(currentStoryData, choiceIndex >= 0 ? choiceIndex : 0);
+      applyFx(fx, prev);
+    }
+    // 取下一段剧情
     result = pickStory(G.char?.id || '散户', G.turn);
     if(!result) result = {story:'市场陷入沉寂，你在等待下一个信号。',choices:['继续观望','分析数据','休息一下'],
       effects:[{money:0,mind:5,know:5,luck:0,item:null,lose_item:null,breakthrough:false},{money:0,mind:0,know:10,luck:0,item:null,lose_item:null,breakthrough:false},{money:0,mind:10,know:0,luck:5,item:null,lose_item:null,breakthrough:false}]};
-    // 显示事件badge（固定关键帧）
     if(result.badge){
-      log('【'+result.title+'】'+(result.badge==='利好'?'':'')+(result.badge==='暴雷'?'':''), result.badge==='暴雷'?'b':'s');
+      log('【'+result.title+'】', result.badge==='暴雷'?'b':'s');
     }
     await typeText(fillStoryAmounts(result.story));
     currentStoryData = result;
     document.getElementById('pd-row').style.display='none';
     renderChoices(result.choices);setEnabled(true);
   } else {
-    // ═══ BYOK 模式：AI 实时生成 ═══
+    // ═══ BYOK/AI 模式 ═══
     const cached=cache[choice];
     if(cached&&typeof cached==='object'&&cached.story){
       result=cached;
@@ -2479,8 +2477,9 @@ async function onChoice(choice){
       currentStory=document.getElementById('story-text').textContent;
     }
     currentStoryData = result;
-    // BYOK 模式：效果在下一回合 onChoice 开头应用（和池模式统一）
-    // 但为了兼容，这里也直接 applyFx
+    // AI 模式：AI 返回的 effects 直接应用（单对象）
+    const prev={money:G.money,mind:G.mind,know:G.know,luck:G.luck};
+    applyFx(result.effects, prev);
     tryEvent(()=>{renderChoices(result.choices);setEnabled(true);});
   }
 }
