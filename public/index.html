@@ -1762,7 +1762,8 @@ function applyFx(fx, prev, turnOverride) {
     }
     // 孙宇晨：盈利事件收益额外+20%
     if(cid==='孙宇晨' && fx.money>0 && prev){
-      const bonus=Math.round(prev.money*0.04); // 额外20%的盈利
+      const profit=G.money-prev.money; // 本回合实际盈利
+      const bonus=Math.round(profit*0.2); // 盈利的20%
       G.money+=bonus;
       if(bonus>0) log('【画饼加成】叙事变现+'+fmtAsset(bonus).replace('¥',''),'g');
     }
@@ -1886,7 +1887,11 @@ function checkHiddenEnding(bestR){
     return {title:'浴火重生',sub:'从濒临归零到财务自由\n「跌到谷底的那天，你没有放弃」\n真正的传奇，是从废墟中站起来的人。'};
   // 全属性99
   if(G.mind>=99 && G.know>=99 && G.luck>=99) return {title:'全属性满值',sub:'心态、认知、气运全部达到极限\n「你已经超越了这个游戏的设计」\n恭喜，你是完美的币圈玩家。'};
-  // 速通大师：10回合内达A10
+  // V神封神结局：认知≥80
+  if(G.char?.id==='V神' && G.know>=80) return {title:'封神',sub:'你的认知达到了这个世界的极限\n去中心化不只是技术，是一种信仰\n「代码即法律，共识即真理」\n以太坊的精神，将永远改变世界。'};
+  // 中本聪消失结局
+  if(G.char?.id==='中本聪') return {title:'消失',sub:'你选择了沉默。\n没有人知道你是谁，没有人知道你在哪。\n但你创造的东西，改变了一切。\n「我已经转向做其他事了。」'};
+  // 速通大师：10回合内达LV10
   if(G.turn<=10 && bestR>=10) return {title:'速通大师',sub:'仅用'+G.turn+'回合就冲到了十亿大佬\n「别人还在散户，你已经大佬了」\n这速度，连V神都要鼓掌。'};
   return null;
 }
@@ -2216,7 +2221,25 @@ function syncAllocUI(){
     if(afEl)afEl.style.width=pct+'%';
     if(btnP)btnP.disabled=(pts<=0||alloc[a.key]>=10);
     if(btnM)btnM.disabled=alloc[a.key]<=0;
+    // 本金实时预览
+    if(a.key==='money'){
+      const preview=document.getElementById('asset-preview');
+      if(preview){
+        preview.textContent=fmtAsset(MONEY_MAP[val]);
+        if(val===0) preview.style.color='var(--crimson2)';
+        else preview.style.color='var(--gold2)';
+      }
+    }
   });
+  // 0本金警告
+  const confirmBtn=document.getElementById('alloc-confirm');
+  if(confirmBtn&&alloc.money===0){
+    confirmBtn.textContent='⚠ 0本金=必死开局，确定？';
+    confirmBtn.style.background='#fa5151';
+  }else if(confirmBtn){
+    confirmBtn.textContent='确认分配，抽取词条 →';
+    confirmBtn.style.background='';
+  }
 }
 function onAllocConfirm(){
   // 本金加点 → 实际开局资产（通过映射表）
@@ -2393,12 +2416,21 @@ function applyTraitEffects(){
     if(t.id==='t19') fx.luck=50;
     if(t.id==='t20') {G.luck=99;}              // 中本聪遗产：气运满值
     // 轮回词条
-    if(t.isReborn&&t.attr){
-      if(t.attr==='money'){
-        G.money=Math.round(G.money*1.5); // 轮回本金 +50%
-      } else {
-        const delta={mind:20,know:30,luck:20}[t.attr]||20;
-        fx[t.attr]=(fx[t.attr]||0)+delta;
+    if(t.isReborn){
+      // 轮回词条：根据描述中的属性加成应用（支持多属性）
+      const desc=t.desc||'';
+      const moneyMatch=desc.match(/本金[+＋](\d+)/);
+      const mindMatch=desc.match(/心态[+＋](\d+)/);
+      const knowMatch=desc.match(/认知[+＋](\d+)/);
+      const luckMatch=desc.match(/气运[+＋](\d+)/);
+      if(moneyMatch) G.money=Math.round(G.money*(1+parseInt(moneyMatch[1])/100));
+      if(mindMatch) fx.mind=(fx.mind||0)+parseInt(mindMatch[1]);
+      if(knowMatch) fx.know=(fx.know||0)+parseInt(knowMatch[1]);
+      if(luckMatch) fx.luck=(fx.luck||0)+parseInt(luckMatch[1]);
+      // 没匹配到任何属性时用默认值
+      if(!moneyMatch&&!mindMatch&&!knowMatch&&!luckMatch&&t.attr){
+        if(t.attr==='money') G.money=Math.round(G.money*1.5);
+        else fx[t.attr]=(fx[t.attr]||0)+20;
       }
     }
     // 本金已在上面通过乘法处理，这里只处理非本金属性
@@ -2599,15 +2631,37 @@ function showEv(ev,onClose){
 // 选项渲染
 // ════════════════════════════════════════════════════
 const RISKS=['xian','wen','qi'];
+// 从 effects 推断风险类型（池模式用）
+function inferRisk(fx){
+  if(!fx||typeof fx!=='object') return 'wen';
+  const m=fx.money||0, mind=fx.mind||0;
+  if(m>=40||(m>0&&mind<-5)) return 'xian'; // 高收益或高风险
+  if(m<=0&&mind>=0&&(fx.know||0)>=0) return 'wen'; // 保守稳健
+  return 'qi'; // 其他
+}
 function renderChoices(choices){
   const wrap=document.getElementById('choices');wrap.innerHTML='';
   currentChoices = [...choices];
   choices.forEach((c,i)=>{
-    const risk=RISKS[i%3],rc=risk==='xian'?'r-xian':risk==='wen'?'r-wen':'r-qi',rt=risk==='xian'?'🔥 险':risk==='wen'?'🛡 稳':'✨ 奇';
+    // 池模式：从 effects 推断风险；AI模式：按固定顺序
+    let risk;
+    if(isPoolMode()&&currentStoryData&&Array.isArray(currentStoryData.effects)&&currentStoryData.effects[i]){
+      risk=inferRisk(currentStoryData.effects[i]);
+    } else {
+      risk=RISKS[i%3];
+    }
+    const rc=risk==='xian'?'r-xian':risk==='wen'?'r-wen':'r-qi',rt=risk==='xian'?'🔥 险':risk==='wen'?'🛡 稳':'✨ 奇';
     const btn=document.createElement('button');btn.className='choice';
     const txtSpan=document.createElement('span');txtSpan.className='choice-text';txtSpan.textContent=c;
     const tagSpan=document.createElement('span');tagSpan.className='rtag '+rc;tagSpan.textContent=rt;
     btn.appendChild(txtSpan);btn.appendChild(tagSpan);
+    // ZachXBT 专属：险选项标红警告
+    if(G.char?.id==='ZachXBT' && risk==='xian'){
+      btn.style.border='2px solid #fa5151';
+      const warn=document.createElement('span');warn.textContent='⚠ 链上侦探嗅到风险';
+      warn.style.cssText='font-size:10px;color:#fa5151;display:block;margin-top:2px;';
+      txtSpan.appendChild(warn);
+    }
     btn.onclick=()=>onChoice(c);wrap.appendChild(btn);
   });
   persistRun();
@@ -2806,6 +2860,10 @@ async function initGame(){
     renderChoices(result.choices);
     setEnabled(true);
     document.getElementById('start-backend-status').textContent='在线';
+    // 中本聪：开局触发传奇事件
+    if(G.char?.id==='中本聪'){
+      showFull('创世区块','2009年1月3日\nThe Times 03/Jan/2009\nChancellor on brink of second bailout for banks\n\n比特币，诞生了。','gold','开始传奇','breakthrough');
+    }
   } else {
     // ═══ BYOK 模式：AI 生成开局 ═══
     document.getElementById('thinking').className='thinking show';
