@@ -72,7 +72,7 @@ ${charCtx}${traitCtx?'\n'+traitCtx:''}
 持仓：${Array.isArray(state.inv)&&state.inv.length?state.inv.join('、'):'空仓'}${debuffCtx}${(state.turn||0)>=25?'\n【最后冲刺】还剩'+(30-(state.turn||0))+'回合，剧情应体现紧迫感和最终抉择的氛围':''}
 
 规则：
-1.story简中≤150字，完整句子，延续剧情，体现人物口吻。禁止写任何具体金额数字，用定性描述代替（如"赚了一笔""亏了不少""翻了一倍""账户缩水严重"），具体数字由UI展示。
+1.story简中≤150字，完整句子，延续剧情，体现人物口吻。提到资产/金额时用占位符{TOTAL}(当前总资产)、{CHANGE}(变化额)、{AFTER}(变化后)，前端自动替换为真实数字。例如"账户资产达到{TOTAL}"或"浮盈{CHANGE}"。
 2.choices固定3个≤12字中文，不带编号。
 3.effects.money百分比整数(-50~100)，mind/know±15，luck±10。无物品变化item/lose_item=null。达${nextRealm.asset}可breakthrough=true。
 4.低认知多伪装骗局。每回合一个场景，禁教程/设定集/目录/总结。

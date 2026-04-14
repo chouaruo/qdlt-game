@@ -2674,11 +2674,25 @@ async function typeText(text){
 }
 
 // 替换剧情中的金额占位符
-function fillStoryAmounts(story){
-  let s = story.replace(/\{TOTAL\}|\{CHANGE\}|\{AFTER\}/g, '');
-  // 只清理明确的货币金额（¥/$开头 + 数字 + 单位），不影响正常文本
-  s = s.replace(/[¥$￥]\s*[\d,]+\.?\d*\s*[万亿]*/g, '一笔资金');
-  // 修复截断的句子（只在明显截断时补省略号，不干扰正常结尾）
+function fillStoryAmounts(story, fx){
+  let s = story;
+  const total = fmtAsset(G.money);
+  // 替换占位符为真实数字
+  s = s.replace(/\{TOTAL\}/g, total);
+  if(fx && fx.money){
+    const pct = fx.money;
+    const delta = Math.abs(Math.round(G.money * pct / 100));
+    const after = Math.max(0, G.money + Math.round(G.money * pct / 100));
+    s = s.replace(/\{CHANGE\}/g, fmtAsset(delta));
+    s = s.replace(/\{AFTER\}/g, fmtAsset(after));
+  } else {
+    s = s.replace(/\{CHANGE\}|\{AFTER\}/g, total);
+  }
+  // 将 AI 自编的 ¥/$ 金额替换为真实总资产
+  s = s.replace(/[¥$￥]\s*[\d,]+\.?\d*\s*[万亿]*/g, total);
+  // 将中文大写金额（十亿、百亿、千万等独立出现的）替换为真实值
+  s = s.replace(/(?<=[突破达到超过有了赚了亏了])[\s]*[零一二三四五六七八九十百千]+[万亿]+/g, total.replace('¥',''));
+  // 修复截断的句子
   const trimmed = s.trim();
   if(trimmed.length>10 && !/[。！？…」』)）\.~～]$/.test(trimmed) && !/[了的着过吧呢啊哦呀吗嘛]$/.test(trimmed)) s = trimmed+'。';
   return s;
