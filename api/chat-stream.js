@@ -3,7 +3,7 @@ export const config = { runtime: 'edge' };
 const MODEL = process.env.AI_MODEL || 'claude-haiku-4-5-20251001';
 const API_BASE = process.env.AI_API_BASE || 'https://api.anthropic.com';
 const FALLBACK_CHOICES = ['持仓等待', '分析链上', '联系律师'];
-const ALLOWED_ORIGINS = ['https://qdlt-game.vercel.app'];
+const ALLOWED_ORIGINS = ['https://qdlt-game.vercel.app','http://localhost:3000','http://localhost:3011'];
 
 const OUTPUT_SCHEMA = {
   type: 'object',
@@ -74,7 +74,7 @@ ${charCtx}${traitCtx?'\n'+traitCtx:''}
 规则：
 1.story简中≤150字，完整句子，延续剧情，体现人物口吻。禁止写任何具体金额数字，用定性描述代替（如"赚了一笔""亏了不少""翻了一倍""账户缩水严重"），具体数字由UI展示。
 2.choices固定3个≤12字中文，不带编号。
-3.effects.money百分比整数(-50~100)，mind/know±20，luck±15。无物品变化item/lose_item=null。达${nextRealm.asset}可breakthrough=true。
+3.effects.money百分比整数(-50~100)，mind/know±15，luck±10。无物品变化item/lose_item=null。达${nextRealm.asset}可breakthrough=true。
 4.低认知多伪装骗局。每回合一个场景，禁教程/设定集/目录/总结。
 5.story禁Markdown(标题/代码块/列表/表格)，全中文不夹英文（币圈专有名词BTC/ETH/USDT/DeFi等除外）。choices须正常中文操作选项。`;
 }

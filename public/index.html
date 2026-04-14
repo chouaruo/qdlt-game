@@ -1266,7 +1266,7 @@ function readStore(key) {
   catch (_) { return null; }
 }
 function safeSetItem(key, val) {
-  try { safeSetItem(key, val); }
+  try { localStorage.setItem(key, val); }
   catch (e) { console.warn('localStorage写入失败:', e.message); }
 }
 function saveMeta() {
@@ -1344,7 +1344,7 @@ function onShareCopy(){
 
   const sd=G._shareData||{c:'散户',r:0,t:0,a:0,d:'money'};
   const realmName=REALMS[sd.r]?.name||'负债韭菜';
-  const deathMap={money:'破产了',mind:'心态崩了',know:'被骗光了'};
+  const deathMap={money:'破产了',mind:'心态崩了',know:'被骗光了',done:'30回合结束'};
   const base=location.origin;
   const url=`${base}/share.html?c=${encodeURIComponent(sd.c)}&r=${sd.r}&t=${sd.t}&a=${sd.a}&d=${sd.d}&ref=${inv.code}`;
   const text=`币圈模拟器 | 我扮演${G.char?.name||'散户'}，最高冲到${realmName}(${fmtAsset(sd.a)})，第${sd.t}回合${deathMap[sd.d]||'出局了'}...\n你能比我撑得更久吗？\n${url}`;
@@ -1874,8 +1874,8 @@ function showFull(big, sub, color, btn, mode='') {
   // 死亡时显示分享区域
   const ss=document.getElementById('share-section');
   if(!G.alive && mode!=='breakthrough'){
-    const deathMap={money:'破产清算',mind:'心态崩溃',know:'认知归零'};
-    const deathCause=G.money<=0?'money':G.mind<=0?'mind':'know';
+    const deathMap={money:'破产清算',mind:'心态崩溃',know:'认知归零',done:'30回合结束'};
+    const deathCause=G.money<=0?'money':G.mind<=0?'mind':G.know<=0?'know':'done';
     document.getElementById('share-char').textContent=G.char?.name||'散户';
     document.getElementById('share-realm').textContent=REALMS[G.bestRunRealm||G.realmIdx]?.name+' '+REALMS[G.bestRunRealm||G.realmIdx]?.code;
     document.getElementById('share-turn').textContent=G.turn+'回合';
@@ -1983,7 +1983,7 @@ function renderCharGrid(){
     req.textContent=ch.reqRealm>0?'突破'+REALMS[ch.reqRealm].name:'默认解锁';card.appendChild(req);
     // 锁图标
     if(locked){const lk=document.createElement('div');lk.className='char-lock-icon';lk.textContent='🔒';card.appendChild(lk);}
-    card.onclick=()=>onCharClick(ch,locked);
+    card.onclick=(e)=>onCharClick(ch,locked,e);
     grid.appendChild(card);
   });
 }
@@ -1992,7 +1992,7 @@ function canUnlockChar(ch){
   return G.bestRealm >= ch.reqRealm;
 }
 let _selectedCharEl=null;
-function onCharClick(ch,locked){
+function onCharClick(ch,locked,e){
   // 清除之前选中
   document.querySelectorAll('.char-card').forEach(c=>c.classList.remove('selected'));
   const detail=document.getElementById('char-detail');
@@ -2005,7 +2005,7 @@ function onCharClick(ch,locked){
     return;
   }
   // 选中
-  event.currentTarget.classList.add('selected');
+  e.currentTarget.classList.add('selected');
   selectedChar=ch;
   document.getElementById('char-confirm-btn').disabled=false;
   // 显示详情
@@ -2641,7 +2641,7 @@ async function onChoice(choice){
     await typeText(fillStoryAmounts(result.story));
     currentStoryData = result;
     document.getElementById('pd-row').style.display='none';
-    renderChoices(result.choices);setEnabled(true);
+    tryEvent(()=>{renderChoices(result.choices);setEnabled(true);});
   } else {
     // ═══ BYOK/AI 模式 ═══
     const cached=cache[choice];
