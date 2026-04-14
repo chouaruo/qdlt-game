@@ -76,7 +76,7 @@ ${charCtx}${traitCtx?'\n'+traitCtx:''}
 2.choices固定3个≤12字中文，不带编号。
 3.effects.money百分比整数(-50~100)，mind/know±15，luck±10。无物品变化item/lose_item=null。达${nextRealm.asset}可breakthrough=true。
 4.低认知多伪装骗局。每回合一个场景，禁教程/设定集/目录/总结。
-5.story禁Markdown(标题/代码块/列表/表格)，全中文不夹英文（币圈专有名词BTC/ETH/USDT/DeFi等除外）。choices须正常中文操作选项。`;
+5.story禁Markdown(标题/代码块/列表/表格)，全中文不夹英文（币圈专有名词BTC/ETH/USDT/DeFi等除外）。story必须语句通顺，无语病，无残句。choices须正常中文操作选项。`;
 }
 
 function formatHistory(histSnap) {

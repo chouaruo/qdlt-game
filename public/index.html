@@ -2597,15 +2597,8 @@ async function typeText(text){
 // 替换剧情中的金额占位符
 function fillStoryAmounts(story){
   let s = story.replace(/\{TOTAL\}|\{CHANGE\}|\{AFTER\}/g, '');
-  // 清理 AI 自编的具体金额
-  // 中文数字：十亿、百万、一千万等
-  s = s.replace(/[零一二三四五六七八九十百千万亿]+[万亿元块]+/g, '一大笔钱');
-  // 阿拉伯数字+单位：600万、3.5亿、1,000万等
-  s = s.replace(/[\d,]+\.?\d*\s*[万亿元块]+/g, '一大笔钱');
-  // ¥/$前缀金额：¥600万、$100M等
-  s = s.replace(/[¥$￥]\s*[\d,]+\.?\d*\s*[万亿元块MBKmk]*/g, '一大笔钱');
-  // 去重：连续的"一大笔钱"合并
-  s = s.replace(/(一大笔钱[\s、，,]*)+一大笔钱/g, '一大笔钱');
+  // 只清理明确的货币金额（¥/$开头 + 数字 + 单位），不影响正常文本
+  s = s.replace(/[¥$￥]\s*[\d,]+\.?\d*\s*[万亿]*/g, '一笔资金');
   // 修复截断的句子
   if(s.length>10 && !/[。！？…」』)）\.]$/.test(s.trim())) s = s.trim()+'……';
   return s;
