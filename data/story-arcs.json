@@ -1293,6 +1293,440 @@
               ]
             }
           ]
+        },
+        "early": {
+          "stories": [
+            {
+              "id": "散户_early_00",
+              "tags": [
+                "交易",
+                "牛市",
+                "社交"
+              ],
+              "story": "狗蛋哥们儿在工地群里吹牛说炒币一个月翻十倍，你也心动了。攒了三个月工资，第一次充值进交易所。看着K线图一脸懵逼，根本不知道什么是支撑位阻力位。隔壁老王递来一张纸条：\"兄弟，听我的，这个币要起飞了。\"你的手开始发抖……",
+              "choices": [
+                "全仓梭哈，跟风买入",
+                "先买一点试试手感",
+                "查资料再说，别急"
+              ],
+              "effects": [
+                {
+                  "money": -40,
+                  "mind": -15,
+                  "know": -5,
+                  "luck": 15,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 15,
+                  "mind": 5,
+                  "know": 10,
+                  "luck": 0,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 0,
+                  "mind": 10,
+                  "know": 20,
+                  "luck": -10,
+                  "item": "交易笔记",
+                  "lose_item": null,
+                  "breakthrough": false
+                }
+              ]
+            },
+            {
+              "id": "散户_early_01",
+              "tags": [
+                "调查",
+                "技术",
+                "KOL"
+              ],
+              "story": "微博上一个大V发了个帖子，配图是豪车豪宅，说自己靠某个币赚了巨款。评论区全是\"求带飞\"。你点进他主页，两个月前还在发招聘信息。心里有点疑惑，但他粉丝这么多，应该没问题吧？你在评论里@了他……",
+              "choices": [
+                "私信他要推荐码和内幕",
+                "查查他的发言记录和账号",
+                "直接买他推荐的币"
+              ],
+              "effects": [
+                {
+                  "money": -50,
+                  "mind": -20,
+                  "know": -10,
+                  "luck": 0,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 0,
+                  "mind": 15,
+                  "know": 20,
+                  "luck": 5,
+                  "item": "警惕心",
+                  "lose_item": null,
+                  "breakthrough": true
+                },
+                {
+                  "money": -50,
+                  "mind": -20,
+                  "know": 0,
+                  "luck": -15,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                }
+              ]
+            },
+            {
+              "id": "散户_early_02",
+              "tags": [
+                "社区",
+                "营销",
+                "社交"
+              ],
+              "story": "币圈电报群里有个大哥拉你进\"内部交流群\"，说有项目要发币，只有圈内人才知道。入群费需要转一笔币，他说这是\"风险保证金\"。群里全是陌生账号在吹项目，你有点兴奋又有点不安。大哥催你赶紧转账……",
+              "choices": [
+                "转账进去，反正不多",
+                "问朋友咨询意见再决定",
+                "直接退群，感觉不对劲"
+              ],
+              "effects": [
+                {
+                  "money": -50,
+                  "mind": -20,
+                  "know": -5,
+                  "luck": 0,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 0,
+                  "mind": 10,
+                  "know": 15,
+                  "luck": 10,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 0,
+                  "mind": 20,
+                  "know": 20,
+                  "luck": 15,
+                  "item": "诈骗名单",
+                  "lose_item": null,
+                  "breakthrough": true
+                }
+              ]
+            },
+            {
+              "id": "散户_early_03",
+              "tags": [
+                "DeFi",
+                "技术",
+                "牛市"
+              ],
+              "story": "某个DeFi项目承诺年化收益百分之几百，你在币乎上看到有人说\"真的到账了\"。合约看不懂，但反正就是把币质押进去等分红。你的币在钱包里躺着也是躺着，何不搏一下？你点开了质押界面……",
+              "choices": [
+                "全部质押，闭眼等收益",
+                "质押一半试试效果",
+                "先学合约原理再说"
+              ],
+              "effects": [
+                {
+                  "money": -50,
+                  "mind": -10,
+                  "know": 0,
+                  "luck": 15,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 20,
+                  "mind": 10,
+                  "know": 15,
+                  "luck": 10,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 0,
+                  "mind": 15,
+                  "know": 20,
+                  "luck": 0,
+                  "item": "智能合约入门",
+                  "lose_item": null,
+                  "breakthrough": true
+                }
+              ]
+            },
+            {
+              "id": "散户_early_04",
+              "tags": [
+                "交易",
+                "震荡",
+                "心理"
+              ],
+              "story": "你买的币今天跌了一半。工作群里有人问你最近咋样，你没法说实话。晚上睡不着，刷K线刷到凌晨三点。你看到有人说\"越跌越买，底部抄到就翻身\"，也有人说\"赶紧割肉止损\"。你的手指在卖出和持有之间不停颤抖……",
+              "choices": [
+                "咬牙加仓，赌反弹",
+                "分批卖出，止损出局",
+                "暂停看盘，出去走走"
+              ],
+              "effects": [
+                {
+                  "money": 30,
+                  "mind": -20,
+                  "know": 5,
+                  "luck": 15,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": -20,
+                  "mind": 15,
+                  "know": 10,
+                  "luck": 5,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 0,
+                  "mind": 20,
+                  "know": 20,
+                  "luck": 0,
+                  "item": "冷静头脑",
+                  "lose_item": null,
+                  "breakthrough": true
+                }
+              ]
+            },
+            {
+              "id": "散户_early_05",
+              "tags": [
+                "挖矿",
+                "技术",
+                "投资"
+              ],
+              "story": "表哥说挖矿比炒币稳，推荐你买矿机。价格不便宜，但他说一年就能回本。你没搞懂电费、难度调整这些东西，但看起来躺赚的样子很诱人。表哥给了你一个链接……",
+              "choices": [
+                "直接下单矿机，闭眼躺赚",
+                "查查电费成本和收益表",
+                "先去矿场考察再决定"
+              ],
+              "effects": [
+                {
+                  "money": -50,
+                  "mind": -15,
+                  "know": -10,
+                  "luck": 10,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 0,
+                  "mind": 10,
+                  "know": 20,
+                  "luck": 5,
+                  "item": "矿业知识",
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": -15,
+                  "mind": 15,
+                  "know": 20,
+                  "luck": 15,
+                  "item": "实地经验",
+                  "lose_item": null,
+                  "breakthrough": true
+                }
+              ]
+            },
+            {
+              "id": "散户_early_06",
+              "tags": [
+                "NFT",
+                "营销",
+                "社交"
+              ],
+              "story": "抖音上一个美女博主说某个NFT项目是\"下一个机会\"，还发了开盲盒的视频。评论全是\"求地址\"。她长得不错，讲得也很激情。你点开项目网站，花了不少钱铸造了几个盲盒。打开一看……都是垃圾图片……",
+              "choices": [
+                "继续买，可能下一个是稀有的",
+                "马上在二级市场砸价甩卖",
+                "研究一下项目方背景再说"
+              ],
+              "effects": [
+                {
+                  "money": -50,
+                  "mind": -20,
+                  "know": -5,
+                  "luck": 0,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": -40,
+                  "mind": 10,
+                  "know": 5,
+                  "luck": 5,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": -30,
+                  "mind": 20,
+                  "know": 20,
+                  "luck": 10,
+                  "item": "审美觉醒",
+                  "lose_item": null,
+                  "breakthrough": true
+                }
+              ]
+            },
+            {
+              "id": "散户_early_07",
+              "tags": [
+                "交易",
+                "技术",
+                "学习"
+              ],
+              "story": "你在某平台买的币突然无法提现，客服一直没回复。群里有人说这是\"平台跑路的前兆\"。你慌了，想从另一个交易所砸盘卖出，但这样会亏很多。一个老币友私信你说别着急，他遇到过这情况……",
+              "choices": [
+                "听老币友的，等等再说",
+                "马上砸盘，逃离风险",
+                "查平台公告，了解真相"
+              ],
+              "effects": [
+                {
+                  "money": 10,
+                  "mind": 10,
+                  "know": 15,
+                  "luck": 15,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": -50,
+                  "mind": -15,
+                  "know": -5,
+                  "luck": -10,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 5,
+                  "mind": 15,
+                  "know": 20,
+                  "luck": 5,
+                  "item": "信息渠道",
+                  "lose_item": null,
+                  "breakthrough": true
+                }
+              ]
+            },
+            {
+              "id": "散户_early_08",
+              "tags": [
+                "合规",
+                "调查",
+                "风险"
+              ],
+              "story": "公司财务说国家要查币圈，要求员工不能再炒币。你有点怂了，怕被举报或者啥的。但币圈朋友说这都是吓唬人，一堆人都在玩。你的币还在交易所里，不知道该不该动……",
+              "choices": [
+                "赶紧全部套现，保险起见",
+                "查查官方政策文件再决定",
+                "继续玩，但低调一点"
+              ],
+              "effects": [
+                {
+                  "money": -30,
+                  "mind": 15,
+                  "know": 10,
+                  "luck": 10,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 0,
+                  "mind": 20,
+                  "know": 20,
+                  "luck": 5,
+                  "item": "合规认知",
+                  "lose_item": null,
+                  "breakthrough": true
+                },
+                {
+                  "money": 0,
+                  "mind": -15,
+                  "know": -10,
+                  "luck": -15,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                }
+              ]
+            },
+            {
+              "id": "散户_early_09",
+              "tags": [
+                "社区",
+                "学习",
+                "突破"
+              ],
+              "story": "经过两个月的亏损和学习，你终于意识到自己啥都不懂。在一个免费的币圈知识社区里，你认真听了一堂关于基本面分析的课。讲师说的话让你茅塞顿开。他建议新手要建立自己的投资体系。你决定停止盲目跟风……",
+              "choices": [
+                "制定一个学习计划，从基础开始",
+                "参加社区进阶课程，深度学习",
+                "先用模拟账户练习，再实战"
+              ],
+              "effects": [
+                {
+                  "money": 0,
+                  "mind": 20,
+                  "know": 20,
+                  "luck": 0,
+                  "item": "学习计划",
+                  "lose_item": null,
+                  "breakthrough": true
+                },
+                {
+                  "money": -10,
+                  "mind": 20,
+                  "know": 20,
+                  "luck": 5,
+                  "item": "进阶认证",
+                  "lose_item": null,
+                  "breakthrough": true
+                },
+                {
+                  "money": 0,
+                  "mind": 20,
+                  "know": 20,
+                  "luck": 10,
+                  "item": "模拟账户",
+                  "lose_item": null,
+                  "breakthrough": true
+                }
+              ]
+            }
+          ]
         }
       }
     },
@@ -3066,6 +3500,430 @@
               ]
             }
           ]
+        },
+        "early": {
+          "stories": [
+            {
+              "id": "CZ_early_00",
+              "tags": [
+                "社交",
+                "调查"
+              ],
+              "story": "从OKCoin离职那天，你在币乎写了句扎心的话：'交易所就是个印钞机，但印的是别人的钞票。'一个名叫何一的运营看到了，找你聊天。她说交易所的核心不是技术，是信任。你们在小酒馆聊了三小时，她的想法让你眼界大开——也许该做点不一样的。",
+              "choices": [
+                "继续单干，别信任何人",
+                "邀请她加入创业队伍",
+                "先调查她的背景再说"
+              ],
+              "effects": [
+                {
+                  "money": 0,
+                  "mind": -15,
+                  "know": 0,
+                  "luck": -10,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 0,
+                  "mind": 20,
+                  "know": 15,
+                  "luck": 15,
+                  "item": "何一的信任",
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": -20,
+                  "mind": 10,
+                  "know": 10,
+                  "luck": 5,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                }
+              ]
+            },
+            {
+              "id": "CZ_early_01",
+              "tags": [
+                "技术",
+                "投资"
+              ],
+              "story": "你找了个年轻的技术哥们，他说能在三个月内搭一个币币交易系统。听起来很靠谱，但你手里的启动资金有限。去融资吧？还是自己扣扣搜搜地砌砖？隔壁桌一个老炮儿听了你们的聊天，递过来个名片说'我有点闲钱，但代价不菲'。",
+              "choices": [
+                "自筹资金，控制权利",
+                "接受投资方融资",
+                "先找VC融资背书"
+              ],
+              "effects": [
+                {
+                  "money": -30,
+                  "mind": 15,
+                  "know": 5,
+                  "luck": -5,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 40,
+                  "mind": -10,
+                  "know": 0,
+                  "luck": 10,
+                  "item": "天使投资者",
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 0,
+                  "mind": 10,
+                  "know": 10,
+                  "luck": -15,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                }
+              ]
+            },
+            {
+              "id": "CZ_early_02",
+              "tags": [
+                "交易",
+                "震荡"
+              ],
+              "story": "币安上线第一周，交易量惨淡。你决定亲自在币乎、微博和电报群卖力吆喝，发优惠券、返佣、限时免费交易。一个老玩家私信你：'这是杀鸡取卵，补贴战没人赢。'但隔壁竞争对手正在砸钱做营销。你该跟风，还是坚持自己的节奏？",
+              "choices": [
+                "大力补贴，抢占市场",
+                "保持节奏，积累口碑",
+                "小幅补贴，观察竞争"
+              ],
+              "effects": [
+                {
+                  "money": -50,
+                  "mind": 5,
+                  "know": 0,
+                  "luck": 15,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": -10,
+                  "mind": 20,
+                  "know": 15,
+                  "luck": -5,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": -25,
+                  "mind": 10,
+                  "know": 10,
+                  "luck": 10,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                }
+              ]
+            },
+            {
+              "id": "CZ_early_03",
+              "tags": [
+                "合规",
+                "调查"
+              ],
+              "story": "国内监管部门突然对P2P和虚拟币交易所传来风声。你的法务团队拿不准政策方向。一个前监管部门的朋友建议你提前转向国际市场，另一个业内人士说'这就是虚晕，再等等'。你手里的用户大多在国内，如何选择？",
+              "choices": [
+                "坚守国内，等政策澄清",
+                "主动出海，开拓国际",
+                "两手准备，同时布局"
+              ],
+              "effects": [
+                {
+                  "money": -20,
+                  "mind": -20,
+                  "know": 0,
+                  "luck": -15,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 10,
+                  "mind": 20,
+                  "know": 20,
+                  "luck": 15,
+                  "item": "国际视野",
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": -40,
+                  "mind": 15,
+                  "know": 15,
+                  "luck": 10,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                }
+              ]
+            },
+            {
+              "id": "CZ_early_04",
+              "tags": [
+                "KOL",
+                "营销"
+              ],
+              "story": "一个粉丝百万的币圈大V找你，要求用币安代币作为回扣来推荐交易所。这笔钱对小公司来说很关键，但你隐约感觉到风险。另一个选择是砸钱做品牌广告，见效慢但更正规。还有人建议你干脆自己成为KOL。",
+              "choices": [
+                "付代币给大V推广",
+                "走传统品牌广告路线",
+                "自己做内容，建立IP"
+              ],
+              "effects": [
+                {
+                  "money": 30,
+                  "mind": -15,
+                  "know": 0,
+                  "luck": -15,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": -35,
+                  "mind": 10,
+                  "know": 10,
+                  "luck": 5,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": -20,
+                  "mind": 20,
+                  "know": 20,
+                  "luck": 15,
+                  "item": "个人品牌",
+                  "lose_item": null,
+                  "breakthrough": true
+                }
+              ]
+            },
+            {
+              "id": "CZ_early_05",
+              "tags": [
+                "挖矿",
+                "牛市"
+              ],
+              "story": "2017年上半年，币圈开始疯狂。矿工大量涌入，GPU和ASIC芯片脱销。一个朋友建议币安也做矿池业务，分一杯羹。但你觉得交易所才是核心竞争力，分散精力不值。不过，矿工们在你平台交易最活跃，如果不给他们便利……",
+              "choices": [
+                "进军矿池业务",
+                "专注交易所业务",
+                "上线矿工友好功能"
+              ],
+              "effects": [
+                {
+                  "money": 20,
+                  "mind": -10,
+                  "know": 10,
+                  "luck": 10,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 5,
+                  "mind": 15,
+                  "know": 20,
+                  "luck": 0,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 15,
+                  "mind": 10,
+                  "know": 15,
+                  "luck": 15,
+                  "item": "矿工社区",
+                  "lose_item": null,
+                  "breakthrough": false
+                }
+              ]
+            },
+            {
+              "id": "CZ_early_06",
+              "tags": [
+                "技术",
+                "安全"
+              ],
+              "story": "交易所遭遇第一次黑客攻击企图，虽然被拦截了，但暴露了系统的脆弱性。你需要大规模升级安全架构，这意味着两周的功能冻结和重金投入。竞争对手趁机抢用户。或者，你可以发布'我们已修复'的声明，继续运营？",
+              "choices": [
+                "彻底升级，承受短期损失",
+                "发声明继续运营",
+                "部分升级，保证可用性"
+              ],
+              "effects": [
+                {
+                  "money": -40,
+                  "mind": 20,
+                  "know": 20,
+                  "luck": 15,
+                  "item": "安全口碑",
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 10,
+                  "mind": -20,
+                  "know": 0,
+                  "luck": -15,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": -15,
+                  "mind": 5,
+                  "know": 15,
+                  "luck": -10,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                }
+              ]
+            },
+            {
+              "id": "CZ_early_07",
+              "tags": [
+                "社区",
+                "调查"
+              ],
+              "story": "币安社群变成了一个自治组织，用户们自发组织了十几个语言社群。一些社群领导人要求给予官方身份和激励。你的团队人手不足，但这些人是最活跃的传播者。怎么利用这股力量而不失控？",
+              "choices": [
+                "官方认可，建立体系",
+                "保持距离，自生自灭",
+                "部分合作，小额激励"
+              ],
+              "effects": [
+                {
+                  "money": -15,
+                  "mind": 20,
+                  "know": 20,
+                  "luck": 15,
+                  "item": "全球社区",
+                  "lose_item": null,
+                  "breakthrough": true
+                },
+                {
+                  "money": 0,
+                  "mind": 5,
+                  "know": 0,
+                  "luck": -10,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": -5,
+                  "mind": 15,
+                  "know": 10,
+                  "luck": 15,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                }
+              ]
+            },
+            {
+              "id": "CZ_early_08",
+              "tags": [
+                "投资",
+                "熊市"
+              ],
+              "story": "币价开始调整，交易量下滑。一个机构投资者找上门，说要投币安一笔钱，但条件是占股15%并派驻董事。这笔钱能度过难关，但你会失去部分控制权。另一个选择是自己扛过去，或者找个更温和的投资方。",
+              "choices": [
+                "接受机构投资和董事席",
+                "寻找更宽松的融资条件",
+                "自力更生，坚守控制权"
+              ],
+              "effects": [
+                {
+                  "money": 60,
+                  "mind": -15,
+                  "know": 15,
+                  "luck": 10,
+                  "item": null,
+                  "lose_item": "创业精神",
+                  "breakthrough": false
+                },
+                {
+                  "money": 35,
+                  "mind": 10,
+                  "know": 10,
+                  "luck": 5,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": -30,
+                  "mind": 20,
+                  "know": 20,
+                  "luck": -15,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                }
+              ]
+            },
+            {
+              "id": "CZ_early_09",
+              "tags": [
+                "交易",
+                "牛市"
+              ],
+              "story": "币安用户突破百万大关。你突然意识到，交易所的真正价值不仅是手续费，还有数据、流动性和生态。一个想法浮现：发行平台币。但这可能触发监管敏感区，也可能让你成为币圈的印钞机。团队分成两派。",
+              "choices": [
+                "发行平台币BNB",
+                "保守运营，稳定现金流",
+                "先小范围试点"
+              ],
+              "effects": [
+                {
+                  "money": 80,
+                  "mind": 20,
+                  "know": 20,
+                  "luck": 15,
+                  "item": "BNB生态",
+                  "lose_item": null,
+                  "breakthrough": true
+                },
+                {
+                  "money": 20,
+                  "mind": 10,
+                  "know": 5,
+                  "luck": -10,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 40,
+                  "mind": 15,
+                  "know": 20,
+                  "luck": 15,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                }
+              ]
+            }
+          ]
         }
       }
     },
@@ -4781,6 +5639,440 @@
                   "mind": 20,
                   "know": 20,
                   "luck": 15,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                }
+              ]
+            }
+          ]
+        },
+        "final": {
+          "stories": [
+            {
+              "id": "SBF_final_00",
+              "tags": [
+                "调查",
+                "合规",
+                "社交"
+              ],
+              "story": "联邦特工敲门了。他们手里攥着交易记录、钱包地址、离岸账户截图。你坐在律师对面，对方说「证据链完整」。镜子后面的审讯室里，曾经的Alameda高管们正在翻供。你突然意识到，那些「量化套利」的故事，现在听起来就像黑色喜剧。律师递过一份文件，上面赫然写着「认罪协议」。",
+              "choices": [
+                "全盘托出，争取从轻",
+                "坚持无罪，打持久战",
+                "先听听检控方底线"
+              ],
+              "effects": [
+                {
+                  "money": -50,
+                  "mind": -15,
+                  "know": 10,
+                  "luck": 15,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": -50,
+                  "mind": -20,
+                  "know": 5,
+                  "luck": -15,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": -40,
+                  "mind": -10,
+                  "know": 15,
+                  "luck": 5,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                }
+              ]
+            },
+            {
+              "id": "SBF_final_01",
+              "tags": [
+                "社交",
+                "反思",
+                "KOL"
+              ],
+              "story": "币圈大V们纷纷发推特与你划清界限。昔日吹捧你「改变金融」的媒体，如今用「诈骗天才」的标题卖流量。一位曾在你办公室打过工的年轻交易员给你发来语音消息，他说自己损失了一切，但最后那句话让你沉默了：「我原以为跟着你能学到交易秘诀，没想到学到的是欲望的极限。」你关掉了手机，在黑暗里坐了一整晚。",
+              "choices": [
+                "发声明为自己辩护",
+                "选择沉默和自我反思",
+                "找几个还愿意见你的人倾诉"
+              ],
+              "effects": [
+                {
+                  "money": -20,
+                  "mind": -20,
+                  "know": 5,
+                  "luck": -15,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 0,
+                  "mind": -20,
+                  "know": 20,
+                  "luck": 10,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": true
+                },
+                {
+                  "money": 0,
+                  "mind": -15,
+                  "know": 15,
+                  "luck": 5,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                }
+              ]
+            },
+            {
+              "id": "SBF_final_02",
+              "tags": [
+                "交易",
+                "熊市",
+                "风险"
+              ],
+              "story": "你翻出尘封的交易日志。2017年的套利单、2021年的NFT狂欢、那些你亲手写下的量化模型。每一个成功的背后，现在都像一根刺。有效利他主义告诉你「最大化好处」，但你却在最大化伤害。一个想法突然闪过：如果当初没有那么贪心，没有用客户资金做杠杆赌博，一切会不会不同？你拿起笔，开始记录那些关键的错误决策时刻。",
+              "choices": [
+                "写一份详细的认错书",
+                "分析为什么会走到这一步",
+                "销毁所有记录，一了百了"
+              ],
+              "effects": [
+                {
+                  "money": -10,
+                  "mind": 20,
+                  "know": 20,
+                  "luck": -10,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": true
+                },
+                {
+                  "money": 0,
+                  "mind": 15,
+                  "know": 20,
+                  "luck": 5,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": true
+                },
+                {
+                  "money": 0,
+                  "mind": -20,
+                  "know": -20,
+                  "luck": -15,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                }
+              ]
+            },
+            {
+              "id": "SBF_final_03",
+              "tags": [
+                "投资",
+                "社区",
+                "技术"
+              ],
+              "story": "Alameda的某个前员工给你寄来一份代码。这是你们曾经秘密开发的风险预警系统——能提前24小时发现市场崩盘。你们从未启用过，因为那样就没法赚大钱。现在这个代码可能拯救几百万散户。律师说「交出去就是认罪证据」，但你看着这段代码，突然想起了有效利他的初心——「为最多的人创造最大的幸福」。讽刺的是，你现在才真正有机会做到。",
+              "choices": [
+                "匿名泄露给监管部门",
+                "公开发布，坦承一切",
+                "销毁代码，隐瞒到底"
+              ],
+              "effects": [
+                {
+                  "money": -30,
+                  "mind": 20,
+                  "know": 20,
+                  "luck": 10,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": true
+                },
+                {
+                  "money": -50,
+                  "mind": 20,
+                  "know": 20,
+                  "luck": -10,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": true
+                },
+                {
+                  "money": 0,
+                  "mind": -20,
+                  "know": -15,
+                  "luck": -15,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                }
+              ]
+            },
+            {
+              "id": "SBF_final_04",
+              "tags": [
+                "社交",
+                "反思",
+                "调查"
+              ],
+              "story": "狱中笔友计划的志愿者找到了你。她说有几百个被你伤害的人想听你说话——不是道歉词稿，而是真话。一个曾在FTX崩盘中自杀的用户的母亲也在名单上。你的律师极力反对，说这会「自投罗网」。但你突然想到：你花了十年追求数学上的完美，却从未直视过自己造成的人类苦难。这一次，没有套利空间，没有对冲策略。只有你，和那些破碎的生命。",
+              "choices": [
+                "接受采访，面对受害者",
+                "书信回应，保持距离",
+                "婉拒，继续低调"
+              ],
+              "effects": [
+                {
+                  "money": -50,
+                  "mind": 20,
+                  "know": 20,
+                  "luck": -15,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": true
+                },
+                {
+                  "money": -20,
+                  "mind": 20,
+                  "know": 20,
+                  "luck": 5,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 0,
+                  "mind": -20,
+                  "know": 5,
+                  "luck": -10,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                }
+              ]
+            },
+            {
+              "id": "SBF_final_05",
+              "tags": [
+                "技术",
+                "DeFi",
+                "投资"
+              ],
+              "story": "一个斯坦福的年轻天才给你发邮件。他说他正在做「透明化链上交易」的项目，想用你的故事作为反面教材——「为什么中心化交易所必然导致作恶」。他邀请你参与顾问。讽刺的是，如果FTX从一开始就是完全去中心化、完全透明的，你根本没有机会挪用客户资金。你可以帮助这个项目，但这也意味着承认自己是「必然的反面」。",
+              "choices": [
+                "无偿顾问，赎罪性参与",
+                "投资但不露面，金钱救赎",
+                "拒绝，彻底断绝币圈"
+              ],
+              "effects": [
+                {
+                  "money": -5,
+                  "mind": 20,
+                  "know": 20,
+                  "luck": 15,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": true
+                },
+                {
+                  "money": 20,
+                  "mind": 10,
+                  "know": 20,
+                  "luck": 10,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 0,
+                  "mind": -20,
+                  "know": 10,
+                  "luck": -5,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                }
+              ]
+            },
+            {
+              "id": "SBF_final_06",
+              "tags": [
+                "调查",
+                "合规",
+                "社交"
+              ],
+              "story": "检察官给你看了一份名单——FTX倒闭后自杀的人数。数字不多，但每一个都是一个世界的坍塌。有退休老人、有大学生、有单亲妈妈。你的量化模型曾经精确到小数点后六位，但这一刻你无法精确化这种痛苦。检察官问：「你有什么想说？」你开口的时候，声音在发抖。这不是法庭上的策略性发言，而是你第一次真正承认：数字背后是人。",
+              "choices": [
+                "为每个受害者捐赠基金",
+                "出庭作证，不隐瞒任何细节",
+                "请求与受害者直接对话"
+              ],
+              "effects": [
+                {
+                  "money": -50,
+                  "mind": 20,
+                  "know": 20,
+                  "luck": 10,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": true
+                },
+                {
+                  "money": -40,
+                  "mind": 20,
+                  "know": 20,
+                  "luck": -15,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": true
+                },
+                {
+                  "money": -20,
+                  "mind": 20,
+                  "know": 20,
+                  "luck": 5,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": true
+                }
+              ]
+            },
+            {
+              "id": "SBF_final_07",
+              "tags": [
+                "反思",
+                "社区",
+                "技术"
+              ],
+              "story": "你看到了一个关于「科技精英的堕落」的纪录片片段。里面采访了你的MIT同学、Jane Street的前同事、Alameda的初期员工。他们都说同样的话：「他太聪明了，聪明到可以为任何事找到理由。」一个心理学家在旁白中说，这叫「智力的诅咒」——越聪明的人，越能为自己的贪婪编织完美的故事。你突然意识到，也许正是你的天赋，成了你的陷阱。",
+              "choices": [
+                "接受「天才有缺陷」的现实",
+                "研究心理学，理解自己的病症",
+                "拒绝被定义，继续否认"
+              ],
+              "effects": [
+                {
+                  "money": 0,
+                  "mind": 20,
+                  "know": 20,
+                  "luck": 5,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": true
+                },
+                {
+                  "money": -10,
+                  "mind": 20,
+                  "know": 20,
+                  "luck": 10,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": true
+                },
+                {
+                  "money": 0,
+                  "mind": -20,
+                  "know": -10,
+                  "luck": -15,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                }
+              ]
+            },
+            {
+              "id": "SBF_final_08",
+              "tags": [
+                "投资",
+                "牛市",
+                "风险"
+              ],
+              "story": "一个风险投资人找到你。他说币圈新一轮牛市要来了，问你要不要卷土重来。他甚至说可以帮你洗白，用新公司名义、新国家注册。这一刻，你感受到了曾经最熟悉的诱惑——机会、增长、「改变世界」。你的大脑开始计算概率，你的手指在敲键盘。但突然停住了。你意识到，这就是你上一次在这个岔路口的选择——只是现在，你知道了后果。",
+              "choices": [
+                "拒绝，永远远离交易",
+                "考虑合法创业，但不碰币圈",
+                "接受，赌一把反转人生"
+              ],
+              "effects": [
+                {
+                  "money": 0,
+                  "mind": 20,
+                  "know": 15,
+                  "luck": 10,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": true
+                },
+                {
+                  "money": 10,
+                  "mind": 15,
+                  "know": 20,
+                  "luck": 15,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 30,
+                  "mind": -20,
+                  "know": -20,
+                  "luck": -15,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                }
+              ]
+            },
+            {
+              "id": "SBF_final_09",
+              "tags": [
+                "反思",
+                "社交",
+                "调查"
+              ],
+              "story": "狱友是个前银行家，也因为欺诈入狱。他问你：「现在回头看，你觉得有效利他主义是幌子吗？」你没有立即回答。因为你知道，答案很复杂。也许一开始你真的想改变金融。但在每一个小的妥协、每一个「为了更大的善而做的恶」之间，你迷失了。有效利他主义变成了高级的自我欺骗工具。你对狱友说：「最危险的不是坏人，而是用好理由去做坏事的聪明人。」他点点头：「那你现在是谁？」",
+              "choices": [
+                "彻底放弃利他主义，接受自己是坏人",
+                "重新定义利他主义，从最小的善开始",
+                "这个问题没有答案，继续活着"
+              ],
+              "effects": [
+                {
+                  "money": 0,
+                  "mind": -20,
+                  "know": 20,
+                  "luck": 5,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": true
+                },
+                {
+                  "money": 0,
+                  "mind": 20,
+                  "know": 20,
+                  "luck": 10,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": true
+                },
+                {
+                  "money": 0,
+                  "mind": 0,
+                  "know": 20,
+                  "luck": 0,
                   "item": null,
                   "lose_item": null,
                   "breakthrough": false
@@ -6528,6 +7820,440 @@
               ]
             }
           ]
+        },
+        "boom": {
+          "stories": [
+            {
+              "id": "宝二爷_boom_00",
+              "tags": [
+                "交易",
+                "牛市",
+                "KOL"
+              ],
+              "story": "你在直播间里喊单，粉丝们疯狂跟风。币价确实涨了，粉丝赚麻了，开始把你叫\"郭大师\"。但你心里清楚——这波行情能持续多久？有人在弹幕里问你要不要搞个VIP社群，月费不少呢。你的布道精神和铜臭味开始打架。",
+              "choices": [
+                "开VIP割韭菜",
+                "免费分享，纯布道",
+                "VIP但良心定价"
+              ],
+              "effects": [
+                {
+                  "money": 60,
+                  "mind": -20,
+                  "know": 0,
+                  "luck": -15,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 10,
+                  "mind": 20,
+                  "know": 20,
+                  "luck": 15,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 35,
+                  "mind": 15,
+                  "know": 15,
+                  "luck": 10,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                }
+              ]
+            },
+            {
+              "id": "宝二爷_boom_01",
+              "tags": [
+                "挖矿",
+                "技术",
+                "内蒙"
+              ],
+              "story": "内蒙矿场来了个技术狂人，他说能把你的挖矿效率提升一倍，但需要改造整套硬件系统，投资得不少。他的PPT看起来挺专业，但你听不太懂他在说啥。矿工们问你信不信这哥们儿？你摸了摸下巴。",
+              "choices": [
+                "砸钱升级，信他",
+                "先小范围测试",
+                "维持现状别折腾"
+              ],
+              "effects": [
+                {
+                  "money": 50,
+                  "mind": 10,
+                  "know": 20,
+                  "luck": -15,
+                  "item": "高效矿机",
+                  "lose_item": null,
+                  "breakthrough": true
+                },
+                {
+                  "money": -20,
+                  "mind": 20,
+                  "know": 20,
+                  "luck": 10,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 5,
+                  "mind": 0,
+                  "know": 0,
+                  "luck": 0,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                }
+              ]
+            },
+            {
+              "id": "宝二爷_boom_02",
+              "tags": [
+                "社区",
+                "营销",
+                "社交"
+              ],
+              "story": "你的粉丝要求你出个NFT头像系列，说能给社区带来归属感。朋友圈里的大V都这么干了，赚得盆满钵满。但你有点犹豫——这东西真有价值，还是就是个图片？不过机会窗口似乎在关闭。",
+              "choices": [
+                "赶紧出NFT",
+                "深入研究后再决定",
+                "NFT是智商税躲开"
+              ],
+              "effects": [
+                {
+                  "money": 45,
+                  "mind": -20,
+                  "know": -10,
+                  "luck": 15,
+                  "item": "NFT系列",
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 15,
+                  "mind": 20,
+                  "know": 20,
+                  "luck": 5,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": -10,
+                  "mind": 20,
+                  "know": 15,
+                  "luck": -10,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                }
+              ]
+            },
+            {
+              "id": "宝二爷_boom_03",
+              "tags": [
+                "合规",
+                "调查",
+                "风险事件"
+              ],
+              "story": "有记者来采访，问你对\"币圈割韭菜\"的看法，还问你有没有违规操作。你一开始想怼他，但转念一想——现在是风口浪尖，一句话不当就被截图传遍网络。你得好好琢磨怎么说。",
+              "choices": [
+                "坦诚回应所有质疑",
+                "官方套话糊弄过去",
+                "拒绝采访，沉默处理"
+              ],
+              "effects": [
+                {
+                  "money": 10,
+                  "mind": 20,
+                  "know": 20,
+                  "luck": 15,
+                  "item": "声誉加成",
+                  "lose_item": null,
+                  "breakthrough": true
+                },
+                {
+                  "money": 20,
+                  "mind": -15,
+                  "know": -20,
+                  "luck": -15,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 0,
+                  "mind": -10,
+                  "know": 0,
+                  "luck": 0,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                }
+              ]
+            },
+            {
+              "id": "宝二爷_boom_04",
+              "tags": [
+                "DeFi",
+                "技术",
+                "学习"
+              ],
+              "story": "有个小伙子来给你讲解流动性挖矿和无常损失，你听得有点懵。但他说这是未来的大方向，懂DeFi的人能赚翻。你意识到自己的知识体系可能跟不上了。要不要花时间学这些复杂的东西？",
+              "choices": [
+                "砸时间学DeFi",
+                "邀请他做顾问合作",
+                "我还是专注挖矿"
+              ],
+              "effects": [
+                {
+                  "money": -15,
+                  "mind": 10,
+                  "know": 20,
+                  "luck": 5,
+                  "item": "DeFi知识",
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 25,
+                  "mind": 15,
+                  "know": 20,
+                  "luck": 15,
+                  "item": "DeFi顾问",
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 10,
+                  "mind": 5,
+                  "know": 0,
+                  "luck": 0,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                }
+              ]
+            },
+            {
+              "id": "宝二爷_boom_05",
+              "tags": [
+                "投资",
+                "牛市",
+                "社交"
+              ],
+              "story": "某个大机构的基金经理加你微信，说想投资你的矿场，估值不低。他开着豪车来内蒙见你，谈吐都透着专业。但你听圈里人说，这哥们儿背景有点复杂。这笔钱好赚，但风险也大。",
+              "choices": [
+                "签合同，要融资",
+                "深入调查再谈",
+                "自力更生不需要"
+              ],
+              "effects": [
+                {
+                  "money": 80,
+                  "mind": -20,
+                  "know": -15,
+                  "luck": -15,
+                  "item": "融资",
+                  "lose_item": null,
+                  "breakthrough": true
+                },
+                {
+                  "money": 0,
+                  "mind": 20,
+                  "know": 20,
+                  "luck": 15,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 20,
+                  "mind": 10,
+                  "know": 5,
+                  "luck": 10,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                }
+              ]
+            },
+            {
+              "id": "宝二爷_boom_06",
+              "tags": [
+                "交易",
+                "熊市",
+                "风险事件"
+              ],
+              "story": "币价突然跳水，直播间炸了。粉丝们开始骂你，说你的分析全是扯淡。你的心理防线在崩溃边缘，但作为KOL，你得稳住。要么认错道歉，要么死硬嘴硬说是阴谋，要么干脆下播躲一躲。",
+              "choices": [
+                "真诚认错，承认看错",
+                "甩锅市场操纵",
+                "下播冷静，停播几天"
+              ],
+              "effects": [
+                {
+                  "money": -20,
+                  "mind": 20,
+                  "know": 20,
+                  "luck": 10,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 10,
+                  "mind": -20,
+                  "know": -20,
+                  "luck": -15,
+                  "item": null,
+                  "lose_item": "信誉",
+                  "breakthrough": false
+                },
+                {
+                  "money": 0,
+                  "mind": -15,
+                  "know": 0,
+                  "luck": -10,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                }
+              ]
+            },
+            {
+              "id": "宝二爷_boom_07",
+              "tags": [
+                "社区",
+                "KOL",
+                "营销"
+              ],
+              "story": "一个地方政府邀请你做\"区块链产业推介会\"的讲者。这是大舞台，能大幅提升你的影响力和合规性光环。但演讲要求你说官方想听的话，可能需要你调整一些极端观点。这是出名的机会吗？",
+              "choices": [
+                "接受演讲，适度调整",
+                "照自己想法讲，不妥协",
+                "婉拒，太多限制"
+              ],
+              "effects": [
+                {
+                  "money": 30,
+                  "mind": 5,
+                  "know": 15,
+                  "luck": 15,
+                  "item": "官方背书",
+                  "lose_item": null,
+                  "breakthrough": true
+                },
+                {
+                  "money": 10,
+                  "mind": 20,
+                  "know": 10,
+                  "luck": -15,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 5,
+                  "mind": 15,
+                  "know": 0,
+                  "luck": -10,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                }
+              ]
+            },
+            {
+              "id": "宝二爷_boom_08",
+              "tags": [
+                "挖矿",
+                "风险事件",
+                "内蒙"
+              ],
+              "story": "内蒙突然查电费，矿场面临断电风险。你听说有人在联系不正规的电力渠道，能保证不被查。但那样风险更大，一旦出事，矿场可能被没收。你得在短时间内做决定。",
+              "choices": [
+                "配合检查，合规整改",
+                "联系不正规电源",
+                "矿机转移到其他地方"
+              ],
+              "effects": [
+                {
+                  "money": -40,
+                  "mind": 20,
+                  "know": 15,
+                  "luck": 15,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 20,
+                  "mind": -20,
+                  "know": -20,
+                  "luck": -15,
+                  "item": null,
+                  "lose_item": "矿场",
+                  "breakthrough": false
+                },
+                {
+                  "money": -30,
+                  "mind": 10,
+                  "know": 20,
+                  "luck": 15,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                }
+              ]
+            },
+            {
+              "id": "宝二爷_boom_09",
+              "tags": [
+                "社交",
+                "投资",
+                "牛市"
+              ],
+              "story": "你在高端饭局上遇见了传说中的币圈大佬，他对你的矿场和影响力很感兴趣，暗示可以一起做点大项目。酒到半酣，他说要建立一个\"精英俱乐部\"，邀请你入伙。这可能是改变命运的机会，但也可能是个局。",
+              "choices": [
+                "豪爽答应，入伙",
+                "先观察，不急着决定",
+                "礼貌拒绝，各走各的路"
+              ],
+              "effects": [
+                {
+                  "money": 70,
+                  "mind": -20,
+                  "know": 10,
+                  "luck": -15,
+                  "item": "俱乐部身份",
+                  "lose_item": null,
+                  "breakthrough": true
+                },
+                {
+                  "money": 15,
+                  "mind": 20,
+                  "know": 20,
+                  "luck": 15,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 10,
+                  "mind": 15,
+                  "know": 5,
+                  "luck": 5,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                }
+              ]
+            }
+          ]
         }
       }
     },
@@ -8268,6 +9994,440 @@
               ]
             }
           ]
+        },
+        "early": {
+          "stories": [
+            {
+              "id": "徐明星_early_00",
+              "tags": [
+                "交易",
+                "牛市",
+                "社交"
+              ],
+              "story": "豆丁网的日子太无聊了。你在知乎看到有人吹嘘炒币一个月翻十倍，心想这哥们在扯淡。但转念一想，比特币从几块钱涨到几千块，这逻辑似乎没问题？你决定用生活费买点试试水，告诉自己这叫「学习成本」。现在币在钱包里，你开始每天盯着K线，手心冒汗。",
+              "choices": [
+                "继续加仓，趁年轻赌一把",
+                "持币观望，先学技术分析",
+                "全部卖掉，这太刺激了"
+              ],
+              "effects": [
+                {
+                  "money": 35,
+                  "mind": -15,
+                  "know": 5,
+                  "luck": 15,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 0,
+                  "mind": 10,
+                  "know": 20,
+                  "luck": 0,
+                  "item": "技术分析基础",
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": -40,
+                  "mind": 5,
+                  "know": 0,
+                  "luck": -10,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                }
+              ]
+            },
+            {
+              "id": "徐明星_early_01",
+              "tags": [
+                "技术",
+                "社区",
+                "调查"
+              ],
+              "story": "你在某个币圈社区发现一个叫OKCoin的交易所，号称是「国内技术最强」。你作为物理系学生，对技术这两个字有种本能的好奇。你研究了他们的撮合引擎设计，确实比某些山寨所专业。一个念头闪过：要不要投简历试试？但你还在豆丁，要不要赌一把？",
+              "choices": [
+                "投简历去OKCoin面试",
+                "先在豆丁做完项目再说",
+                "找OKCoin员工打听情况"
+              ],
+              "effects": [
+                {
+                  "money": 20,
+                  "mind": -5,
+                  "know": 20,
+                  "luck": 15,
+                  "item": "交易所从业经验",
+                  "lose_item": null,
+                  "breakthrough": true
+                },
+                {
+                  "money": 0,
+                  "mind": 15,
+                  "know": 10,
+                  "luck": 0,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 0,
+                  "mind": 5,
+                  "know": 15,
+                  "luck": 10,
+                  "item": "行业人脉",
+                  "lose_item": null,
+                  "breakthrough": false
+                }
+              ]
+            },
+            {
+              "id": "徐明星_early_02",
+              "tags": [
+                "交易",
+                "震荡",
+                "投资"
+              ],
+              "story": "你的第一笔交易赚了一笔。心态膨胀，开始研究杠杆交易。一个币圈朋友说「杠杆就是放大器，10倍杠杆等于十倍收益」。他没提亏损也会十倍。你开始用5倍杠杆追高，结果币价一个跳水，你的账户直接爆仓。损失了前面赚的全部，还倒贴。你半夜睡不着，开始怀疑人生。",
+              "choices": [
+                "借钱翻本，必须扳回来",
+                "暂停交易，反思错误",
+                "转向挖矿，避免交易风险"
+              ],
+              "effects": [
+                {
+                  "money": -50,
+                  "mind": -20,
+                  "know": 5,
+                  "luck": -15,
+                  "item": null,
+                  "lose_item": "本金信心",
+                  "breakthrough": false
+                },
+                {
+                  "money": -30,
+                  "mind": 20,
+                  "know": 20,
+                  "luck": 5,
+                  "item": "风险管理意识",
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": -25,
+                  "mind": 10,
+                  "know": 15,
+                  "luck": 0,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                }
+              ]
+            },
+            {
+              "id": "徐明星_early_03",
+              "tags": [
+                "社交",
+                "KOL",
+                "营销"
+              ],
+              "story": "某个币圈大V在微博疯狂吹一个山寨币，粉丝跟风买入。你看他的分析「逻辑清晰」，也跟着梭哈。三天后项目方跑路，币价归零。你才意识到：这位大V拿的是项目方的推广费。你在评论区质问他，被他直接拉黑。这一刻，你明白了币圈信息不对称的残酷。",
+              "choices": [
+                "举报这个大V骗子",
+                "默默退圈，相信技术面",
+                "学习辨别虚假信息"
+              ],
+              "effects": [
+                {
+                  "money": -50,
+                  "mind": -10,
+                  "know": 10,
+                  "luck": -15,
+                  "item": null,
+                  "lose_item": "对KOL的信任",
+                  "breakthrough": false
+                },
+                {
+                  "money": -50,
+                  "mind": 0,
+                  "know": 5,
+                  "luck": -15,
+                  "item": null,
+                  "lose_item": "币圈热情",
+                  "breakthrough": false
+                },
+                {
+                  "money": -50,
+                  "mind": 15,
+                  "know": 20,
+                  "luck": 0,
+                  "item": "信息辨别能力",
+                  "lose_item": null,
+                  "breakthrough": true
+                }
+              ]
+            },
+            {
+              "id": "徐明星_early_04",
+              "tags": [
+                "技术",
+                "DeFi",
+                "学习"
+              ],
+              "story": "你开始研究智能合约和DeFi。作为物理系学生，你觉得代码逻辑很清晰，决定把币存进某个DeFi协议「借贷」赚利息。年化收益率写的是百分之几百。你没看审计报告，也不知道什么是闪电贷攻击。两周后，协议被黑客攻击，你的币凭空消失。你第一次体会到「代码即法律」的恐怖。",
+              "choices": [
+                "从此不碰DeFi，太危险",
+                "深入学习智能合约安全",
+                "转向传统金融产品"
+              ],
+              "effects": [
+                {
+                  "money": -50,
+                  "mind": -20,
+                  "know": 5,
+                  "luck": -15,
+                  "item": null,
+                  "lose_item": "DeFi信心",
+                  "breakthrough": false
+                },
+                {
+                  "money": -50,
+                  "mind": 10,
+                  "know": 20,
+                  "luck": -5,
+                  "item": "合约审计知识",
+                  "lose_item": null,
+                  "breakthrough": true
+                },
+                {
+                  "money": -50,
+                  "mind": 5,
+                  "know": 0,
+                  "luck": -10,
+                  "item": null,
+                  "lose_item": "冒险精神",
+                  "breakthrough": false
+                }
+              ]
+            },
+            {
+              "id": "徐明星_early_05",
+              "tags": [
+                "交易",
+                "社区",
+                "调查"
+              ],
+              "story": "你在OKCoin的交易社区认识了一个资深玩家，他声称有「内部渠道」知道某些币要上线。他主动加你微信，说可以给你「小费提示」。你心里有点起疑，但又有点心动。他开始让你先转账「验证账户」。你突然想起最近看过的诈骗案例，决定测试一下。",
+              "choices": [
+                "直接拉黑，这明显是骗子",
+                "假装转账，看他如何反应",
+                "问他能不能先转账给你"
+              ],
+              "effects": [
+                {
+                  "money": 0,
+                  "mind": 15,
+                  "know": 15,
+                  "luck": 15,
+                  "item": "诈骗识别能力",
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 0,
+                  "mind": 5,
+                  "know": 20,
+                  "luck": 10,
+                  "item": "反诈经验",
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": -20,
+                  "mind": -20,
+                  "know": 5,
+                  "luck": -15,
+                  "item": null,
+                  "lose_item": "账户资金",
+                  "breakthrough": false
+                }
+              ]
+            },
+            {
+              "id": "徐明星_early_06",
+              "tags": [
+                "投资",
+                "牛市",
+                "心态"
+              ],
+              "story": "经过几个月的亏损和学习，你终于在一次行情中赚了一笔。同学问你赚多少了，你下意识地说了个数字。他当众说「靠，这点钱有什么好炫耀的」。你突然明白：币圈最大的风险不是亏钱，是心态失衡。你开始反思，为什么总想告诉别人赚了多少？这是真的投资思维吗？",
+              "choices": [
+                "保持低调，闷声赚大钱",
+                "分享经验，帮助更多人",
+                "写个交易日记，只给自己看"
+              ],
+              "effects": [
+                {
+                  "money": 15,
+                  "mind": 20,
+                  "know": 10,
+                  "luck": 10,
+                  "item": "低调习惯",
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 10,
+                  "mind": 15,
+                  "know": 20,
+                  "luck": 5,
+                  "item": "社区影响力",
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 0,
+                  "mind": 20,
+                  "know": 20,
+                  "luck": 0,
+                  "item": "自我认知",
+                  "lose_item": null,
+                  "breakthrough": true
+                }
+              ]
+            },
+            {
+              "id": "徐明星_early_07",
+              "tags": [
+                "合规",
+                "调查",
+                "风险"
+              ],
+              "story": "你听说国家要「严打虚拟货币」，有个朋友已经把币都换成法币跑路了。另一个朋友说这是FUD，反而加仓。你很困惑：到底要不要担心政策风险？你开始查阅官方声明，发现政府打击的是非法融资，而不是持币本身。但这条线有多清楚呢？你开始意识到，合规风险可能比技术风险更致命。",
+              "choices": [
+                "全部套现，风险太大",
+                "持仓观望，相信政策稳定",
+                "分散持仓，对冲政策风险"
+              ],
+              "effects": [
+                {
+                  "money": -25,
+                  "mind": 10,
+                  "know": 10,
+                  "luck": 5,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 20,
+                  "mind": -10,
+                  "know": 15,
+                  "luck": 15,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 0,
+                  "mind": 15,
+                  "know": 20,
+                  "luck": 10,
+                  "item": "风险对冲思维",
+                  "lose_item": null,
+                  "breakthrough": true
+                }
+              ]
+            },
+            {
+              "id": "徐明星_early_08",
+              "tags": [
+                "技术",
+                "挖矿",
+                "投资"
+              ],
+              "story": "你琢磨着用显卡挖矿。朋友说现在显卡价格被炒得飞起，买一张卡的钱够你交易一年的手续费。另一个朋友说挖矿才是「长期稳定收益」。你查了数据，挖矿需要持续投入电费，而且矿机迭代快。但你作为技术出身，对「自动运行赚钱」这个概念有种执念。到底该不该入坑？",
+              "choices": [
+                "投资矿机，建立被动收入",
+                "专注交易，时间效率更高",
+                "小额试水，边学边做"
+              ],
+              "effects": [
+                {
+                  "money": -40,
+                  "mind": -10,
+                  "know": 20,
+                  "luck": 5,
+                  "item": "矿机投资",
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 25,
+                  "mind": 10,
+                  "know": 15,
+                  "luck": 10,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": -15,
+                  "mind": 10,
+                  "know": 20,
+                  "luck": 5,
+                  "item": "挖矿基础知识",
+                  "lose_item": null,
+                  "breakthrough": true
+                }
+              ]
+            },
+            {
+              "id": "徐明星_early_09",
+              "tags": [
+                "社交",
+                "营销",
+                "突破"
+              ],
+              "story": "OKCoin的HR找到了你。原来你在币圈社区的言论被内部人注意到了：虽然亏过钱，但分析思路清晰，态度诚恳。HR说他们缺「既懂技术又理解交易」的人。这一刻，你意识到：也许我的亏损不是失败，而是学费。豆丁网的日子突然显得太遥远了。你拿着offer，重新审视自己这半年的币圈之旅。",
+              "choices": [
+                "接offer，投身交易所",
+                "再在豆丁磨炼一年",
+                "谈个更高的薪资再决定"
+              ],
+              "effects": [
+                {
+                  "money": 50,
+                  "mind": 20,
+                  "know": 20,
+                  "luck": 15,
+                  "item": "交易所职位",
+                  "lose_item": null,
+                  "breakthrough": true
+                },
+                {
+                  "money": 0,
+                  "mind": 5,
+                  "know": 15,
+                  "luck": -5,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 40,
+                  "mind": 15,
+                  "know": 20,
+                  "luck": 15,
+                  "item": "交易所职位",
+                  "lose_item": null,
+                  "breakthrough": true
+                }
+              ]
+            }
+          ]
         }
       }
     },
@@ -10000,6 +12160,440 @@
                   "money": 30,
                   "mind": 20,
                   "know": 20,
+                  "luck": 15,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": true
+                }
+              ]
+            }
+          ]
+        },
+        "growth": {
+          "stories": [
+            {
+              "id": "孙宇晨_growth_00",
+              "tags": [
+                "营销",
+                "社交",
+                "牛市"
+              ],
+              "story": "你在微博上的一句「波场才是真正的以太坊杀手」引爆了全网。粉丝疯狂转发，媒体争相报道。币圈大V开始@你，有人说你是天才，有人说你是骗子。你的手机快被震炸了。这时，某头部交易所CEO私信你，想聊聊合作。你意识到，话题制造机的威力超乎想象。",
+              "choices": [
+                "趁热打铁发币融资",
+                "低调回应防止监管风险",
+                "继续制造话题扩大影响"
+              ],
+              "effects": [
+                {
+                  "money": 60,
+                  "mind": 10,
+                  "know": 5,
+                  "luck": -10,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 20,
+                  "mind": 15,
+                  "know": 10,
+                  "luck": 5,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 40,
+                  "mind": 20,
+                  "know": 0,
+                  "luck": 15,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                }
+              ]
+            },
+            {
+              "id": "孙宇晨_growth_01",
+              "tags": [
+                "交易",
+                "震荡",
+                "风险"
+              ],
+              "story": "波场生态内的一个头部项目突然跑路了。社区炸锅，有人开始质疑波场的审核机制。你的合伙人建议立即发声，但你犹豫了——这是承认问题，还是装作不知道？你想起北大的课堂讨论，诚信与增长的悖论再次浮现。选择会决定社区对你的信任。",
+              "choices": [
+                "主动披露问题恢复信任",
+                "甩锅给项目方保护生态",
+                "沉默以对等待舆情消退"
+              ],
+              "effects": [
+                {
+                  "money": -20,
+                  "mind": 20,
+                  "know": 15,
+                  "luck": 10,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 10,
+                  "mind": -15,
+                  "know": -10,
+                  "luck": -15,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 5,
+                  "mind": -5,
+                  "know": 0,
+                  "luck": -10,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                }
+              ]
+            },
+            {
+              "id": "孙宇晨_growth_02",
+              "tags": [
+                "投资",
+                "KOL",
+                "社交"
+              ],
+              "story": "某国际顶级风投找到你，说想投波场生态基金。但条件是你要去纽约路演半年，把更多美元投资者带进来。这意味着你要离开中文社区的舞台。你在办公室走来走去，窗外是北京的夜景。影响力和资本，这是个经典的交易。宾大的校友网络闪现脑海。",
+              "choices": [
+                "赴美路演拓展国际市场",
+                "留在国内深耕社区运营",
+                "派代理人去美国谈判"
+              ],
+              "effects": [
+                {
+                  "money": 50,
+                  "mind": 5,
+                  "know": 20,
+                  "luck": 15,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": true
+                },
+                {
+                  "money": 35,
+                  "mind": 15,
+                  "know": 10,
+                  "luck": 5,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 25,
+                  "mind": 0,
+                  "know": 5,
+                  "luck": -5,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                }
+              ]
+            },
+            {
+              "id": "孙宇晨_growth_03",
+              "tags": [
+                "DeFi",
+                "技术",
+                "挖矿"
+              ],
+              "story": "你的技术团队开发了一个创新的流动性挖矿产品，年化收益设计得非常诱人。但内部审计发现了一个隐藏的漏洞，可能被黑客利用。工程师建议延期发布修复，但市场窗口就在眼前，竞对已经摩拳擦掌。你想起那句「快速迭代」的信条，但风险也在眼前。",
+              "choices": [
+                "按时发布相信能快速修补",
+                "延期修复确保安全上线",
+                "发布beta版本小范围测试"
+              ],
+              "effects": [
+                {
+                  "money": 45,
+                  "mind": -20,
+                  "know": -15,
+                  "luck": -15,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 10,
+                  "mind": 15,
+                  "know": 20,
+                  "luck": 10,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 30,
+                  "mind": 10,
+                  "know": 15,
+                  "luck": 5,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                }
+              ]
+            },
+            {
+              "id": "孙宇晨_growth_04",
+              "tags": [
+                "NFT",
+                "营销",
+                "社区"
+              ],
+              "story": "一个大牌明星团队找你合作波场NFT项目，说能吸引圈外用户进场。合作费用不便宜，但他们承诺会让波场登上主流媒体。你的市场团队兴奋不已。但你也知道，NFT圈的泡沫有多大。这是乘风破浪，还是接盘侠？",
+              "choices": [
+                "全力支持明星项目上线",
+                "谈判降低风险分摊比例",
+                "婉拒合作专注生态建设"
+              ],
+              "effects": [
+                {
+                  "money": 55,
+                  "mind": 10,
+                  "know": 5,
+                  "luck": 15,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 35,
+                  "mind": 5,
+                  "know": 10,
+                  "luck": 10,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 15,
+                  "mind": 20,
+                  "know": 15,
+                  "luck": 0,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                }
+              ]
+            },
+            {
+              "id": "孙宇晨_growth_05",
+              "tags": [
+                "调查",
+                "合规",
+                "风险"
+              ],
+              "story": "某监管机构突然约见你，询问波场的用户身份认证、资金流向等问题。办公室里的气氛瞬间凝固。你的律师团队准备了厚厚的合规文件，但你知道，监管的态度决定了接下来的生存空间。这是第一次挫折的信号。你深呼一口气，走进会议室。",
+              "choices": [
+                "主动配合展示合规决心",
+                "谨慎应对准备应诉预案",
+                "通过关系寻求政策倾斜"
+              ],
+              "effects": [
+                {
+                  "money": -15,
+                  "mind": 10,
+                  "know": 20,
+                  "luck": 15,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": -10,
+                  "mind": 5,
+                  "know": 10,
+                  "luck": 0,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": -30,
+                  "mind": -10,
+                  "know": -5,
+                  "luck": -15,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                }
+              ]
+            },
+            {
+              "id": "孙宇晨_growth_06",
+              "tags": [
+                "交易",
+                "熊市",
+                "投资"
+              ],
+              "story": "大盘开始调整，你持有的一大笔资产缩水不少。社区开始出现悲观声音，有人问「波场真的能成吗」。你的对冲基金经理建议减仓锁定损失，但你的直觉告诉你这是抄底的机会。北大的博弈论课程闪现——在信息不对称的市场，谁更疯狂谁就赢。",
+              "choices": [
+                "反向操作继续加仓",
+                "保持现状等待反弹",
+                "部分减仓降低风险敞口"
+              ],
+              "effects": [
+                {
+                  "money": 65,
+                  "mind": -10,
+                  "know": 5,
+                  "luck": 15,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": -10,
+                  "mind": 5,
+                  "know": 0,
+                  "luck": -5,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 15,
+                  "mind": 10,
+                  "know": 10,
+                  "luck": 5,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                }
+              ]
+            },
+            {
+              "id": "孙宇晨_growth_07",
+              "tags": [
+                "社区",
+                "KOL",
+                "营销"
+              ],
+              "story": "一个曾经力挺你的知名币圈大V突然发文批评波场「技术平庸、只会营销」。他的粉丝跟风嘘声，甚至有人翻出你多年前的言论来攻击。评论区的战争瞬间升级。你的公关团队急了，建议你硬怼回去。但你停顿了——这个人的话，有些扎心。",
+              "choices": [
+                "发文强力回应维护声誉",
+                "保持沉默不给对方热度",
+                "私下沟通化解矛盾"
+              ],
+              "effects": [
+                {
+                  "money": 5,
+                  "mind": -15,
+                  "know": 0,
+                  "luck": -10,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 10,
+                  "mind": 10,
+                  "know": 5,
+                  "luck": 0,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 20,
+                  "mind": 15,
+                  "know": 15,
+                  "luck": 10,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": true
+                }
+              ]
+            },
+            {
+              "id": "孙宇晨_growth_08",
+              "tags": [
+                "挖矿",
+                "技术",
+                "投资"
+              ],
+              "story": "波场的挖矿难度不断上升，成本也在攀升。你收到一份报告：继续投入基础设施需要一笔巨大的资本开支，但短期内看不到回报。财务VP说「我们现在有两个选择：成为真正的基础设施，或者变成空气币」。这是成长期的分水岭。你想起宾大的融资课，每一轮融资都是对信念的验证。",
+              "choices": [
+                "融资投入基础设施建设",
+                "优化成本维持现状运营",
+                "引入机构合作分担压力"
+              ],
+              "effects": [
+                {
+                  "money": 40,
+                  "mind": 15,
+                  "know": 20,
+                  "luck": 10,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": true
+                },
+                {
+                  "money": -20,
+                  "mind": -10,
+                  "know": -5,
+                  "luck": -15,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 30,
+                  "mind": 5,
+                  "know": 15,
+                  "luck": 5,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                }
+              ]
+            },
+            {
+              "id": "孙宇晨_growth_09",
+              "tags": [
+                "社交",
+                "营销",
+                "调查"
+              ],
+              "story": "你被邀请参加达沃斯论坛，与全球精英讨论区块链未来。这是梦想的舞台，你已经构思好了演讲稿。但同时，某财经媒体的记者联系了你，说要做一期深度调查报道，涉及你的早年项目。这是国际化的机会，还是自揭伤疤的陷阱？",
+              "choices": [
+                "赴达沃斯只参加论坛",
+                "接受媒体采访展现透明度",
+                "两个都参加展现自信"
+              ],
+              "effects": [
+                {
+                  "money": 30,
+                  "mind": 15,
+                  "know": 10,
+                  "luck": 15,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 10,
+                  "mind": 20,
+                  "know": 20,
+                  "luck": 5,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 25,
+                  "mind": 10,
+                  "know": 15,
                   "luck": 15,
                   "item": null,
                   "lose_item": null,
@@ -22578,6 +25172,440 @@
               ]
             }
           ]
+        },
+        "early": {
+          "stories": [
+            {
+              "id": "Saylor_early_00",
+              "tags": [
+                "交易",
+                "新手",
+                "震荡"
+              ],
+              "story": "你刚花了一笔积蓄买入比特币，结果第二天暴跌了。币圈大V们在推特上狂欢'抄底机会'，你的心态也开始动摇。钱包里的数字在闪烁，你开始怀疑是不是搞反了——应该跌的时候加仓吗？还是赶紧割肉止损？手指悬停在卖出按钮上，汗水滴在屏幕上。",
+              "choices": [
+                "坚定持币，再加一笔",
+                "分批止损，保留本金",
+                "观望等待，不做决定"
+              ],
+              "effects": [
+                {
+                  "money": 45,
+                  "mind": 20,
+                  "know": 10,
+                  "luck": 15,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": -30,
+                  "mind": -20,
+                  "know": 5,
+                  "luck": -10,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": -15,
+                  "mind": 10,
+                  "know": 0,
+                  "luck": 0,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                }
+              ]
+            },
+            {
+              "id": "Saylor_early_01",
+              "tags": [
+                "社区",
+                "KOL",
+                "社交"
+              ],
+              "story": "你加入了一个币圈微信群，群主自称是'比特币教父'，正在推荐一个'绝密投资机会'。群里已经有不少人转账了，消息刷屏到看不见上文。有人说'踏空等于亏钱'，有人晒出账户截图说赚了一倍。你的手指在转账键上停留，犹豫不决。这真的是机会，还是精心设计的局？",
+              "choices": [
+                "冲进去，先赚了再说",
+                "深入调查，查阅资料",
+                "直接退群，远离诱惑"
+              ],
+              "effects": [
+                {
+                  "money": -50,
+                  "mind": -20,
+                  "know": -15,
+                  "luck": -15,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 0,
+                  "mind": 20,
+                  "know": 20,
+                  "luck": 10,
+                  "item": "调查笔记",
+                  "lose_item": null,
+                  "breakthrough": true
+                },
+                {
+                  "money": 10,
+                  "mind": 20,
+                  "know": 15,
+                  "luck": 15,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                }
+              ]
+            },
+            {
+              "id": "Saylor_early_02",
+              "tags": [
+                "技术",
+                "学习",
+                "调查"
+              ],
+              "story": "你决定深入学习比特币原理，但打开《比特币白皮书》后被密码学和工作量证明的概念砸懵了。你试图在B站找教程，却被各种'日赚千元''暴富密码'的视频轰炸。有个声音在脑子里响起：也许你不该理解原理，只需要相信就够了。但心里又隐隐不安。",
+              "choices": [
+                "放弃学习，信仰就够了",
+                "硬啃白皮书和技术文档",
+                "找找靠谱的科普教程"
+              ],
+              "effects": [
+                {
+                  "money": 0,
+                  "mind": -10,
+                  "know": -20,
+                  "luck": 5,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 5,
+                  "mind": 15,
+                  "know": 20,
+                  "luck": 0,
+                  "item": "技术笔记",
+                  "lose_item": null,
+                  "breakthrough": true
+                },
+                {
+                  "money": 0,
+                  "mind": 20,
+                  "know": 20,
+                  "luck": 10,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                }
+              ]
+            },
+            {
+              "id": "Saylor_early_03",
+              "tags": [
+                "投资",
+                "牛市",
+                "营销"
+              ],
+              "story": "比特币开始上涨，你的账户浮盈越来越多。朋友们开始问你投资秘诀，你俨然成了'炒币高手'。一个自媒体运营联系你，要你分享赚钱故事，说可以帮你积累粉丝和品牌。你开始幻想自己成为下一个币圈大V。但同时，心里有个声音在问：我真的懂行情吗，还是只是运气好？",
+              "choices": [
+                "接受邀请，开始做内容",
+                "低调持币，拒绝出镜",
+                "分享经验，但保持谨慎"
+              ],
+              "effects": [
+                {
+                  "money": -40,
+                  "mind": -20,
+                  "know": 5,
+                  "luck": -15,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 20,
+                  "mind": 20,
+                  "know": 0,
+                  "luck": 15,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 10,
+                  "mind": 20,
+                  "know": 15,
+                  "luck": 10,
+                  "item": "信誉",
+                  "lose_item": null,
+                  "breakthrough": false
+                }
+              ]
+            },
+            {
+              "id": "Saylor_early_04",
+              "tags": [
+                "熊市",
+                "心态",
+                "风险"
+              ],
+              "story": "比特币突然闪崩，整个币圈陷入恐慌。交易所的服务器都被挤崩了。你的账户从浮盈变成浮亏，红色的数字刺痛眼睛。抖音上全是'破产了''跳楼了'的段子。你开始失眠，每分钟刷新一次行情。家人问你在干什么，你突然意识到自己可能赌上了太多。",
+              "choices": [
+                "割肉止损，远离币圈",
+                "坚守信仰，再熬一熬",
+                "分析原因，调整策略"
+              ],
+              "effects": [
+                {
+                  "money": -50,
+                  "mind": -20,
+                  "know": 5,
+                  "luck": -15,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 30,
+                  "mind": 10,
+                  "know": 0,
+                  "luck": 15,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": -20,
+                  "mind": 20,
+                  "know": 20,
+                  "luck": 10,
+                  "item": "反思日记",
+                  "lose_item": null,
+                  "breakthrough": true
+                }
+              ]
+            },
+            {
+              "id": "Saylor_early_05",
+              "tags": [
+                "合规",
+                "调查",
+                "风险"
+              ],
+              "story": "你无意中看到新闻，说某国政府要严格监管加密货币。币圈开始传言'政策风险''账户冻结''交易禁令'。你的第一反应是恐慌，但随即想起一些资深玩家说过'历史上出现过无数次监管传言，比特币都活过来了'。你需要判断：这次是狼来了，还是真的狼来了？",
+              "choices": [
+                "立即转移资产到冷钱包",
+                "持续关注官方声明",
+                "分散风险到多个国家"
+              ],
+              "effects": [
+                {
+                  "money": -15,
+                  "mind": 10,
+                  "know": 20,
+                  "luck": 5,
+                  "item": "冷钱包",
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 5,
+                  "mind": 20,
+                  "know": 20,
+                  "luck": 15,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": true
+                },
+                {
+                  "money": -25,
+                  "mind": 15,
+                  "know": 15,
+                  "luck": 0,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                }
+              ]
+            },
+            {
+              "id": "Saylor_early_06",
+              "tags": [
+                "DeFi",
+                "技术",
+                "风险"
+              ],
+              "story": "你在币圈论坛看到DeFi的讨论，听说有个流动性挖矿项目年化收益超过三位数。'把币放进去就能自动赚钱'的描述让你心动。但你点进合约代码，看到一堆看不懂的代码。评论区有人喊'这是诈骗''拉盘砸盘'，也有人晒出巨额收益。你陷入了信息的迷宫。",
+              "choices": [
+                "小额试水，尝一尝",
+                "彻底学习智能合约再投",
+                "远离DeFi，只持币"
+              ],
+              "effects": [
+                {
+                  "money": -50,
+                  "mind": -20,
+                  "know": 10,
+                  "luck": -15,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 0,
+                  "mind": 15,
+                  "know": 20,
+                  "luck": 5,
+                  "item": "合约知识",
+                  "lose_item": null,
+                  "breakthrough": true
+                },
+                {
+                  "money": 10,
+                  "mind": 20,
+                  "know": 5,
+                  "luck": 15,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                }
+              ]
+            },
+            {
+              "id": "Saylor_early_07",
+              "tags": [
+                "社交",
+                "心态",
+                "投资"
+              ],
+              "story": "你在公司食堂听到同事讨论股票，他们嘲笑加密货币是'博彩''割韭菜'。你本想反驳，但突然意识到自己其实也没有坚实的论据。一个同事说他亲戚在2018年亏了房子首付，整个办公室笑了。你感到被孤立，开始怀疑自己的选择。要不要为自己的信仰辩护？",
+              "choices": [
+                "激烈辩论，捍卫信仰",
+                "保持沉默，低调做事",
+                "虚心听取，反思自己"
+              ],
+              "effects": [
+                {
+                  "money": 0,
+                  "mind": -15,
+                  "know": 5,
+                  "luck": -15,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 5,
+                  "mind": 10,
+                  "know": 0,
+                  "luck": 15,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 0,
+                  "mind": 20,
+                  "know": 20,
+                  "luck": 10,
+                  "item": "新视角",
+                  "lose_item": null,
+                  "breakthrough": true
+                }
+              ]
+            },
+            {
+              "id": "Saylor_early_08",
+              "tags": [
+                "挖矿",
+                "技术",
+                "投资"
+              ],
+              "story": "有个朋友建议你投资矿机，说'比特币越来越难挖，现在买矿机就是抄底'。他给你展示了一个Excel表格，计算出一年能回本赚两倍。你被吸引了，但也注意到他每个月都在推销新款矿机。还有个细节让你困惑：如果这么赚钱，他为什么还要卖矿机给别人？",
+              "choices": [
+                "投资矿机，参与挖矿",
+                "自己研究成本再决定",
+                "坚持持币，不碰矿机"
+              ],
+              "effects": [
+                {
+                  "money": -50,
+                  "mind": -10,
+                  "know": 15,
+                  "luck": -15,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": -10,
+                  "mind": 15,
+                  "know": 20,
+                  "luck": 5,
+                  "item": "成本分析",
+                  "lose_item": null,
+                  "breakthrough": true
+                },
+                {
+                  "money": 15,
+                  "mind": 20,
+                  "know": 5,
+                  "luck": 15,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                }
+              ]
+            },
+            {
+              "id": "Saylor_early_09",
+              "tags": [
+                "牛市",
+                "心态",
+                "突破"
+              ],
+              "story": "经过几个月的折腾、学习和心态调整，比特币终于进入新一轮上升周期。你的账户浮盈开始显著增长。但这一次，你没有急着变现或吹牛，反而开始思考更深层的问题：我为什么相信比特币？如果只是为了赚钱，那和赌博有什么区别？你决定重新审视自己的投资哲学。",
+              "choices": [
+                "坚守长期主义，永不卖出",
+                "设定目标价格，有序减仓",
+                "深入研究，成为真正信徒"
+              ],
+              "effects": [
+                {
+                  "money": 40,
+                  "mind": 20,
+                  "know": 20,
+                  "luck": 15,
+                  "item": "信念",
+                  "lose_item": null,
+                  "breakthrough": true
+                },
+                {
+                  "money": 25,
+                  "mind": 20,
+                  "know": 15,
+                  "luck": 15,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 10,
+                  "mind": 20,
+                  "know": 20,
+                  "luck": 10,
+                  "item": "哲学笔记",
+                  "lose_item": null,
+                  "breakthrough": true
+                }
+              ]
+            }
+          ]
         }
       }
     },
@@ -30391,6 +33419,874 @@
                   "item": "匿名支持",
                   "lose_item": null,
                   "breakthrough": false
+                }
+              ]
+            }
+          ]
+        },
+        "boom": {
+          "stories": [
+            {
+              "id": "中本聪_boom_00",
+              "tags": [
+                "交易",
+                "牛市",
+                "KOL"
+              ],
+              "story": "一个自称掌握百万粉丝的大V找上门来，要求你站台推荐某个新币种。他说这是'千载难逢的机会'，能帮你赚一笔，还能扩大影响力。你看着他夸大其词的方案，陷入沉思——权力与责任的天平又一次倾斜。你深知散户的贪婪，也知道自己的话有多重。",
+              "choices": [
+                "婉拒，保持沉默的力量",
+                "有条件地合作，但声明风险",
+                "直接揭露项目方的套路"
+              ],
+              "effects": [
+                {
+                  "money": 0,
+                  "mind": 15,
+                  "know": 10,
+                  "luck": 5,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 25,
+                  "mind": -10,
+                  "know": 15,
+                  "luck": 0,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": -30,
+                  "mind": 20,
+                  "know": 20,
+                  "luck": -15,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": true
+                }
+              ]
+            },
+            {
+              "id": "中本聪_boom_01",
+              "tags": [
+                "技术",
+                "震荡",
+                "调查"
+              ],
+              "story": "矿工集团暗示他们在修改比特币代码，以获得更多优势。这触犯了你的底线——去中心化的初心不能沦为权力游戏。但如果你举报，会得罪整个产业链。你在深夜的代码前坐了很久，思考着什么是真正的'中本聪精神'。",
+              "choices": [
+                "匿名发布技术证明，揭露漏洞",
+                "私下警告矿工，给改正机会",
+                "沉默，让市场自我纠正"
+              ],
+              "effects": [
+                {
+                  "money": -20,
+                  "mind": 20,
+                  "know": 20,
+                  "luck": -15,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": true
+                },
+                {
+                  "money": 10,
+                  "mind": 5,
+                  "know": 15,
+                  "luck": 10,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 0,
+                  "mind": -15,
+                  "know": 0,
+                  "luck": 5,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                }
+              ]
+            },
+            {
+              "id": "中本聪_boom_02",
+              "tags": [
+                "合规",
+                "社区",
+                "营销"
+              ],
+              "story": "某国政府部门邀请你参加闭门会议，讨论如何'规范'加密货币。他们承诺给予政策优惠，但条件是你要配合他们的监管框架。你咀嚼着这个诱人的果实，它尝起来像权力，也像陷阱。中本聪从来不信任权力。",
+              "choices": [
+                "参与但坚持底线，推动理性监管",
+                "拒绝参会，保持独立地位",
+                "参与后秘密泄露内容给社区"
+              ],
+              "effects": [
+                {
+                  "money": 35,
+                  "mind": -5,
+                  "know": 20,
+                  "luck": 5,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 0,
+                  "mind": 20,
+                  "know": 5,
+                  "luck": 10,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": -40,
+                  "mind": 10,
+                  "know": 15,
+                  "luck": -15,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                }
+              ]
+            },
+            {
+              "id": "中本聪_boom_03",
+              "tags": [
+                "投资",
+                "DeFi",
+                "风险"
+              ],
+              "story": "一个自动做市商协议的创始人拿着融资方案来找你。他说这会彻底改变交易方式，但代码还没审计，风险巨大。团队在催促，投资者在围观，所有人都等你点头。你却想起了那些因代码漏洞而破产的故事。",
+              "choices": [
+                "投资并推动快速上线",
+                "投资但要求严格审计和延期",
+                "拒投，建议他们再磨几年"
+              ],
+              "effects": [
+                {
+                  "money": 60,
+                  "mind": -20,
+                  "know": 10,
+                  "luck": -15,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 40,
+                  "mind": 10,
+                  "know": 20,
+                  "luck": 5,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": -10,
+                  "mind": 15,
+                  "know": 15,
+                  "luck": 15,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                }
+              ]
+            },
+            {
+              "id": "中本聪_boom_04",
+              "tags": [
+                "社交",
+                "牛市",
+                "KOL"
+              ],
+              "story": "你的一条简短推文被疯传，散户们在评论里把你当神供奉。有人说你的话能决定币价，有人写论文分析你的措辞。这种被神化的感觉既诡异又危险。你意识到，自己正在成为那种最不想成为的东西——一个掌握话语权的权力中心。",
+              "choices": [
+                "澄清自己只是观察者，非先知",
+                "利用影响力推进教育和普及",
+                "彻底隐居，断绝一切联系"
+              ],
+              "effects": [
+                {
+                  "money": -15,
+                  "mind": 20,
+                  "know": 10,
+                  "luck": 10,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 30,
+                  "mind": 5,
+                  "know": 20,
+                  "luck": 5,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 0,
+                  "mind": 20,
+                  "know": 0,
+                  "luck": 15,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": true
+                }
+              ]
+            },
+            {
+              "id": "中本聪_boom_05",
+              "tags": [
+                "挖矿",
+                "技术",
+                "竞争"
+              ],
+              "story": "一个芯片制造商声称开发出划时代的挖矿芯片，性能提升十倍。但这会加剧算力集中化，威胁网络安全。他们承诺给你提前股份，但你知道这是在问你：你是否愿意为了利益而妥协初心？",
+              "choices": [
+                "接受股份并保持影响力监督",
+                "拒绝，公开呼吁抵制中心化芯片",
+                "投资但要求芯片设计开源"
+              ],
+              "effects": [
+                {
+                  "money": 45,
+                  "mind": -15,
+                  "know": 10,
+                  "luck": 5,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": -25,
+                  "mind": 20,
+                  "know": 15,
+                  "luck": -10,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": true
+                },
+                {
+                  "money": 20,
+                  "mind": 10,
+                  "know": 20,
+                  "luck": 10,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                }
+              ]
+            },
+            {
+              "id": "中本聪_boom_06",
+              "tags": [
+                "调查",
+                "社区",
+                "震荡"
+              ],
+              "story": "有人声称找到了你真实身份的蛛丝马迹，开始在论坛里兜售'爆料'。你的隐私正在被商品化。一个选择是追查这个人并起诉；另一个是彻底曝光自己；最后一个是任由谣言蔓延。身份本身成了一场权力游戏。",
+              "choices": [
+                "法律途径追查并惩罚泄露者",
+                "主动公开身份，终结所有谜团",
+                "既不确认也不否认，保持神秘"
+              ],
+              "effects": [
+                {
+                  "money": -30,
+                  "mind": 5,
+                  "know": 10,
+                  "luck": -15,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 0,
+                  "mind": -20,
+                  "know": 20,
+                  "luck": -15,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": true
+                },
+                {
+                  "money": 10,
+                  "mind": 15,
+                  "know": 5,
+                  "luck": 15,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                }
+              ]
+            },
+            {
+              "id": "中本聪_boom_07",
+              "tags": [
+                "NFT",
+                "营销",
+                "牛市"
+              ],
+              "story": "一群艺术家用你的名字创建了NFT系列，声称要把你的'精神'铸造成区块链艺术。这既是致敬，也是消费。有人已经赚了一笔，更多人在等你的反应。你看着这个荒诞的镜像，思考着符号权力的边界。",
+              "choices": [
+                "出面制止，保护个人名义权",
+                "合作，但捐献收益给开源项目",
+                "沉默旁观这场符号狂欢"
+              ],
+              "effects": [
+                {
+                  "money": -20,
+                  "mind": 10,
+                  "know": 5,
+                  "luck": -5,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 50,
+                  "mind": 10,
+                  "know": 10,
+                  "luck": 10,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 0,
+                  "mind": -10,
+                  "know": 0,
+                  "luck": 5,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                }
+              ]
+            },
+            {
+              "id": "中本聪_boom_08",
+              "tags": [
+                "熊市",
+                "风险",
+                "投资"
+              ],
+              "story": "市场进入极度恐慌，币价暴跌。一些早期信徒在求救，说他们投入了毕生积蓄。另有机构低价抄底，准备大赚一笔。你的言论此时如同火焰——可以煽动人们坚守，也能点燃绝望。沉默本身也是一种选择。",
+              "choices": [
+                "发声鼓励长期持有，稳定军心",
+                "分析风险，劝说高杠杆者止损",
+                "彻底沉默，让市场自然出清"
+              ],
+              "effects": [
+                {
+                  "money": 30,
+                  "mind": -15,
+                  "know": 5,
+                  "luck": 10,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 0,
+                  "mind": 15,
+                  "know": 20,
+                  "luck": 5,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": -40,
+                  "mind": 20,
+                  "know": 10,
+                  "luck": 15,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                }
+              ]
+            },
+            {
+              "id": "中本聪_boom_09",
+              "tags": [
+                "技术",
+                "社区",
+                "突破"
+              ],
+              "story": "一个天才少年提出了彻底改进比特币协议的方案，但需要全网共识。他恳求你背书，这个方案会让你赚一笔，也会让网络更优雅。然而，任何大改动都可能分裂社区，甚至摧毁已有的共识。你面对的是创造者最难的决定：何时放手。",
+              "choices": [
+                "背书支持，推动升级落地",
+                "中立评价，让社区自由讨论",
+                "保持沉默，相信时间会筛选"
+              ],
+              "effects": [
+                {
+                  "money": 50,
+                  "mind": -10,
+                  "know": 20,
+                  "luck": 5,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": true
+                },
+                {
+                  "money": 20,
+                  "mind": 10,
+                  "know": 20,
+                  "luck": 10,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 0,
+                  "mind": 20,
+                  "know": 10,
+                  "luck": 15,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": true
+                }
+              ]
+            }
+          ]
+        },
+        "climax": {
+          "stories": [
+            {
+              "id": "中本聪_climax_00",
+              "tags": [
+                "交易",
+                "牛市",
+                "KOL"
+              ],
+              "story": "币圈顶流主播直播间，数百万人等你现身。弹幕刷屏：'中本聪来了！'你的一句话能掀起涨跌。但你清楚，这场繁荣背后是多少韭菜血泪。主播递来麦克风，眼神闪烁着贪婪。你该说什么？",
+              "choices": [
+                "揭露市场虚假繁荣真相",
+                "保持沉默，转身离开",
+                "随波逐流，鼓励All in"
+              ],
+              "effects": [
+                {
+                  "money": -30,
+                  "mind": 20,
+                  "know": 15,
+                  "luck": -15,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 0,
+                  "mind": 10,
+                  "know": 5,
+                  "luck": 10,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 50,
+                  "mind": -20,
+                  "know": -10,
+                  "luck": 5,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                }
+              ]
+            },
+            {
+              "id": "中本聪_climax_01",
+              "tags": [
+                "技术",
+                "调查",
+                "合规"
+              ],
+              "story": "FBI特工敲门了。他们掌握了你的部分交易记录，怀疑你与某个暗网案件有关。办公室里弥漫着压抑的气氛。特工冷冷说：'比特币本来就是为洗钱设计的吧？'你需要证明自己的清白，但这意味着暴露某些秘密。",
+              "choices": [
+                "全力配合调查，公开所有记录",
+                "聘请律师，保护隐私",
+                "承认部分事实，隐瞒核心信息"
+              ],
+              "effects": [
+                {
+                  "money": -40,
+                  "mind": -15,
+                  "know": 10,
+                  "luck": 15,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": -25,
+                  "mind": 5,
+                  "know": 0,
+                  "luck": 0,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": -50,
+                  "mind": -20,
+                  "know": 5,
+                  "luck": -15,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": true
+                }
+              ]
+            },
+            {
+              "id": "中本聪_climax_02",
+              "tags": [
+                "DeFi",
+                "技术",
+                "震荡"
+              ],
+              "story": "你发现了某个头部DeFi协议的致命漏洞——可以造成生态内数十亿资产瞬间蒸发。代码写得很漂亮，但也很危险。举报能拯救生态却会暴露自己的身份；沉默可以继续隐匿。你的手指悬在键盘上，犹豫了。",
+              "choices": [
+                "匿名提交漏洞赏金计划",
+                "直接公开漏洞，让市场自救",
+                "什么都不做，静观其变"
+              ],
+              "effects": [
+                {
+                  "money": 30,
+                  "mind": 15,
+                  "know": 20,
+                  "luck": 10,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": -50,
+                  "mind": 20,
+                  "know": 20,
+                  "luck": -15,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": true
+                },
+                {
+                  "money": 80,
+                  "mind": -20,
+                  "know": -15,
+                  "luck": -15,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                }
+              ]
+            },
+            {
+              "id": "中本聪_climax_03",
+              "tags": [
+                "社区",
+                "营销",
+                "牛市"
+              ],
+              "story": "某个新兴公链项目方找上你，开价巨大，希望你成为他们的'精神领袖'。他们说：'你的背书能让我们融资翻倍。'项目白皮书写得漂亮，但你看出了致命的技术缺陷。金钱与良心的天平在摇晃。",
+              "choices": [
+                "接受合作，暗示他们修复缺陷",
+                "拒绝并警告社区有风险",
+                "接受报酬但保持沉默"
+              ],
+              "effects": [
+                {
+                  "money": 40,
+                  "mind": 0,
+                  "know": 10,
+                  "luck": 5,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": -20,
+                  "mind": 20,
+                  "know": 20,
+                  "luck": 15,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 70,
+                  "mind": -20,
+                  "know": -10,
+                  "luck": -15,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                }
+              ]
+            },
+            {
+              "id": "中本聪_climax_04",
+              "tags": [
+                "挖矿",
+                "熊市",
+                "投资"
+              ],
+              "story": "全球能源危机升级，各国政府开始打压比特币挖矿。你的矿场面临关停，整个生态陷入寒冬。一家能源集团愿意提供廉价电力，但代价是交出部分挖矿数据。这笔赚了不少，但代价呢？",
+              "choices": [
+                "出售矿场，转向其他赛道",
+                "秘密与能源集团合作",
+                "坚守立场，关闭矿场"
+              ],
+              "effects": [
+                {
+                  "money": 20,
+                  "mind": 5,
+                  "know": 5,
+                  "luck": 0,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 60,
+                  "mind": -20,
+                  "know": 0,
+                  "luck": -15,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": -50,
+                  "mind": 20,
+                  "know": 15,
+                  "luck": 10,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                }
+              ]
+            },
+            {
+              "id": "中本聪_climax_05",
+              "tags": [
+                "社交",
+                "调查",
+                "KOL"
+              ],
+              "story": "一位资深记者宣称掌握了你的真实身份线索，即将发表长篇调查报道。她约你见面，表示可以给你'更正'的机会。咖啡厅里，她展示了部分证据——准确但不完整。你该如何应对这场身份危机？",
+              "choices": [
+                "承认身份，讲述真实故事",
+                "承认部分事实，否认核心部分",
+                "否认所有，威胁法律诉讼"
+              ],
+              "effects": [
+                {
+                  "money": -50,
+                  "mind": 20,
+                  "know": 20,
+                  "luck": 15,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": true
+                },
+                {
+                  "money": -30,
+                  "mind": 0,
+                  "know": 10,
+                  "luck": -10,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 10,
+                  "mind": -20,
+                  "know": -15,
+                  "luck": -15,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                }
+              ]
+            },
+            {
+              "id": "中本聪_climax_06",
+              "tags": [
+                "NFT",
+                "牛市",
+                "社区"
+              ],
+              "story": "NFT市场疯狂，一个项目方把你的肖像铸成NFT进行拍卖，无需你的同意。这幅'中本聪的幽灵'已经拍出天价。你既愤怒又哭笑不得——讽刺之极。法律途径遥遥无期，你能做什么？",
+              "choices": [
+                "发起诉讼，维护个人权益",
+                "买下所有NFT并销毁",
+                "将其视为现代艺术，接受创意"
+              ],
+              "effects": [
+                {
+                  "money": -45,
+                  "mind": 10,
+                  "know": 0,
+                  "luck": 5,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": -50,
+                  "mind": 20,
+                  "know": 5,
+                  "luck": 15,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 40,
+                  "mind": 15,
+                  "know": 10,
+                  "luck": 10,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                }
+              ]
+            },
+            {
+              "id": "中本聪_climax_07",
+              "tags": [
+                "投资",
+                "机构",
+                "牛市"
+              ],
+              "story": "华尔街顶级基金经理登门造访。他们代表一个巨型财团，想收购你手中的比特币储备和核心代码所有权。金额足以让你成为星球首富。但一旦交易完成，比特币的去中心化灵魂就死了。他们等着你的决定。",
+              "choices": [
+                "接受收购，从此隐退",
+                "拒绝交易，保留独立性",
+                "部分交易，保留核心权益"
+              ],
+              "effects": [
+                {
+                  "money": 100,
+                  "mind": -20,
+                  "know": -20,
+                  "luck": 0,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 0,
+                  "mind": 20,
+                  "know": 20,
+                  "luck": 15,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": true
+                },
+                {
+                  "money": 50,
+                  "mind": 0,
+                  "know": 5,
+                  "luck": 5,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                }
+              ]
+            },
+            {
+              "id": "中本聪_climax_08",
+              "tags": [
+                "技术",
+                "社区",
+                "震荡"
+              ],
+              "story": "比特币网络分裂危机爆发。两个阵营为了控制权在激烈交战，双方都声称代表你的初心。一方坚守原教旨，一方主张大规模扩容。社区撕裂，你必须表态。但你的任何言论都会被当作圣旨。",
+              "choices": [
+                "支持原教旨派的立场",
+                "支持扩容派的务实方案",
+                "拒绝表态，让社区自我决定"
+              ],
+              "effects": [
+                {
+                  "money": 20,
+                  "mind": 20,
+                  "know": 15,
+                  "luck": 10,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 40,
+                  "mind": -10,
+                  "know": 10,
+                  "luck": 5,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": -30,
+                  "mind": 20,
+                  "know": 20,
+                  "luck": 15,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": true
+                }
+              ]
+            },
+            {
+              "id": "中本聪_climax_09",
+              "tags": [
+                "合规",
+                "熊市",
+                "调查"
+              ],
+              "story": "各国央行联合推出数字人民币、数字欧元等CBDC。他们直言不讳：比特币是对主权货币的威胁，必须被管制甚至禁止。舆论风向反转，你看着曾经的梦想被贬低为'投机泡沫'。这是终局，还是新的开始？",
+              "choices": [
+                "公开回应，为比特币辩护",
+                "深度潜水，远离舆论中心",
+                "承认局限，倡导和平共存"
+              ],
+              "effects": [
+                {
+                  "money": -40,
+                  "mind": 20,
+                  "know": 20,
+                  "luck": -15,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 10,
+                  "mind": 0,
+                  "know": 0,
+                  "luck": 15,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": false
+                },
+                {
+                  "money": 20,
+                  "mind": 10,
+                  "know": 15,
+                  "luck": 10,
+                  "item": null,
+                  "lose_item": null,
+                  "breakthrough": true
                 }
               ]
             }
