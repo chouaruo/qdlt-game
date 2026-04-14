@@ -1784,6 +1784,32 @@ function applyFx(fx, prev, turnOverride) {
   }
 
   if(G.money>G.peakMoney) G.peakMoney=G.money;
+
+  // ── 自动持仓：根据回合和盈亏自动获得/失去币种 ──
+  const AUTO_COINS = {
+    early: ['BTC','ETH','USDT','SOL','DOGE'],
+    growth: ['BTC','ETH','BNB','SOL','AVAX','MATIC','LINK'],
+    boom: ['BTC','ETH','UNI','AAVE','ARB','OP','PEPE'],
+    climax: ['BTC','ETH','SOL','DOGE','SHIB','WLD','TIA'],
+    final: ['BTC','ETH','USDT'],
+  };
+  if(fx.money!=null && fx.money!==0 && G.turn>1){
+    const phase = turnToPhase(G.turn);
+    const coins = AUTO_COINS[phase]||AUTO_COINS.early;
+    if(fx.money>0 && G.inv.length<5){
+      // 盈利时随机获得一个币种
+      const available = coins.filter(c=>!G.inv.includes(c));
+      if(available.length){
+        const coin = available[Math.floor(Math.random()*available.length)];
+        G.inv.push(coin);
+      }
+    } else if(fx.money<-20 && G.inv.length>0){
+      // 大亏时随机失去一个币种
+      const lost = G.inv[Math.floor(Math.random()*G.inv.length)];
+      G.inv = G.inv.filter(c=>c!==lost);
+    }
+  }
+
   updateStats(prev);
   checkRealm();
   // 死亡/结算延迟到下一次 onChoice，让玩家先看完当前剧情
