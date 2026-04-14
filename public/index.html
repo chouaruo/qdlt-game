@@ -2488,13 +2488,16 @@ async function callAIStream(userMsg, histSnap){
 }
 
 function prefetchAll(choices, histSnap){
-  if(!choices?.length)return;
-  cache={};pdCount=choices.length;setPD(true);
-  choices.forEach(async c=>{
-    try{cache[c]=await callAI('我的选择：'+c,histSnap);}
-    catch(_){cache[c]=null;}
-    if(--pdCount<=0)setPD(false);
-  });
+  if(!choices?.length || isPoolMode()) return; // 剧情池模式不预生成
+  cache={};
+  // 只预生成第一个选项（减少 API 调用，避免撞频率限制）
+  const first = choices[0];
+  pdCount=1;setPD(true);
+  (async()=>{
+    try{cache[first]=await callAI('我的选择：'+first,histSnap);}
+    catch(_){cache[first]=null;}
+    setPD(false);
+  })();
 }
 
 // ════════════════════════════════════════════════════
@@ -2559,7 +2562,9 @@ function renderChoices(choices){
   choices.forEach((c,i)=>{
     const risk=RISKS[i%3],rc=risk==='xian'?'r-xian':risk==='wen'?'r-wen':'r-qi',rt=risk==='xian'?'🔥 险':risk==='wen'?'🛡 稳':'✨ 奇';
     const btn=document.createElement('button');btn.className='choice';
-    btn.innerHTML=`<span class="choice-text">${c}</span><span class="rtag ${rc}">${rt}</span>`;
+    const txtSpan=document.createElement('span');txtSpan.className='choice-text';txtSpan.textContent=c;
+    const tagSpan=document.createElement('span');tagSpan.className='rtag '+rc;tagSpan.textContent=rt;
+    btn.appendChild(txtSpan);btn.appendChild(tagSpan);
     btn.onclick=()=>onChoice(c);wrap.appendChild(btn);
   });
   persistRun();

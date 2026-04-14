@@ -34,15 +34,15 @@ module.exports = async (req, res) => {
 
   if (req.method === 'OPTIONS') { res.status(204).end(); return; }
 
-  // GET /api/invite?code=X7K9M2 → 查询积分
+  // GET /api/invite?code=X7K9M2 → 查询积分（不返回 BSC 地址）
   if (req.method === 'GET') {
     const code = req.query?.code;
     if (!code || typeof code !== 'string' || !/^[A-Za-z0-9]{4,8}$/.test(code)) {
       res.status(400).json({ error: '无效的邀请码' }); return;
     }
     const points = await redis('HGET', `user:${code}`, 'points');
-    const bscAddr = await redis('HGET', `user:${code}`, 'bscAddr');
-    res.status(200).json({ code, points: Number(points) || 0, bscAddr: bscAddr || null });
+    // 不返回 bscAddr，防止地址泄露
+    res.status(200).json({ code, points: Number(points) || 0 });
     return;
   }
 
@@ -52,6 +52,7 @@ module.exports = async (req, res) => {
 
     // 保存 BSC 地址
     if (action === 'save_addr' && ref && bscAddr) {
+      if (!/^[A-Za-z0-9]{4,8}$/.test(ref)) { res.status(400).json({ error: '无效的邀请码' }); return; }
       if (/^0x[a-fA-F0-9]{40}$/.test(bscAddr)) {
         await redis('HSET', `user:${ref}`, 'bscAddr', bscAddr, 'updatedAt', new Date().toISOString());
       }
@@ -59,10 +60,18 @@ module.exports = async (req, res) => {
       return;
     }
 
-    // 邀请加分
-    if (!ref || typeof ref !== 'string' || ref.length !== 6) {
+    // 邀请加分（服务端频率限制：同一 ref 每分钟最多加一次）
+    if (!ref || typeof ref !== 'string' || !/^[A-Za-z0-9]{6}$/.test(ref)) {
       res.status(400).json({ error: '无效的邀请码' }); return;
     }
+    const rateLimitKey = `ratelimit:invite:${ref}`;
+    const exists = await redis('EXISTS', rateLimitKey);
+    if (exists) {
+      const points = await redis('HGET', `user:${ref}`, 'points');
+      res.status(200).json({ ref, points: Number(points) || 0, limited: true });
+      return;
+    }
+    await redis('SET', rateLimitKey, '1', 'EX', 60); // 60秒冷却
     const newPoints = await redis('HINCRBY', `user:${ref}`, 'points', 10);
     await redis('HSET', `user:${ref}`, 'code', ref, 'lastActive', new Date().toISOString());
     res.status(200).json({ ref, points: Number(newPoints) || 0 });
