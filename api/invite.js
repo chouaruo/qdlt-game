@@ -16,7 +16,7 @@ async function redis(command, ...args) {
   return data.result;
 }
 
-const ALLOWED_ORIGINS = ['https://qdlt-game.vercel.app','http://localhost:3000','http://localhost:3011'];
+const ALLOWED_ORIGINS = ['https://qdlt-game.vercel.app','https://degenlife.gg','https://www.degenlife.gg','http://localhost:3000','http://localhost:3011'];
 
 function setCors(req, res) {
   const origin = req.headers.origin;

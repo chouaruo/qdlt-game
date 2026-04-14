@@ -3,7 +3,7 @@ export const config = { runtime: 'edge' };
 const MODEL = process.env.AI_MODEL || 'claude-haiku-4-5-20251001';
 const API_BASE = process.env.AI_API_BASE || 'https://api.anthropic.com';
 const FALLBACK_CHOICES = ['持仓等待', '分析链上', '联系律师'];
-const ALLOWED_ORIGINS = ['https://qdlt-game.vercel.app','http://localhost:3000','http://localhost:3011'];
+const ALLOWED_ORIGINS = ['https://qdlt-game.vercel.app','https://degenlife.gg','https://www.degenlife.gg','http://localhost:3000','http://localhost:3011'];
 
 const OUTPUT_SCHEMA = {
   type: 'object',

@@ -2,7 +2,7 @@
 
 const { generateGameTurn } = require('../lib/chat');
 
-const ALLOWED_ORIGINS = ['https://qdlt-game.vercel.app','http://localhost:3000','http://localhost:3011'];
+const ALLOWED_ORIGINS = ['https://qdlt-game.vercel.app','https://degenlife.gg','https://www.degenlife.gg','http://localhost:3000','http://localhost:3011'];
 const MAX_BODY_SIZE = 50 * 1024; // 50KB
 const RATE_WINDOW = 60 * 1000;   // 1 min
 const RATE_LIMIT = 15;           // max 15 req/min per IP
