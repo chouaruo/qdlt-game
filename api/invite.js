@@ -16,36 +16,30 @@ async function redis(command, ...args) {
   return data.result;
 }
 
-module.exports = async (req, res) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
+const ALLOWED_ORIGINS = ['https://qdlt-game.vercel.app'];
+
+function setCors(req, res) {
+  const origin = req.headers.origin;
+  if (ALLOWED_ORIGINS.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+  }
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'DENY');
+}
+
+module.exports = async (req, res) => {
+  setCors(req, res);
 
   if (req.method === 'OPTIONS') { res.status(204).end(); return; }
 
   // GET /api/invite?code=X7K9M2 → 查询积分
   if (req.method === 'GET') {
     const code = req.query?.code;
-
-    // 导出所有数据（发行方用）
-    if (req.query?.list === 'all') {
-      const keys = await redis('KEYS', 'user:*');
-      const users = [];
-      if (keys) {
-        for (const key of keys) {
-          const data = await redis('HGETALL', key);
-          if (data) {
-            const obj = {};
-            for (let i = 0; i < data.length; i += 2) obj[data[i]] = data[i + 1];
-            users.push(obj);
-          }
-        }
-      }
-      res.status(200).json({ total: users.length, users });
-      return;
+    if (!code || typeof code !== 'string' || !/^[A-Za-z0-9]{4,8}$/.test(code)) {
+      res.status(400).json({ error: '无效的邀请码' }); return;
     }
-
-    if (!code) { res.status(400).json({ error: '缺少 code 参数' }); return; }
     const points = await redis('HGET', `user:${code}`, 'points');
     const bscAddr = await redis('HGET', `user:${code}`, 'bscAddr');
     res.status(200).json({ code, points: Number(points) || 0, bscAddr: bscAddr || null });

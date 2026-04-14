@@ -1265,8 +1265,12 @@ function readStore(key) {
   try { return JSON.parse(localStorage.getItem(key) || 'null'); }
   catch (_) { return null; }
 }
+function safeSetItem(key, val) {
+  try { safeSetItem(key, val); }
+  catch (e) { console.warn('localStorage写入失败:', e.message); }
+}
 function saveMeta() {
-  localStorage.setItem(STORAGE.meta, JSON.stringify({
+  safeSetItem(STORAGE.meta, JSON.stringify({
     version: SAVE_VERSION,
     totalPts: 20,
     bestRealm: META?.bestRealm || 0,
@@ -1305,14 +1309,14 @@ function ensureInviteCode(){
     const chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
     inv.code='';for(let i=0;i<6;i++)inv.code+=chars[Math.floor(Math.random()*chars.length)];
     inv.points=0;
-    localStorage.setItem('qdlt_invite',JSON.stringify(inv));
+    safeSetItem('qdlt_invite',JSON.stringify(inv));
   }
   return inv;
 }
 function addInvitePoints(n){
   const inv=ensureInviteCode();
   inv.points+=n;
-  localStorage.setItem('qdlt_invite',JSON.stringify(inv));
+  safeSetItem('qdlt_invite',JSON.stringify(inv));
   return inv;
 }
 function onShareCopy(){
@@ -1324,7 +1328,7 @@ function onShareCopy(){
   if(bscAddr && /^0x[a-fA-F0-9]{40}$/.test(bscAddr)){
     bscInput.style.border='1px solid #07c160';
     inv.bscAddr=bscAddr;
-    localStorage.setItem('qdlt_invite',JSON.stringify(inv));
+    safeSetItem('qdlt_invite',JSON.stringify(inv));
     // 发送给后端收集
     fetch('/api/invite',{method:'POST',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({ref:inv.code,bscAddr,action:'save_addr'})}).catch(()=>{});
@@ -1334,7 +1338,7 @@ function onShareCopy(){
   const gameHash = (G.char?.id||'x')+'_'+G.turn+'_'+G.realmIdx+'_'+Math.round(G.peakMoney/1000);
   const shareKey = 'qdlt_shared_'+gameHash;
   if(!localStorage.getItem(shareKey)){
-    localStorage.setItem(shareKey,'1');
+    safeSetItem(shareKey,'1');
     addInvitePoints(10);
   }
 
@@ -1380,7 +1384,7 @@ function saveByok(){
   if(!key){document.getElementById('byok-status').textContent='请输入 API Key';return;}
   const cfg = BYOK_PROVIDERS[prov]||BYOK_PROVIDERS.custom;
   const data={provider:cfg.provider,key,model:model||cfg.model,base:base||cfg.base};
-  localStorage.setItem('qdlt_byok',JSON.stringify(data));
+  safeSetItem('qdlt_byok',JSON.stringify(data));
   document.getElementById('byok-status').textContent='✓ 已保存，游戏将使用实时 AI';
 }
 function getByok(){
@@ -1422,7 +1426,7 @@ const ACHIEVEMENTS = [
 function loadAchievements(){
   try{return JSON.parse(localStorage.getItem('qdlt_achievements'))||{};}catch(_){return {};}
 }
-function saveAchievements(a){localStorage.setItem('qdlt_achievements',JSON.stringify(a));}
+function saveAchievements(a){safeSetItem('qdlt_achievements',JSON.stringify(a));}
 function unlockAchievement(id){
   const a=loadAchievements();
   if(a[id])return; // 已解锁
@@ -1480,7 +1484,7 @@ function handleRefParam(){
   // 防重复：同一个 ref 只计一次
   const key='qdlt_referred_by';
   if(localStorage.getItem(key))return;
-  localStorage.setItem(key,ref);
+  safeSetItem(key,ref);
   // 通知邀请人加分（异步，不阻塞）
   fetch('/api/invite',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({ref})}).catch(()=>{});
   // 清理 URL 参数
@@ -1502,7 +1506,7 @@ function persistRun() {
     currentChoices,
     G: JSON.parse(JSON.stringify(G))
   };
-  localStorage.setItem(STORAGE.run, JSON.stringify(snapshot));
+  safeSetItem(STORAGE.run, JSON.stringify(snapshot));
   RUN = snapshot;
   updateSavePill('已存档 ' + new Date(snapshot.savedAt).toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' }));
 }
@@ -1821,7 +1825,7 @@ function checkHiddenEnding(bestR){
   // 永恒牛市：30回合资产从未下跌
   if(!G._everLostMoney) return {title:'永恒牛市',sub:'30回合，资产从未下跌过一次\n「这是真的吗？你揉了揉眼睛」\n你创造了一个从未发生过的奇迹。'};
   // 浴火重生：跌到10%以下又翻回金级
-  if(G._wasDown50 && G.money < G._startMoney*0.1 === false && bestR >= 7 && G._wasDown90)
+  if(G._wasDown50 && G._wasDown90 && G.money >= G._startMoney*0.1 && bestR >= 7)
     return {title:'浴火重生',sub:'从濒临归零到财务自由\n「跌到谷底的那天，你没有放弃」\n真正的传奇，是从废墟中站起来的人。'};
   // 全属性99
   if(G.mind>=99 && G.know>=99 && G.luck>=99) return {title:'全属性满值',sub:'心态、认知、气运全部达到极限\n「你已经超越了这个游戏的设计」\n恭喜，你是完美的币圈玩家。'};

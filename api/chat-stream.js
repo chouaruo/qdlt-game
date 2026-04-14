@@ -1,8 +1,9 @@
 export const config = { runtime: 'edge' };
 
-const MODEL = process.env.AI_MODEL || 'qwen-plus';
-const API_BASE = process.env.AI_API_BASE || 'https://dashscope.aliyuncs.com/compatible-mode/v1';
+const MODEL = process.env.AI_MODEL || 'claude-haiku-4-5-20251001';
+const API_BASE = process.env.AI_API_BASE || 'https://api.anthropic.com';
 const FALLBACK_CHOICES = ['持仓等待', '分析链上', '联系律师'];
+const ALLOWED_ORIGINS = ['https://qdlt-game.vercel.app'];
 
 const OUTPUT_SCHEMA = {
   type: 'object',
@@ -115,19 +116,19 @@ function normalizeResult(result) {
     }
   };
   n.effects.money=Math.max(-50,Math.min(100,n.effects.money));
-  n.effects.mind=Math.max(-20,Math.min(20,n.effects.mind));
-  n.effects.know=Math.max(-20,Math.min(20,n.effects.know));
-  n.effects.luck=Math.max(-15,Math.min(15,n.effects.luck));
+  n.effects.mind=Math.max(-15,Math.min(15,n.effects.mind));
+  n.effects.know=Math.max(-15,Math.min(15,n.effects.know));
+  n.effects.luck=Math.max(-10,Math.min(10,n.effects.luck));
   n.choices=n.choices.filter((c,i,a)=>isValidChoice(c)&&a.indexOf(c)===i);
   return n;
 }
 
 export default async function handler(req) {
-  if (req.method === 'OPTIONS') return new Response(null, { status: 204, headers: corsHeaders() });
-  if (req.method !== 'POST') return new Response(JSON.stringify({error:'Method not allowed'}), { status: 405, headers: corsHeaders() });
+  if (req.method === 'OPTIONS') return new Response(null, { status: 204, headers: corsHeaders(req) });
+  if (req.method !== 'POST') return new Response(JSON.stringify({error:'Method not allowed'}), { status: 405, headers: corsHeaders(req) });
 
   const apiKey = process.env.AI_API_KEY || process.env.ANTHROPIC_API_KEY;
-  if (!apiKey) return new Response(JSON.stringify({error:'未配置API Key'}), { status: 500, headers: corsHeaders() });
+  if (!apiKey) return new Response(JSON.stringify({error:'未配置API Key'}), { status: 500, headers: corsHeaders(req) });
 
   const { userMsg, histSnap, state } = await req.json();
 
@@ -156,7 +157,7 @@ export default async function handler(req) {
 
   if (!anthropicRes.ok) {
     const detail = await anthropicRes.text().catch(()=>'API error');
-    return new Response(JSON.stringify({error:detail}), { status: anthropicRes.status, headers: corsHeaders() });
+    return new Response(JSON.stringify({error:detail}), { status: anthropicRes.status, headers: corsHeaders(req) });
   }
 
   const encoder = new TextEncoder();
@@ -212,10 +213,18 @@ export default async function handler(req) {
   });
 
   return new Response(stream, {
-    headers: { ...corsHeaders(), 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache', 'Connection': 'keep-alive' }
+    headers: { ...corsHeaders(req), 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache', 'Connection': 'keep-alive' }
   });
 }
 
-function corsHeaders() {
-  return { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Methods': 'POST, OPTIONS', 'Access-Control-Allow-Headers': 'Content-Type' };
+function corsHeaders(req) {
+  const origin = req?.headers?.get?.('origin') || '';
+  const h = {
+    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type',
+    'X-Content-Type-Options': 'nosniff',
+    'X-Frame-Options': 'DENY'
+  };
+  if (ALLOWED_ORIGINS.includes(origin)) h['Access-Control-Allow-Origin'] = origin;
+  return h;
 }
