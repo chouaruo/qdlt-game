@@ -329,7 +329,9 @@ body{
 .choice:disabled{opacity:0.3;cursor:not-allowed;transform:none;}
 .choice-text{flex:1;}
 .rtag{font-size:12px;padding:3px 10px;border-radius:12px;font-family:inherit;letter-spacing:0.03em;flex-shrink:0;white-space:nowrap;font-weight:500;background:rgba(255,255,255,.18);backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,.3);color:#fff;}
-.r-xian{}.r-wen{}.r-qi{}
+.r-xian{background:#fa5151;color:#fff;border-color:#fa5151;}
+.r-wen{background:#07c160;color:#fff;border-color:#07c160;}
+.r-qi{background:#576b95;color:#fff;border-color:#576b95;}
 
 /* 底部 */
 .bottom-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
@@ -2582,7 +2584,9 @@ function showEv(ev,onClose){
     const btn=document.createElement('button');btn.className='ev-ch';
     const rc=ch.risk==='xian'?'r-xian':ch.risk==='wen'?'r-wen':'r-qi';
     const rt=ch.risk==='xian'?'🔥 险':ch.risk==='wen'?'🛡 稳':'✨ 奇';
-    btn.innerHTML=`<span>${ch.text}</span><span class="rtag ${rc}">${rt}</span>`;
+    const txtSpan=document.createElement('span');txtSpan.textContent=ch.text;
+    const tagSpan=document.createElement('span');tagSpan.className='rtag '+rc;tagSpan.textContent=rt;
+    btn.appendChild(txtSpan);btn.appendChild(tagSpan);
     btn.onclick=()=>{
       const prev={money:G.money,mind:G.mind,know:G.know,luck:G.luck};
       applyFx(ch.fx,prev);log('【'+ev.title+'】','s');
@@ -2633,8 +2637,9 @@ function fillStoryAmounts(story){
   let s = story.replace(/\{TOTAL\}|\{CHANGE\}|\{AFTER\}/g, '');
   // 只清理明确的货币金额（¥/$开头 + 数字 + 单位），不影响正常文本
   s = s.replace(/[¥$￥]\s*[\d,]+\.?\d*\s*[万亿]*/g, '一笔资金');
-  // 修复截断的句子
-  if(s.length>10 && !/[。！？…」』)）\.]$/.test(s.trim())) s = s.trim()+'……';
+  // 修复截断的句子（只在明显截断时补省略号，不干扰正常结尾）
+  const trimmed = s.trim();
+  if(trimmed.length>10 && !/[。！？…」』)）\.~～]$/.test(trimmed) && !/[了的着过吧呢啊哦呀吗嘛]$/.test(trimmed)) s = trimmed+'。';
   return s;
 }
 
