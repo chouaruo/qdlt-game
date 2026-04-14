@@ -2882,9 +2882,26 @@ async function initGame(){
           result=await callAI(prompt,[]);
           usedPregen = true;
         }catch(e){
-          document.getElementById('api-err').textContent = e.message || '服务端连接失败';
-          document.getElementById('start-backend-status').textContent='推演失败';
-          result={story:'链上连接失败，请检查服务端环境变量后重试。',choices:[],effects:{}};
+          // BYOK 失败，自动切回剧情池模式
+          console.warn('BYOK失败，切回剧情池:', e.message);
+          clearByok();
+          if(!storyArcData) await loadStoryArcs();
+          if(storyArcData){
+            document.getElementById('thinking').className='thinking';
+            // 重走池模式开局
+            G.turn = 1;
+            result = pickStory(G.char?.id || '散户', 1);
+            if(!result){
+              const cid=G.char?.id||'散户';
+              const openerText=cid==='散户'?getRetailOpener(G.money):(CHAR_OPENERS[cid]||'你踏入了币圈的世界。');
+              result={story:openerText,choices:['开始交易','研究项目','观望等待'],effects:[{money:10,mind:0,know:5,luck:0,item:null,lose_item:null,breakthrough:false},{money:0,mind:5,know:10,luck:0,item:null,lose_item:null,breakthrough:false},{money:0,mind:10,know:5,luck:5,item:null,lose_item:null,breakthrough:false}]};
+            }
+            await typeText(fillStoryAmounts(result.story));
+            currentStoryData=result;updateStats(null);renderChoices(result.choices);setEnabled(true);
+            document.getElementById('start-backend-status').textContent='在线（已切回剧情池）';
+            return;
+          }
+          result={story:'连接失败，请刷新重试。',choices:[],effects:{}};
           usedPregen = false;
         }
       }
