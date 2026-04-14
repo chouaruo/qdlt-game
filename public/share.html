@@ -4,13 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>币圈模拟器 · 战绩</title>
-<link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&display=swap" rel="stylesheet">
 <style>
 :root{--gold:#d4881a;--bg:#111;--card:#1a1a1a;--border:rgba(255,255,255,0.1);}
 *{margin:0;padding:0;box-sizing:border-box;}
 body{background:var(--bg);min-height:100vh;display:flex;align-items:center;justify-content:center;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Noto Sans SC','PingFang SC',sans-serif;color:#fff;padding:1.5rem;}
 .container{width:100%;max-width:400px;display:flex;flex-direction:column;align-items:center;gap:1.2rem;}
-.logo{font-family:'Ma Shan Zheng',cursive;font-size:clamp(1.8rem,6vw,2.5rem);color:var(--gold);letter-spacing:0.15em;text-align:center;}
+.logo{font-family:'Noto Serif SC',serif;font-size:clamp(1.8rem,6vw,2.5rem);color:var(--gold);letter-spacing:0.15em;text-align:center;}
 .card{width:100%;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:24px 20px;display:flex;flex-direction:column;align-items:center;gap:16px;}
 .avatar{width:72px;height:72px;border-radius:50%;background:#222;border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;font-size:32px;overflow:hidden;}
 .avatar img{width:100%;height:100%;object-fit:cover;}
@@ -45,12 +45,12 @@ body{background:var(--bg);min-height:100vh;display:flex;align-items:center;justi
 </div>
 <script>
 const REALMS = [
-  {code:'A0',name:'凡人'},{code:'A1',name:'练气初期'},{code:'A2',name:'练气中期'},
-  {code:'A3',name:'练气后期'},{code:'A4',name:'筑基初期'},{code:'A5',name:'筑基中期'},
-  {code:'A6',name:'筑基后期'},{code:'A7',name:'金丹初期'},{code:'A8',name:'金丹中期'},
-  {code:'A9',name:'金丹后期'},{code:'A10',name:'元婴初期'},{code:'A11',name:'元婴中期'},
-  {code:'A12',name:'元婴后期'},{code:'A13',name:'化神初期'},{code:'A14',name:'化神中期'},
-  {code:'A15',name:'化神后期'},
+  {code:'LV0',name:'负债韭菜'},{code:'LV1',name:'注册新手'},{code:'LV2',name:'小额玩家'},
+  {code:'LV3',name:'入门散户'},{code:'LV4',name:'普通散户'},{code:'LV5',name:'资深散户'},
+  {code:'LV6',name:'小额投资者'},{code:'LV7',name:'百万玩家'},{code:'LV8',name:'千万大户'},
+  {code:'LV9',name:'亿级巨鲸'},{code:'LV10',name:'十亿大佬'},{code:'LV11',name:'百亿巨擘'},
+  {code:'LV12',name:'千亿寡头'},{code:'LV13',name:'万亿传说'},{code:'LV14',name:'十万亿神话'},
+  {code:'LV15',name:'百万亿创世'},
 ];
 const CHARS = {
   '散户':{name:'李狗蛋（散户）',emoji:'🧑‍💻',twitter:null},

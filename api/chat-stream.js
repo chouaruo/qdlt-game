@@ -26,22 +26,22 @@ const OUTPUT_SCHEMA = {
 };
 
 const REALMS = [
-  { code:'A0', name:'凡人', asset:'负债' },
-  { code:'A1', name:'练气初期', asset:'¥1' },
-  { code:'A2', name:'练气中期', asset:'¥10' },
-  { code:'A3', name:'练气后期', asset:'¥100' },
-  { code:'A4', name:'筑基初期', asset:'¥1,000' },
-  { code:'A5', name:'筑基中期', asset:'¥1万' },
-  { code:'A6', name:'筑基后期', asset:'¥10万' },
-  { code:'A7', name:'金丹初期', asset:'¥100万' },
-  { code:'A8', name:'金丹中期', asset:'¥1,000万' },
-  { code:'A9', name:'金丹后期', asset:'¥1亿' },
-  { code:'A10', name:'元婴初期', asset:'¥10亿' },
-  { code:'A11', name:'元婴中期', asset:'¥100亿' },
-  { code:'A12', name:'元婴后期', asset:'¥1,000亿' },
-  { code:'A13', name:'化神初期', asset:'¥1万亿' },
-  { code:'A14', name:'化神中期', asset:'¥10万亿' },
-  { code:'A15', name:'化神后期', asset:'¥100万亿' },
+  { code:'LV0', name:'负债韭菜', asset:'负债' },
+  { code:'LV1', name:'注册新手', asset:'¥1' },
+  { code:'LV2', name:'小额玩家', asset:'¥10' },
+  { code:'LV3', name:'入门散户', asset:'¥100' },
+  { code:'LV4', name:'普通散户', asset:'¥1,000' },
+  { code:'LV5', name:'资深散户', asset:'¥1万' },
+  { code:'LV6', name:'小额投资者', asset:'¥10万' },
+  { code:'LV7', name:'百万玩家', asset:'¥100万' },
+  { code:'LV8', name:'千万大户', asset:'¥1,000万' },
+  { code:'LV9', name:'亿级巨鲸', asset:'¥1亿' },
+  { code:'LV10', name:'十亿大佬', asset:'¥10亿' },
+  { code:'LV11', name:'百亿巨擘', asset:'¥100亿' },
+  { code:'LV12', name:'千亿寡头', asset:'¥1,000亿' },
+  { code:'LV13', name:'万亿传说', asset:'¥1万亿' },
+  { code:'LV14', name:'十万亿神话', asset:'¥10万亿' },
+  { code:'LV15', name:'百万亿创世', asset:'¥100万亿' },
 ];
 
 function buildSystemPrompt(state) {
@@ -65,9 +65,9 @@ function buildSystemPrompt(state) {
   const m = state.money||0;
   const assetStr = m>1e12?'¥'+Math.round(m/1e12)+'万亿':m>1e8?'¥'+Math.round(m/1e8)+'亿':m>1e4?'¥'+Math.round(m/1e4)+'万':'¥'+m;
 
-  return `币圈文字冒险叙事引擎。修真=炒币，风格犀利幽默，币圈黑话+真实梗。请返回json格式。
+  return `币圈文字冒险叙事引擎。风格犀利幽默，币圈黑话+真实梗。请返回json格式。
 ${charCtx}${traitCtx?'\n'+traitCtx:''}
-境界：${realm.name}，资产：${assetStr}，心态${state.mind||0}/认知${state.know||0}/气运${state.luck||0}，回合${state.turn||0}/30
+等级：${realm.name}，资产：${assetStr}，心态${state.mind||0}/认知${state.know||0}/气运${state.luck||0}，回合${state.turn||0}/30
 持仓：${Array.isArray(state.inv)&&state.inv.length?state.inv.join('、'):'空仓'}${debuffCtx}${(state.turn||0)>=25?'\n【最后冲刺】还剩'+(30-(state.turn||0))+'回合，剧情应体现紧迫感和最终抉择的氛围':''}
 
 规则：

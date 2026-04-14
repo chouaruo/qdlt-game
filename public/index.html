@@ -634,8 +634,11 @@ body{
       <div class="share-stat-row"><span>存活回合</span><span id="share-turn">-</span></div>
       <div class="share-stat-row"><span>最高资产</span><span id="share-asset">-</span></div>
     </div>
-    <button class="share-btn" id="share-btn" onclick="onShareCopy()">复制分享链接到 X</button>
-    <div class="share-hint">分享可获得 10 积分 · 积分未来可能用于空投</div>
+    <div style="margin-bottom:8px;">
+      <input id="bsc-addr" type="text" placeholder="输入你的 BSC 钱包地址（0x...）" style="width:100%;padding:8px;border:1px solid rgba(255,255,255,0.15);border-radius:6px;font-size:11px;font-family:inherit;background:rgba(255,255,255,0.05);color:#fff;">
+    </div>
+    <button class="share-btn" id="share-btn" onclick="onShareCopy()">保存地址并复制分享链接</button>
+    <div class="share-hint">留下 BSC 地址 + 分享可获得 10 积分 · 每局限领一次 · 积分未来可能用于空投</div>
     <div class="share-pts" id="share-pts"></div>
   </div>
   <button class="full-act" id="full-act" onclick="onFullBtn()"></button>
@@ -1170,9 +1173,31 @@ function addInvitePoints(n){
   return inv;
 }
 function onShareCopy(){
+  // BSC 地址校验
+  const bscInput = document.getElementById('bsc-addr');
+  const bscAddr = bscInput?.value?.trim() || '';
+  if(!bscAddr || !/^0x[a-fA-F0-9]{40}$/.test(bscAddr)){
+    bscInput.style.border='1px solid #fa5151';
+    bscInput.placeholder='请输入有效的 BSC 地址（0x开头，42位）';
+    return;
+  }
+  bscInput.style.border='1px solid #07c160';
+  // 保存 BSC 地址
   const inv=ensureInviteCode();
+  inv.bscAddr=bscAddr;
+  localStorage.setItem('qdlt_invite',JSON.stringify(inv));
+
+  // 防刷：每局只能领一次积分
+  const shareKey='qdlt_shared_'+G.turn+'_'+(G.char?.id||'x');
+  if(localStorage.getItem(shareKey)){
+    // 已领过，只复制不加分
+  } else {
+    localStorage.setItem(shareKey,'1');
+    addInvitePoints(10);
+  }
+
   const sd=G._shareData||{c:'散户',r:0,t:0,a:0,d:'money'};
-  const realmName=REALMS[sd.r]?.name||'凡人';
+  const realmName=REALMS[sd.r]?.name||'负债韭菜';
   const deathMap={money:'破产了',mind:'心态崩了',know:'被骗光了'};
   const base=location.origin;
   const url=`${base}/share.html?c=${encodeURIComponent(sd.c)}&r=${sd.r}&t=${sd.t}&a=${sd.a}&d=${sd.d}&ref=${inv.code}`;
@@ -1181,13 +1206,11 @@ function onShareCopy(){
     const btn=document.getElementById('share-btn');
     btn.textContent='已复制！去 X 粘贴发布吧';
     btn.className='share-btn copied';
-    const inv2=addInvitePoints(10);
-    document.getElementById('share-pts').textContent='我的积分：'+inv2.points+' 分';
+    const inv2=getInviteData();
+    document.getElementById('share-pts').textContent='我的积分：'+inv2.points+' 分 · BSC：'+bscAddr.slice(0,6)+'...'+bscAddr.slice(-4);
   }).catch(()=>{
-    // fallback
     const ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);
     const btn=document.getElementById('share-btn');btn.textContent='已复制！';btn.className='share-btn copied';
-    addInvitePoints(10);
   });
 }
 // 首页加载时处理 ref 参数
@@ -1719,6 +1742,9 @@ function showFull(big, sub, color, btn, mode='') {
     // 积分
     const inv=getInviteData();
     document.getElementById('share-pts').textContent=inv.points>0?'我的积分：'+inv.points+' 分':'';
+    // 恢复已保存的BSC地址
+    const bscInput=document.getElementById('bsc-addr');
+    if(bscInput&&inv.bscAddr) bscInput.value=inv.bscAddr;
     ss.style.display='block';
     document.getElementById('share-btn').textContent='复制分享链接到 X';
     document.getElementById('share-btn').className='share-btn';
