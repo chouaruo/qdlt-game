@@ -1688,16 +1688,16 @@ function applyFx(fx, prev) {
     log('本金'+sign+fmtAsset(Math.abs(delta)).replace('¥','')+'（'+sign+Math.round(pct)+'%）', delta>=0?'g':'b');
   }
 
-  // ── 其他属性：负值保底，单次扣减不能从>10直接打到0 ──
+  // ── 其他属性：比例保护，单次扣减最多扣当前值50% ──
   if(fx.mind!=null){
     let dm=fx.mind;
-    if(dm<0&&G.mind>10) dm=Math.max(dm, -Math.floor(G.mind*0.6)); // 最多扣60%
+    if(dm<0) dm=Math.max(dm, -Math.max(1, Math.floor(G.mind*0.5))); // 最多扣50%，至少扣1
     G.mind=Math.max(0,Math.min(99,G.mind+dm));
     log((dm>=0?'心态+':'心态')+dm,dm>=0?'g':'b');
   }
   if(fx.know!=null){
     let dk=fx.know;
-    if(dk<0&&G.know>10) dk=Math.max(dk, -Math.floor(G.know*0.6));
+    if(dk<0) dk=Math.max(dk, -Math.max(1, Math.floor(G.know*0.5)));
     G.know=Math.max(0,Math.min(99,G.know+dk));
     log((dk>=0?'认知+':'认知')+dk,dk>=0?'g':'b');
   }
@@ -1710,8 +1710,9 @@ function applyFx(fx, prev) {
   if(cid){
     // SBF：每5回合20%概率信任危机
     if(cid==='SBF' && G.turn>0 && G.turn%5===0 && Math.random()<0.2){
-      G.mind=Math.max(0,G.mind-15);
-      log('【信任危机】有效利他的谎言被揭穿，心态-15','b');
+      const sbfDm=Math.max(-15, -Math.max(1, Math.floor(G.mind*0.5)));
+      G.mind=Math.max(0,G.mind+sbfDm);
+      log('【信任危机】有效利他的谎言被揭穿，心态'+sbfDm,'b');
     }
     // Do Kwon：每8回合15%概率脱锚
     if(cid==='DoKwon' && G.turn>0 && G.turn%8===0 && Math.random()<0.15){
