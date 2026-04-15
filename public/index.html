@@ -628,7 +628,7 @@ body{
     <img src="/assets/author-avatar.jpg" style="width:36px;height:36px;border-radius:50%;border:1.5px solid #e8e8e8;">
     <div style="flex:1;">
       <div style="font-size:13px;color:#111;font-weight:500;">@0xTimovo</div>
-      <div style="font-size:11px;color:#999;">关注作者 · 这个游戏免费开放给所有人</div>
+      <div style="font-size:11px;color:#999;">关注作者</div>
     </div>
     <span style="font-size:11px;color:#1d9bf0;font-weight:500;white-space:nowrap;">Follow ↗</span>
   </a>
@@ -809,7 +809,7 @@ body{
       <img src="/assets/author-avatar.jpg" style="width:28px;height:28px;border-radius:50%;">
       <div style="flex:1;">
         <div style="font-size:12px;color:#fff;font-weight:500;">@0xTimovo</div>
-        <div style="font-size:10px;color:rgba(255,255,255,0.5);">关注作者 · 这个游戏免费开放给所有人</div>
+        <div style="font-size:10px;color:rgba(255,255,255,0.5);">关注作者</div>
       </div>
       <span style="font-size:11px;color:#1d9bf0;font-weight:500;">Follow ↗</span>
     </a>
@@ -1284,16 +1284,19 @@ const TOK = {i:0, o:0};
 let cache = {}, pdCount = 0, lastEvIdx = -1;
 let META = null;
 
-// ── 持仓分级：境界决定能拿到什么级别的币 ──
+// ── 持仓分级：境界决定能拿到什么级别的币（30种主流币） ──
 const COIN_TIERS = [
-  { coins: ['BTC','ETH'],                         minRealm: 9, boosts: {BTC:30, ETH:25} },  // 蓝筹：¥1亿+
-  { coins: ['SOL','BNB'],                          minRealm: 7, boosts: {SOL:20, BNB:20} },  // 主流：¥100万+
-  { coins: ['UNI','AAVE','ARB','LINK'],            minRealm: 4, boosts: {UNI:15, AAVE:15, ARB:15, LINK:15} }, // DeFi：¥1000+
-  { coins: ['DOGE','PEPE','SHIB'],                 minRealm: 1, boosts: {DOGE:10, PEPE:10, SHIB:10} }, // Meme：¥1+
-  { coins: ['USDT'],                               minRealm: 0, boosts: {USDT:5} },          // 稳定币：任何
+  { coins: ['BTC','ETH'],                                    minRealm: 9, boosts: {BTC:35, ETH:30} },            // 蓝筹
+  { coins: ['SOL','BNB','XRP'],                              minRealm: 7, boosts: {SOL:25, BNB:25, XRP:22} },    // 主流L1
+  { coins: ['ADA','AVAX','DOT','MATIC','NEAR','ATOM'],       minRealm: 5, boosts: {ADA:18, AVAX:20, DOT:18, MATIC:18, NEAR:20, ATOM:18} }, // 公链
+  { coins: ['UNI','AAVE','ARB','LINK','OP','MKR','LDO'],     minRealm: 4, boosts: {UNI:15, AAVE:16, ARB:15, LINK:16, OP:15, MKR:16, LDO:15} }, // DeFi
+  { coins: ['DOGE','PEPE','SHIB','WIF','BONK','FLOKI'],      minRealm: 1, boosts: {DOGE:12, PEPE:12, SHIB:10, WIF:14, BONK:12, FLOKI:10} }, // Meme
+  { coins: ['USDT','USDC'],                                  minRealm: 0, boosts: {USDT:5, USDC:5} },            // 稳定币
 ];
 const COIN_BOOST = {};
 COIN_TIERS.forEach(t => Object.assign(COIN_BOOST, t.boosts));
+const ALL_COINS = new Set(Object.keys(COIN_BOOST));
+const MAX_INV = 10; // 持仓上限
 
 function getInvBoost() {
   let boost = 0;
@@ -1773,7 +1776,7 @@ function applyFx(fx, prev, turnOverride) {
     log((dk>=0?'认知+':'认知')+dk,dk>=0?'g':'b');
   }
   if(fx.luck!=null&&fx.luck!==0){G.luck=Math.max(0,Math.min(99,G.luck+fx.luck));log((fx.luck>=0?'气运+':'气运')+fx.luck,fx.luck>=0?'g':'b');}
-  if(fx.item&&!G.inv.includes(fx.item)){G.inv.push(fx.item);log('获得：'+fx.item,'s');}
+  if(fx.item&&ALL_COINS.has(fx.item)&&!G.inv.includes(fx.item)&&G.inv.length<MAX_INV){G.inv.push(fx.item);log('获得：'+fx.item,'s');}
   if(fx.lose_item&&G.inv.includes(fx.lose_item)){G.inv=G.inv.filter(it=>it!==fx.lose_item);log('失去：'+fx.lose_item,'b');}
 
   // ── 角色专属词条条件触发 ──
