@@ -845,20 +845,9 @@ const REALMS = [
 // 人物数据
 const CHARS = [
   {
-    id:'散户',emoji:'🧑‍💻',
-    name:'李狗蛋（散户）',reqRealm:0,
-    twitter:null,
-    baseStats:null, baseTrait:null,
-    desc:'普通上班族，工资卡里有三万块，被朋友安利进来了。',
-    skill:'永远在最高点买入、最低点卖出的神奇天赋。',
-    ending:'多个方向，大部分以「上班还贷」结束，极小概率暴富。',
-    rebornTrait:{name:'韭菜记忆',tier:'blue',attr:'mind',desc:'心态+15，气运+10，「上辈子被割的伤疤还在，但我又来了」',isReborn:true},
-    aiTag:'普通散户李狗蛋，刚入币圈的普通人',
-  },
-  {
     id:'CZ',emoji:'🟡',
-    name:'赵长鹏 CZ',reqRealm:3,
-    twitter:'https://unavatar.io/twitter/cz_binance',
+    name:'赵长鹏 CZ',reqRealm:0,
+    twitter:'/assets/cz.jpg',
     baseStats:{money:1.2,mind:8,know:0,luck:0}, baseTrait:{name:'SAFU护体',tier:'orange',attr:'money',desc:'「Funds are SAFU」—— 本金+20%，心态+8，交易所暴雷事件损失减半'},
     desc:'加拿大华裔，麦当劳收银台旁边炒单起家，创立了全球最大交易所。',
     skill:'发一条推文，整个市场必动——利好利空各50%。专属事件：Funds are SAFU、「4」字推文。',
@@ -869,7 +858,7 @@ const CHARS = [
   {
     id:'SBF',emoji:'🟦',
     name:'SBF',reqRealm:3,
-    twitter:'https://unavatar.io/twitter/SBF_FTX',
+    twitter:'/assets/sbf.jpg',
     baseStats:{money:1.0,mind:0,know:15,luck:8}, baseTrait:{name:'有效利他',tier:'orange',attr:'know',desc:'用复杂理论让所有人信你 —— 认知+15，气运+8，每5回合有20%概率「信任危机」心态-15'},
     desc:'MIT高材生，豆袋椅，蓬乱头发，每天只睡4小时，有效利他主义信徒。',
     skill:'话术大师——用极其复杂的理论让所有人相信你，直到不信为止。专属事件：130亿窟窿、FTX崩盘。',
@@ -880,7 +869,7 @@ const CHARS = [
   {
     id:'徐明星',emoji:'🔵',
     name:'徐明星',reqRealm:4,
-    twitter:'https://unavatar.io/twitter/star_okx',
+    twitter:'/assets/xumingxing.jpg',
     baseStats:{money:1.0,mind:-3,know:0,luck:12}, baseTrait:{name:'重大公告',tier:'orange',attr:'luck',desc:'一纸公告搅动市场 —— 气运+12，心态-3，每3回合额外触发一次奇遇事件'},
     desc:'西安程序员，做了个山寨比特币交易所，时常声称自己是中本聪。',
     skill:'随时发布「重大公告」，市场必动。专属事件：提币暂停风波、神秘失联。',
@@ -891,7 +880,7 @@ const CHARS = [
   {
     id:'孙宇晨',emoji:'🌊',
     name:'孙宇晨',reqRealm:5,
-    twitter:'https://unavatar.io/twitter/justinsuntron',
+    twitter:'/assets/justinsun.jpg',
     baseStats:{money:1.0,mind:0,know:-8,luck:15}, baseTrait:{name:'画饼大师',tier:'orange',attr:'luck',desc:'饼永远比现实大一圈 —— 气运+15，认知-8，盈利事件收益额外+20%'},
     desc:'马云门徒，百万美元午餐，波场创始人，格林纳达大使。',
     skill:'无限画饼，只要你信就永远有新故事。专属事件：吃火锅引发暴跌。',
@@ -900,9 +889,20 @@ const CHARS = [
     aiTag:'孙宇晨Justin Sun，波场TRON创始人，格林纳达大使',
   },
   {
+    id:'BenZhou',emoji:'🔷',
+    name:'Ben Zhou',reqRealm:5,
+    twitter:'/assets/benzhou.jpg',
+    baseStats:{money:1.15,mind:10,know:5,luck:0}, baseTrait:{name:'衍生品之王',tier:'orange',attr:'money',desc:'合约市场的隐形霸主 —— 本金+15%，心态+10，认知+5，遭遇黑客事件时损失减半'},
+    desc:'外汇行业出身，创立Bybit成为全球Top3衍生品交易所，经历$14亿被盗仍屹立不倒。',
+    skill:'衍生品产品设计天才，危机公关教科书。专属事件：Bybit崛起、$14亿黑客事件。',
+    ending:'安全重建 / 衍生品帝国 / 监管合规',
+    rebornTrait:{name:'衍生品之王',tier:'red',attr:'money',desc:'本金+20，心态+25，遭遇黑客/安全事件时损失减半',isReborn:true},
+    aiTag:'Ben Zhou，Bybit创始人兼CEO，全球Top3衍生品交易所掌门人',
+  },
+  {
     id:'DoKwon',emoji:'🌑',
     name:'Do Kwon',reqRealm:6,
-    twitter:'https://unavatar.io/twitter/stablekwon',
+    twitter:'/assets/dokwon.jpg',
     baseStats:{money:1.0,mind:-5,know:12,luck:0}, baseTrait:{name:'算法信仰',tier:'orange',attr:'know',desc:'数学就是真理 —— 认知+12，心态-5，本金增速+30%但每8回合有15%概率「脱锚」本金-40%'},
     desc:'斯坦福毕业，「稳定币永不脱钩」，创造了史上最大算法稳定币神话与崩盘。',
     skill:'创建算法稳定币，早期信徒全部暴富，直到系统崩溃归零。',
@@ -913,7 +913,7 @@ const CHARS = [
   {
     id:'ZachXBT',emoji:'🦫',
     name:'ZachXBT',reqRealm:7,
-    twitter:'https://unavatar.io/twitter/zachxbt',
+    twitter:'/assets/zachxbt.jpg',
     baseStats:{money:0.9,mind:0,know:18,luck:0}, baseTrait:{name:'链上记忆',tier:'orange',attr:'know',desc:'见过太多骗局的侦探 —— 认知+18，本金-10%，骗局类选项自动标红提示'},
     desc:'匿名链上侦探，头像是土拨鼠，专门撰写链上调查报告揭露骗局。',
     skill:'追踪任意钱包，识破跑路地址。梗：「ser this is a rug」',
@@ -924,7 +924,7 @@ const CHARS = [
   {
     id:'Saylor',emoji:'₿',
     name:'Michael Saylor',reqRealm:8,
-    twitter:'https://unavatar.io/twitter/saylor',
+    twitter:'/assets/saylor.jpg',
     baseStats:{money:1.3,mind:0,know:-5,luck:-3}, baseTrait:{name:'比特币圣约',tier:'orange',attr:'money',desc:'永远不卖的男人 —— 本金+30%，认知-5，气运-3，盈利回合本金额外+10%'},
     desc:'把公司资产负债表改造成比特币圣杯的男人，任何问题都能回答成「买BTC」。',
     skill:'信仰型满仓，回撤只会让你更想加仓。专属事件：可转债、财报买币、激进布道。',
@@ -935,7 +935,7 @@ const CHARS = [
   {
     id:'HeYi',emoji:'🟨',
     name:'何一 He Yi',reqRealm:9,
-    twitter:'https://unavatar.io/twitter/heyibinance',
+    twitter:'/assets/heyi.jpg',
     baseStats:{money:1.0,mind:5,know:0,luck:12}, baseTrait:{name:'流量天枢',tier:'orange',attr:'luck',desc:'把用户情绪变成收益 —— 气运+12，心态+5，奇遇中利好类型出现概率翻倍'},
     desc:'Binance 联合创始人，擅长用户增长、社区运营和平台节奏控制，是交易所叙事背后的关键推手。',
     skill:'一句话就能把市场情绪从观望推到 FOMO。专属事件：上币风向、社区运营、平台流量倾斜。',
@@ -946,24 +946,13 @@ const CHARS = [
   {
     id:'V神',emoji:'💎',
     name:'V神 Vitalik',reqRealm:10,
-    twitter:'https://unavatar.io/twitter/VitalikButerin',
+    twitter:'/assets/vitalik.jpg',
     baseStats:{money:0.8,mind:0,know:20,luck:0}, baseTrait:{name:'以太坊精神',tier:'orange',attr:'know',desc:'去中心化的信仰者 —— 认知+20，本金-20%，认知达80以上时解锁「封神」隐藏结局'},
     desc:'19岁俄裔加拿大少年，比特币周刊编辑，被拒后自建以太坊，改变了整个行业。',
     skill:'说一句话整个生态震动，但他只关心去中心化本身。专属：捐款SHIB、以太坊合并。',
     ending:'唯一纯正面结局（需放弃所有本金才能达到）',
     rebornTrait:{name:'以太坊精神',tier:'orange',attr:'know',desc:'认知满值，本金归零但解锁「飞升」真结局线',isReborn:true},
     aiTag:'Vitalik Buterin V神，以太坊创始人，去中心化信仰者',
-  },
-  {
-    id:'BenZhou',emoji:'🔷',
-    name:'Ben Zhou',reqRealm:5,
-    twitter:'https://unavatar.io/twitter/benaborben',
-    baseStats:{money:1.15,mind:10,know:5,luck:0}, baseTrait:{name:'衍生品之王',tier:'orange',attr:'money',desc:'合约市场的隐形霸主 —— 本金+15%，心态+10，认知+5，遭遇黑客事件时损失减半'},
-    desc:'外汇行业出身，创立Bybit成为全球Top3衍生品交易所，经历$14亿被盗仍屹立不倒。',
-    skill:'衍生品产品设计天才，危机公关教科书。专属事件：Bybit崛起、$14亿黑客事件。',
-    ending:'安全重建 / 衍生品帝国 / 监管合规',
-    rebornTrait:{name:'衍生品之王',tier:'red',attr:'money',desc:'本金+20，心态+25，遭遇黑客/安全事件时损失减半',isReborn:true},
-    aiTag:'Ben Zhou，Bybit创始人兼CEO，全球Top3衍生品交易所掌门人',
   },
 ];
 
