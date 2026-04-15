@@ -1748,6 +1748,11 @@ function applyFx(fx, prev, turnOverride) {
       if(raw.mind<DEBUFF_DANGER) pct*=2;       // 心态<2：亏损翻倍（恐慌性抛售）
       else if(raw.mind<DEBUFF_WEAK) pct*=1.3;   // 心态<4：亏损×1.3
     }
+    // 境界保护：等级越高，单次最大亏损上限越低（防止大幅缩水挫败感）
+    if(pct<0){
+      const lossCap = G.realmIdx>=12 ? -15 : G.realmIdx>=10 ? -20 : G.realmIdx>=8 ? -25 : G.realmIdx>=6 ? -30 : G.realmIdx>=4 ? -35 : -50;
+      pct = Math.max(pct, lossCap);
+    }
     // 持仓加成：正收益乘以持仓乘数
     const invBoost = getInvBoost();
     if(pct > 0 && invBoost > 1) pct = Math.round(pct * invBoost);
