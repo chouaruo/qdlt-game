@@ -136,6 +136,10 @@ body{
 .char-detail-body{font-size:12px;color:var(--paper2);line-height:1.8;margin-bottom:8px;}
 .char-detail-skill{font-size:11px;color:var(--gray2);border-top:1px solid rgba(200,146,26,0.1);padding-top:8px;line-height:1.7;}
 .char-detail-locked{font-size:13px;color:var(--crimson2);text-align:center;padding:8px 0;}
+.pts-unlock-btn{margin-top:8px;width:100%;padding:10px;background:var(--gold);color:#fff;border:none;border-radius:8px;font-size:13px;cursor:pointer;font-family:inherit;letter-spacing:0.05em;transition:all .2s;}
+.pts-unlock-btn:hover{background:#c07a16;}
+.pts-unlock-btn:disabled{background:#ccc;color:#999;cursor:not-allowed;}
+.pts-unlock-hint{font-size:11px;color:#999;margin-top:4px;text-align:center;}
 
 /* ═══ 属性分配 OVERLAY ═══ */
 #ov-alloc .alloc-inner{width:100%;max-width:560px;display:flex;flex-direction:column;gap:1rem;padding:1.5rem 0 2rem;margin:0 auto;}
@@ -609,10 +613,11 @@ body{
     </div>
   </div>
   <div class="start-panel">
-    <div class="start-row"><span class="start-k">历史最高</span><span class="start-v gold" id="start-best-realm">凡人</span></div>
+    <div class="start-row"><span class="start-k">历史最高</span><span class="start-v gold" id="start-best-realm">负债韭菜</span></div>
     <div class="start-row"><span class="start-k">当前局面</span><span class="start-v" id="start-run-status">无进行中的游戏</span></div>
     <div class="start-row"><span class="start-k">游戏模式</span><span class="start-v" id="start-mode" style="color:var(--jade)">剧情池（免费）</span></div>
     <div class="start-row"><span class="start-k">服务端</span><span class="start-v" id="start-backend-status">等待开局</span></div>
+    <div class="start-row"><span class="start-k">邀请积分</span><span class="start-v" id="start-pts" style="color:var(--gold2)">-</span></div>
   </div>
   <div class="start-actions">
     <button class="btn-gold" id="start-btn" onclick="startFreshRun()">开始游戏 →</button>
@@ -664,7 +669,7 @@ body{
 <div class="ov ov-bg ov-scroll hidden" id="ov-char">
   <div class="char-ov-inner">
     <div class="ov-title">选择你的人物</div>
-    <div class="ov-sub" id="char-pts-hint">历史最高等级：<span id="char-pts-show" style="color:var(--gold2)">凡人</span>　·　属性点：20</div>
+    <div class="ov-sub" id="char-pts-hint">历史最高等级：<span id="char-pts-show" style="color:var(--gold2)">负债韭菜</span>　·　属性点：20</div>
     <div class="char-grid" id="char-grid"></div>
     <div class="char-detail hidden" id="char-detail"></div>
     <button class="btn-gold" id="char-confirm-btn" onclick="onCharConfirm()" disabled>确认人物，进入加点</button>
@@ -705,10 +710,10 @@ body{
   <header class="hdr">
     <div class="hdr-left">
       <div class="hdr-title">币圈模拟器</div>
-      <div class="hdr-char" id="hdr-char">币圈修真传</div>
+      <div class="hdr-char" id="hdr-char">币圈模拟器</div>
     </div>
     <div style="text-align:right">
-      <div class="realm-badge" id="realm-badge">凡人 A0</div>
+      <div class="realm-badge" id="realm-badge">负债韭菜 LV0</div>
       <div class="realm-asset" id="realm-asset">负债</div>
       <div id="market-cycle" style="font-size:10px;margin-top:2px;letter-spacing:0.05em;">🐻 熊市底部</div>
       <div class="hdr-meta">
@@ -798,7 +803,7 @@ body{
       <input id="bsc-addr" type="text" placeholder="留下 BSC 钱包地址（选填）" style="width:100%;padding:10px;border:1px solid rgba(255,255,255,0.15);border-radius:6px;font-size:16px;font-family:inherit;background:rgba(255,255,255,0.05);color:#fff;">
     </div>
     <button class="share-btn" id="share-btn" onclick="onShareCopy()">复制分享链接</button>
-    <div class="share-hint">分享可获得 10 积分 · 每局限领一次 · 积分未来可能用于空投</div>
+    <div class="share-hint">分享链接，每位新玩家为你带来 10 积分 · 积分可解锁角色</div>
     <div class="share-pts" id="share-pts"></div>
     <a href="https://x.com/0xTimovo" target="_blank" style="display:flex;align-items:center;gap:8px;text-decoration:none;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);border-radius:8px;padding:10px 12px;margin-top:10px;">
       <img src="/assets/author-avatar.jpg" style="width:28px;height:28px;border-radius:50%;">
@@ -847,7 +852,7 @@ const CHARS = [
     desc:'普通上班族，工资卡里有三万块，被朋友安利进来了。',
     skill:'永远在最高点买入、最低点卖出的神奇天赋。',
     ending:'多个方向，大部分以「上班还贷」结束，极小概率暴富。',
-    rebornTrait:null,
+    rebornTrait:{name:'韭菜记忆',tier:'blue',attr:'mind',desc:'心态+15，气运+10，「上辈子被割的伤疤还在，但我又来了」',isReborn:true},
     aiTag:'普通散户李狗蛋，刚入币圈的普通人',
   },
   {
@@ -1357,12 +1362,25 @@ function ensureInviteCode(){
   }
   return inv;
 }
-function addInvitePoints(n){
+// 积分从服务端同步（只读）
+async function syncPoints(){
   const inv=ensureInviteCode();
-  inv.points+=n;
-  safeSetItem('qdlt_invite',JSON.stringify(inv));
-  return inv;
+  try{
+    const res=await fetch('/api/invite?code='+inv.code);
+    const data=await res.json();
+    inv.points=data.points||0;
+    safeSetItem('qdlt_invite',JSON.stringify(inv));
+  }catch(_){}
+  updatePointsDisplay();
 }
+function updatePointsDisplay(){
+  const inv=getInviteData();
+  const el=document.getElementById('start-pts');
+  if(el) el.textContent=inv.code ? inv.points+' 分' : '邀请好友赚积分';
+  const sp=document.getElementById('share-pts');
+  if(sp) sp.textContent=inv.points>0?'我的积分：'+inv.points+' 分':'';
+}
+
 function onShareCopy(){
   const inv=ensureInviteCode();
 
@@ -1373,17 +1391,8 @@ function onShareCopy(){
     bscInput.style.border='1px solid #07c160';
     inv.bscAddr=bscAddr;
     safeSetItem('qdlt_invite',JSON.stringify(inv));
-    // 发送给后端收集
     fetch('/api/invite',{method:'POST',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({ref:inv.code,bscAddr,action:'save_addr'})}).catch(()=>{});
-  }
-
-  // 防刷：每局游戏只能领一次（用角色+回合+资产生成唯一key）
-  const gameHash = (G.char?.id||'x')+'_'+G.turn+'_'+G.realmIdx+'_'+Math.round(G.peakMoney/1000);
-  const shareKey = 'qdlt_shared_'+gameHash;
-  if(!localStorage.getItem(shareKey)){
-    safeSetItem(shareKey,'1');
-    addInvitePoints(10);
   }
 
   const sd=G._shareData||{c:'散户',r:0,t:0,a:0,d:'money'};
@@ -1396,8 +1405,7 @@ function onShareCopy(){
     const btn=document.getElementById('share-btn');
     btn.textContent='已复制！去 X 粘贴发布吧';
     btn.className='share-btn copied';
-    const inv2=getInviteData();
-    document.getElementById('share-pts').textContent='我的积分：'+inv2.points+' 分';
+    updatePointsDisplay();
   }).catch(()=>{
     const ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);
     const btn=document.getElementById('share-btn');btn.textContent='已复制！';btn.className='share-btn copied';
@@ -1529,8 +1537,9 @@ function handleRefParam(){
   const key='qdlt_referred_by';
   if(localStorage.getItem(key))return;
   safeSetItem(key,ref);
-  // 通知邀请人加分（异步，不阻塞）
-  fetch('/api/invite',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({ref})}).catch(()=>{});
+  // 通知邀请人加分（带自己的code防自刷）
+  const myCode=getInviteData().code||'';
+  fetch('/api/invite',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({ref,myCode})}).catch(()=>{});
   // 清理 URL 参数
   history.replaceState(null,'',location.pathname);
 }
@@ -2017,7 +2026,7 @@ function onFullBtn() {
 // 开场与续档
 // ════════════════════════════════════════════════════
 function updateStartOverlay() {
-  document.getElementById('start-best-realm').textContent = G.bestRealm>0?REALMS[G.bestRealm].name+' '+REALMS[G.bestRealm].code:'凡人';
+  document.getElementById('start-best-realm').textContent = G.bestRealm>0?REALMS[G.bestRealm].name+' '+REALMS[G.bestRealm].code:'负债韭菜 LV0';
   document.getElementById('continue-btn').disabled = !RUN?.G;
   document.getElementById('start-run-status').textContent = RUN?.savedAt
     ? '已保存到 ' + new Date(RUN.savedAt).toLocaleString('zh-CN', { month:'2-digit', day:'2-digit', hour:'2-digit', minute:'2-digit' })
@@ -2034,6 +2043,8 @@ function updateStartOverlay() {
       modeEl.style.color='var(--jade)';
     }
   }
+  // 同步积分显示
+  syncPoints();
   // 渲染成就墙
   renderAchievementWall();
 }
@@ -2082,7 +2093,7 @@ function resumeSavedRun() {
   if (!restoreRun(RUN)) return;
   document.getElementById('api-err').textContent='';
   document.getElementById('ov-api').className='ov ov-bg hidden';
-  document.getElementById('hdr-char').textContent = G.char?.name || '币圈修真传';
+  document.getElementById('hdr-char').textContent = G.char?.name || '币圈模拟器';
   renderTraitsBar();
   updateStats(null);
   updateTok(0,0);
@@ -2103,7 +2114,7 @@ function restartRun() {
 let selectedChar = null;
 function showCharSelect(){
   document.getElementById('ov-char').className='ov ov-bg ov-scroll';
-  document.getElementById('char-pts-show').textContent=G.bestRealm>0?REALMS[G.bestRealm].name:'凡人';
+  document.getElementById('char-pts-show').textContent=G.bestRealm>0?REALMS[G.bestRealm].name:'负债韭菜';
   renderCharGrid();
 }
 function renderCharGrid(){
@@ -2130,7 +2141,38 @@ function renderCharGrid(){
 }
 function canUnlockChar(ch){
   if(!ch.reqRealm)return true;
-  return G.bestRealm >= ch.reqRealm;
+  if(G.bestRealm >= ch.reqRealm)return true;
+  const unlocked=JSON.parse(localStorage.getItem('qdlt_pts_unlocked')||'[]');
+  return unlocked.includes(ch.id);
+}
+async function unlockCharWithPts(charId){
+  const inv=getInviteData();
+  if(!inv.code||inv.points<50)return;
+  const btn=document.querySelector('.pts-unlock-btn');
+  if(btn){btn.textContent='解锁中...';btn.disabled=true;}
+  try{
+    const res=await fetch('/api/invite',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({action:'spend',code:inv.code,amount:50,charId})});
+    const data=await res.json();
+    if(data.ok){
+      inv.points=data.remaining;
+      safeSetItem('qdlt_invite',JSON.stringify(inv));
+      const list=JSON.parse(localStorage.getItem('qdlt_pts_unlocked')||'[]');
+      if(!list.includes(charId))list.push(charId);
+      safeSetItem('qdlt_pts_unlocked',JSON.stringify(list));
+      renderCharGrid();
+      // 自动选中刚解锁的角色
+      const ch=CHARS.find(c=>c.id===charId);
+      if(ch){
+        const cards=document.querySelectorAll('.char-card');
+        cards.forEach(c=>{if(c.textContent.includes(ch.name)){c.click();}});
+      }
+    }else{
+      if(btn){btn.textContent='积分不足';btn.disabled=true;}
+    }
+  }catch(_){
+    if(btn){btn.textContent='网络错误，请重试';btn.disabled=false;}
+  }
 }
 let _selectedCharEl=null;
 function onCharClick(ch,locked,e){
@@ -2139,8 +2181,12 @@ function onCharClick(ch,locked,e){
   const detail=document.getElementById('char-detail');
   if(locked){
     detail.className='char-detail';
-    detail.innerHTML=`<div class="char-detail-locked">🔒 需突破${REALMS[ch.reqRealm].name}（${REALMS[ch.reqRealm].code}）解锁<br><small>当前历史最高：${G.bestRealm>0?REALMS[G.bestRealm].name:'凡人'}</small></div>`;
-    detail.className='char-detail';
+    const inv=getInviteData();
+    const cost=50;
+    const canAfford=inv.points>=cost;
+    detail.innerHTML=`<div class="char-detail-locked">🔒 需突破${REALMS[ch.reqRealm].name}（${REALMS[ch.reqRealm].code}）解锁<br><small>当前历史最高：${G.bestRealm>0?REALMS[G.bestRealm].name:'负债韭菜'}</small></div>`
+      +`<button class="pts-unlock-btn" onclick="unlockCharWithPts('${ch.id}')" ${canAfford?'':'disabled'}>🎫 消耗 ${cost} 积分永久解锁</button>`
+      +`<div class="pts-unlock-hint">${canAfford?'当前：'+inv.points+' 分':'需'+cost+'分（当前'+inv.points+'）· 邀请好友每人+10分'}</div>`;
     selectedChar=null;
     document.getElementById('char-confirm-btn').disabled=true;
     return;
@@ -2166,7 +2212,7 @@ function onCharClick(ch,locked,e){
 function onCharConfirm(){
   if(!selectedChar)return;
   G.char=selectedChar;
-  document.getElementById('hdr-char').textContent=selectedChar.name+' · '+selectedChar.id;
+  document.getElementById('hdr-char').textContent=selectedChar.name;
   document.getElementById('ov-char').className='ov ov-bg hidden';
   showAllocScreen();
 }
@@ -2916,13 +2962,19 @@ async function initGame(){
         result=await callAI(prompt,[]);
         usedPregen = true;
       }catch(e){
-          // BYOK 失败，自动切回剧情池模式
-          console.warn('BYOK失败，切回剧情池:', e.message);
-          clearByok();
+          // BYOK 失败 → 显示错误，不删除 key，回退到剧情池
+          console.warn('BYOK失败:', e.message);
+          document.getElementById('thinking').className='thinking';
+          const errMsg = e.message || '未知错误';
+          // 显示错误提示
+          const toast=document.createElement('div');
+          toast.style.cssText='position:fixed;top:20px;left:50%;transform:translateX(-50%);background:#fa5151;color:#fff;padding:12px 20px;border-radius:10px;font-size:12px;z-index:9999;max-width:320px;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,0.3);';
+          toast.textContent='AI 模式连接失败：'+errMsg+'（已切换到免费剧情池）';
+          document.body.appendChild(toast);
+          setTimeout(()=>toast.remove(),5000);
+          // 不删除 key，只是本局回退到剧情池
           if(!storyArcData) await loadStoryArcs();
           if(storyArcData){
-            document.getElementById('thinking').className='thinking';
-            // 重走池模式开局
             G.turn = 1;
             result = pickStory(G.char?.id || '散户', 1);
             if(!result){
@@ -2932,7 +2984,7 @@ async function initGame(){
             }
             await typeText(fillStoryAmounts(result.story));
             currentStoryData=result;updateStats(null);renderChoices(result.choices);setEnabled(true);
-            document.getElementById('start-backend-status').textContent='在线（已切回剧情池）';
+            document.getElementById('start-backend-status').textContent='剧情池（AI连接失败）';
             return;
           }
           result={story:'连接失败，请刷新重试。',choices:[],effects:{}};
