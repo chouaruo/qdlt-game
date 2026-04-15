@@ -1661,7 +1661,7 @@ function updateStats(prev) {
   });
   const boostEl = document.getElementById('inv-boost');
   const mult = getInvBoost();
-  if(boostEl){boostEl.textContent = mult>1 ? '收益 x'+mult.toFixed(1) : '';boostEl.className='inv-boost'+(mult<=1?' idle':'');}
+  if(boostEl){boostEl.textContent = mult>1 ? '收益 x'+mult.toFixed(2) : '';boostEl.className='inv-boost'+(mult<=1?' idle':'');}
   renderLogs();
 }
 
@@ -1746,7 +1746,7 @@ function applyFx(fx, prev, turnOverride) {
     if(G.money < G._startMoney*0.5) G._wasDown50=true;
     if(G.money < G._startMoney*0.1) G._wasDown90=true;
     const sign = delta>=0 ? '+' : '';
-    const boostNote = (pct > 0 && invBoost > 1) ? ' 持仓x'+invBoost.toFixed(1) : '';
+    const boostNote = (pct > 0 && invBoost > 1) ? ' 持仓x'+invBoost.toFixed(2) : '';
     log('本金'+sign+fmtAsset(Math.abs(delta)).replace('¥','')+'（'+sign+Math.round(pct)+'%'+boostNote+'）', delta>=0?'g':'b');
   }
 
@@ -1864,7 +1864,7 @@ function applyFx(fx, prev, turnOverride) {
       // 大亏时随机失去一个币种
       const lost = G.inv[Math.floor(Math.random()*G.inv.length)];
       G.inv = G.inv.filter(c=>c!==lost);
-      log('清仓：'+lost,'b');
+      log((COIN_BOOST[lost] ? '清仓：' : '失去：')+lost,'b');
     }
   }
 
