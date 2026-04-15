@@ -337,7 +337,10 @@ body{
 .bp-title{font-size:10px;color:#999;letter-spacing:0.08em;margin-bottom:7px;font-family:inherit;border-bottom:0.5px solid #e8e8e8;padding-bottom:5px;}
 .inv-items{display:flex;flex-wrap:wrap;gap:5px;min-height:22px;}
 .inv-tag{background:#fff7ed;border:none;border-radius:4px;padding:2px 9px;font-size:11px;color:#d4881a;font-family:inherit;}
+.inv-tag .boost-pct{font-size:9px;color:#b8860b;margin-left:2px;opacity:0.7;}
 .inv-empty{font-size:11px;color:#ccc;font-style:italic;}
+.inv-boost{float:right;font-size:10px;color:#d4881a;font-weight:500;letter-spacing:0;}
+.inv-boost.idle{color:#ccc;}
 .log-list{display:flex;flex-direction:column;gap:3px;max-height:90px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:#e8e8e8 transparent;}
 .log-list::-webkit-scrollbar{width:2px}
 .log-list::-webkit-scrollbar-thumb{background:#e0e0e0;border-radius:2px}
@@ -757,7 +760,7 @@ body{
   </div>
 
   <div class="bottom-grid">
-    <div class="bpanel"><div class="bp-title">持　仓　记　录</div><div class="inv-items" id="inv"><span class="inv-empty">空仓</span></div></div>
+    <div class="bpanel"><div class="bp-title">持　仓　记　录<span class="inv-boost" id="inv-boost"></span></div><div class="inv-items" id="inv"><span class="inv-empty">空仓</span></div></div>
     <div class="bpanel"><div class="bp-title">操　盘　日　志</div><div class="log-list" id="log"><div class="log-e">▸ 进入市场</div></div></div>
   </div>
 </div>
@@ -1275,6 +1278,23 @@ const G = {
 const TOK = {i:0, o:0};
 let cache = {}, pdCount = 0, lastEvIdx = -1;
 let META = null;
+
+// ── 持仓分级：境界决定能拿到什么级别的币 ──
+const COIN_TIERS = [
+  { coins: ['BTC','ETH'],                         minRealm: 9, boosts: {BTC:30, ETH:25} },  // 蓝筹：¥1亿+
+  { coins: ['SOL','BNB'],                          minRealm: 7, boosts: {SOL:20, BNB:20} },  // 主流：¥100万+
+  { coins: ['UNI','AAVE','ARB','LINK'],            minRealm: 4, boosts: {UNI:15, AAVE:15, ARB:15, LINK:15} }, // DeFi：¥1000+
+  { coins: ['DOGE','PEPE','SHIB'],                 minRealm: 1, boosts: {DOGE:10, PEPE:10, SHIB:10} }, // Meme：¥1+
+  { coins: ['USDT'],                               minRealm: 0, boosts: {USDT:5} },          // 稳定币：任何
+];
+const COIN_BOOST = {};
+COIN_TIERS.forEach(t => Object.assign(COIN_BOOST, t.boosts));
+
+function getInvBoost() {
+  let boost = 0;
+  G.inv.forEach(c => { boost += (COIN_BOOST[c] || 0); });
+  return 1 + boost / 100;
+}
 let RUN = null;
 let currentStory = '正在加载，等待命运...';
 let currentChoices = [];
@@ -1629,10 +1649,19 @@ function updateStats(prev) {
     }
     else{const el=document.getElementById('sv-'+k);if(el)el.textContent=display(G[k]);}
   });
-  // 背包
+  // 背包 + 加成显示
   const inv = document.getElementById('inv'); inv.innerHTML='';
   if(!G.inv.length) inv.innerHTML='<span class="inv-empty">空仓</span>';
-  else G.inv.forEach(it=>{const t=document.createElement('span');t.className='inv-tag';t.textContent=it;inv.appendChild(t);});
+  else G.inv.forEach(it=>{
+    const t=document.createElement('span');t.className='inv-tag';
+    const boost = COIN_BOOST[it] || 0;
+    t.textContent = it;
+    if(boost){const s=document.createElement('span');s.className='boost-pct';s.textContent='+'+boost+'%';t.appendChild(s);}
+    inv.appendChild(t);
+  });
+  const boostEl = document.getElementById('inv-boost');
+  const mult = getInvBoost();
+  if(boostEl){boostEl.textContent = mult>1 ? '收益 x'+mult.toFixed(1) : '';boostEl.className='inv-boost'+(mult<=1?' idle':'');}
   renderLogs();
 }
 
@@ -1707,6 +1736,9 @@ function applyFx(fx, prev, turnOverride) {
       if(raw.mind<DEBUFF_DANGER) pct*=2;       // 心态<2：亏损翻倍（恐慌性抛售）
       else if(raw.mind<DEBUFF_WEAK) pct*=1.3;   // 心态<4：亏损×1.3
     }
+    // 持仓加成：正收益乘以持仓乘数
+    const invBoost = getInvBoost();
+    if(pct > 0 && invBoost > 1) pct = Math.round(pct * invBoost);
     const delta = Math.round(G.money * pct / 100);
     G.money = Math.max(0, G.money + delta);
     if(G.money>G.peakMoney) G.peakMoney=G.money;
@@ -1714,7 +1746,8 @@ function applyFx(fx, prev, turnOverride) {
     if(G.money < G._startMoney*0.5) G._wasDown50=true;
     if(G.money < G._startMoney*0.1) G._wasDown90=true;
     const sign = delta>=0 ? '+' : '';
-    log('本金'+sign+fmtAsset(Math.abs(delta)).replace('¥','')+'（'+sign+Math.round(pct)+'%）', delta>=0?'g':'b');
+    const boostNote = (pct > 0 && invBoost > 1) ? ' 持仓x'+invBoost.toFixed(1) : '';
+    log('本金'+sign+fmtAsset(Math.abs(delta)).replace('¥','')+'（'+sign+Math.round(pct)+'%'+boostNote+'）', delta>=0?'g':'b');
   }
 
   // ── 其他属性：比例保护，单次扣减最多扣当前值50% ──
@@ -1809,28 +1842,29 @@ function applyFx(fx, prev, turnOverride) {
 
   if(G.money>G.peakMoney) G.peakMoney=G.money;
 
-  // ── 自动持仓：根据回合和盈亏自动获得/失去币种 ──
-  const AUTO_COINS = {
-    early: ['BTC','ETH','USDT','SOL','DOGE'],
-    growth: ['BTC','ETH','BNB','SOL','AVAX','MATIC','LINK'],
-    boom: ['BTC','ETH','UNI','AAVE','ARB','OP','PEPE'],
-    climax: ['BTC','ETH','SOL','DOGE','SHIB','WLD','TIA'],
-    final: ['BTC','ETH','USDT'],
-  };
+  // ── 自动持仓：境界决定能拿到什么级别的币 ──
   if(fx.money!=null && fx.money!==0 && G.turn>1){
-    const phase = turnToPhase(G.turn);
-    const coins = AUTO_COINS[phase]||AUTO_COINS.early;
     if(fx.money>0 && G.inv.length<5){
-      // 盈利时随机获得一个币种
-      const available = coins.filter(c=>!G.inv.includes(c));
-      if(available.length){
-        const coin = available[Math.floor(Math.random()*available.length)];
-        G.inv.push(coin);
+      // 盈利时从当前境界可解锁的最高级别币种中随机获得一个
+      let gained = null;
+      for(const tier of COIN_TIERS){
+        if(G.realmIdx < tier.minRealm) continue;
+        const available = tier.coins.filter(c=>!G.inv.includes(c));
+        if(available.length){
+          gained = available[Math.floor(Math.random()*available.length)];
+          break; // 优先高级别
+        }
+      }
+      if(gained){
+        G.inv.push(gained);
+        const boost = COIN_BOOST[gained] || 0;
+        log('获得：'+gained+(boost ? ' (+'+boost+'%收益)' : ''),'s');
       }
     } else if(fx.money<-20 && G.inv.length>0){
       // 大亏时随机失去一个币种
       const lost = G.inv[Math.floor(Math.random()*G.inv.length)];
       G.inv = G.inv.filter(c=>c!==lost);
+      log('清仓：'+lost,'b');
     }
   }
 
