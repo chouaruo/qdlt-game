@@ -2424,29 +2424,53 @@ function isPoolMode() {
   return storyArcData && !getByok()?.key;
 }
 
+// v2: 玩家状态轨迹判定
+function getTrajectory() {
+  const expectedRealm = Math.floor(G.turn / 2);
+  const moneyOk = G.realmIdx >= expectedRealm;
+  const mindOk = G.mind >= 20;
+  if(moneyOk && mindOk) return 'thriving';
+  if(moneyOk || mindOk) return 'stable';
+  return 'struggling';
+}
+
 function pickStory(charId, turn) {
   if (!storyArcData) return null;
+  // v2格式：按回合+状态选故事
+  if (storyArcData.version === 2) return pickTurnStory(charId, turn);
+  // v1兼容
+  return pickStoryV1(charId, turn);
+}
+
+// v2: 按回合+状态选故事（每回合都是主线节拍）
+function pickTurnStory(charId, turn) {
   const arc = storyArcData.characters?.[charId];
   if (!arc) {
-    // 角色不在剧情池中，尝试通用散户池
-    const fallbackArc = storyArcData.characters?.['散户'];
-    if (!fallbackArc) return null;
-    return pickStory('散户', turn);
+    const fb = storyArcData.characters?.['散户'];
+    return fb ? pickTurnStory('散户', turn) : null;
   }
+  const turnData = arc.turns?.[String(turn)];
+  if (!turnData) return null;
+  const traj = getTrajectory();
+  const vs = turnData.variants || [];
+  const match = vs.find(v => v.condition === traj) || vs.find(v => v.condition === 'default') || vs[0];
+  return match ? { ...match, _beat: turnData.beat } : null;
+}
 
-  // 阶段池（opener 和 fixedBeats 由 CHAR_OPENERS 和 CHAR_EVENTS 处理）
+// v1兼容：按阶段随机选
+function pickStoryV1(charId, turn) {
+  const arc = storyArcData.characters?.[charId];
+  if (!arc) {
+    const fb = storyArcData.characters?.['散户'];
+    return fb ? pickStoryV1('散户', turn) : null;
+  }
   const phase = turnToPhase(turn);
   const pool = arc.phases?.[phase]?.stories || [];
   const available = pool.filter(s => !usedPoolIds.has(s.id));
   if (available.length === 0) return pool.length ? pool[Math.floor(Math.random() * pool.length)] : null;
-
-  // tag 相似度排序（轻量连贯性）
   let picked;
   if (prevTags.length > 0) {
-    const scored = available.map(s => ({
-      s,
-      score: (s.tags || []).filter(t => prevTags.includes(t)).length
-    }));
+    const scored = available.map(s => ({ s, score: (s.tags || []).filter(t => prevTags.includes(t)).length }));
     scored.sort((a, b) => b.score - a.score);
     const topScore = scored[0].score;
     const candidates = scored.filter(x => x.score >= topScore - 1);
@@ -2454,7 +2478,6 @@ function pickStory(charId, turn) {
   } else {
     picked = available[Math.floor(Math.random() * available.length)];
   }
-
   usedPoolIds.add(picked.id);
   prevTags = picked.tags || [];
   return picked;
